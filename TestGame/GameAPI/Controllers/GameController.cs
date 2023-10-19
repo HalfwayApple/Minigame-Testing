@@ -6,17 +6,17 @@ namespace GameAPI.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-        private GameManager gameManager;
+        private readonly GameManager _gameManager;
 
-        public GameController()
+        public GameController(GameManager gameManager)
         {
-            gameManager = new GameManager();
+            _gameManager = gameManager;
         }
 
         [HttpGet("state")]
         public IActionResult GetGameState()
         {
-            var gameState = gameManager.GetGameState();
+            var gameState = _gameManager.GetGameState();
             return Ok(gameState);
         }
     }
