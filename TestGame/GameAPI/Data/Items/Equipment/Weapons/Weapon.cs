@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameAPI.Data.Items.Equipment.Weapons
 {
-    internal class Weapon : Equipment
+    public class Weapon : Equipment
     {
         public int AttackPower { get; set; }
     }

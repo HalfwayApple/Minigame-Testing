@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameAPI.Data.Items.Equipment
 {
-    internal class Equipment
+    public class Equipment
     {
         public string Name { get; set; } = null!;
     }
