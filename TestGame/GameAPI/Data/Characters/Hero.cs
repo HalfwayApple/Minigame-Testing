@@ -4,7 +4,7 @@ using GameAPI.Data.Items.Equipment.Weapons;
 
 namespace GameAPI.Data.Characters
 {
-    internal class Hero : Character
+    public class Hero : Character
     {
         public Hero(int id, string name)
         {

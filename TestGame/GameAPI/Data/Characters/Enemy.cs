@@ -2,7 +2,7 @@
 
 namespace GameAPI.Data.Characters
 {
-    internal class Enemy : Character
+    public class Enemy : Character
     {
         public int XpValue { get; set; }
         public List<Equipment> LootTable { get; set; } = new List<Equipment>();
