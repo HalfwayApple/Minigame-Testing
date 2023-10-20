@@ -89,7 +89,7 @@ namespace GameAPI.Data.Characters
         public void LevelUpCheck()
         {
             int levelCheck = CalcLevel();
-            if (levelCheck > Level) 
+            if (levelCheck > Level)
             {
                 Console.WriteLine("Level up!");
                 Level = levelCheck;
