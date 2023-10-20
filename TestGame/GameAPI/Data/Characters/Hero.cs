@@ -77,6 +77,7 @@ namespace GameAPI.Data.Characters
                 EquipmentInBag.Add(EquippedWeapon);
             }
             EquippedWeapon = weapon;
+            EquipmentInBag.Remove(weapon);
         }
         public void EquipArmor(Armor armor)
         {
@@ -85,7 +86,8 @@ namespace GameAPI.Data.Characters
                 EquipmentInBag.Add(EquippedArmor);
             }
             EquippedArmor = armor;
-        }
+			EquipmentInBag.Remove(armor);
+		}
         public void LevelUpCheck()
         {
             int levelCheck = CalcLevel();

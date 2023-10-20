@@ -19,5 +19,12 @@ namespace GameAPI.Controllers
             var gameState = _gameManager.GetGameState();
             return Ok(gameState);
         }
+
+        [HttpGet("equip")]
+        public IActionResult Equip(int index)
+        {
+            var gameState = _gameManager.Equip(index);
+            return Ok(gameState);
+        }
     }
 }

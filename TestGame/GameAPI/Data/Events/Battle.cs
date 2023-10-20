@@ -8,17 +8,17 @@ using GameAPI.Data.Items.Equipment;
 
 namespace GameAPI.Data.Events
 {
-    internal class Battle
+    internal class Battle : Location
     {
-        Hero Hero { get; set; }
         Enemy Enemy { get; set; }
-        public Battle(Hero hero, Enemy enemy)
+        public Battle(string name, Hero hero, Enemy enemy) : base(name, hero)
         {
+            Name = name;
             Hero = hero;
             Enemy = enemy;
         }
 
-        internal void StartBattle()
+        public void StartBattle()
         {
             while (Enemy.CurrentHP > 0)
             {
