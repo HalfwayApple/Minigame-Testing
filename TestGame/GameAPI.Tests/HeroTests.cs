@@ -1,7 +1,3 @@
-using GameAPI.Data.Items.Equipment.Armors;
-using GameAPI.Data.Items.Equipment.Weapons;
-using Xunit.Abstractions;
-
 namespace GameAPI.Tests
 {
     public class HeroTests
