@@ -71,10 +71,58 @@ namespace GameAPI.Tests
             int armorValue = hero.CalcArmorValue();
 
             //Log
-            _log.WriteLine($"Armor value without armor: {hero.ArmorValue} ArmorValue with armor: {armorValue}");
+            _log.WriteLine($"Armor value med armor: {hero.ArmorValue} ArmorValue utan armor: {armorValue}");
 
             // Assert
             Assert.Equal(testArmor.ArmorValue, armorValue);
+        }
+
+        [Theory]
+        [InlineData(10, 1)]
+        [InlineData(20, 2)]
+        [InlineData(100, 10)]
+        public void CalcLevel_XpLessThan10_ShouldReturnLevelOne(int heroxp, int expectedLevel)
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+            hero.Xp = heroxp;
+
+            // Act
+            int level = hero.CalcLevel();
+
+            //Log
+            _log.WriteLine($"xp du får in: {heroxp} vilket level du är/blir: {level}");
+
+            // Assert
+            Assert.Equal(expectedLevel, level);
+        }
+
+        [Theory]
+        // xp, expectedLevel, expectedMaxHp, expectedMaxMana, expectedAttackPower
+        [InlineData(0, 1, 10, 5, 1)]
+        [InlineData(5, 1, 10, 5, 1)]
+        [InlineData(10, 1, 10, 5, 1)] // vid 10 xp är man fortfarande lvl 1, så denna är för lvl 1
+        [InlineData(20, 2, 13, 7, 2)]
+        [InlineData(100, 10, 37, 23, 10)]
+        public void SetStats_GivenXp_ShouldSetCorrectStats(int xp, int expectedLevel, int expectedMaxHp, int expectedMaxMana, int expectedAttackPower)
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+            hero.Xp = xp;
+
+            // Act
+            hero.SetStats();
+
+            //Log
+            _log.WriteLine($"level: {hero.Level} max hp: {hero.MaxHP} max mana: {hero.MaxMana} attackpower: {hero.AttackPower}");
+
+            // Assert
+            Assert.Equal(expectedLevel, hero.Level);
+            Assert.Equal(expectedMaxHp, hero.MaxHP);
+            Assert.Equal(expectedMaxMana, hero.MaxMana);
+            Assert.Equal(expectedMaxHp, hero.CurrentHP);  // CurrentHP is set to MaxHP in SetStats
+            Assert.Equal(expectedMaxMana, hero.CurrentMana);  // CurrentMana is set to MaxMana in SetStats
+            Assert.Equal(expectedAttackPower, hero.AttackPower);
         }
 
         [Fact]
