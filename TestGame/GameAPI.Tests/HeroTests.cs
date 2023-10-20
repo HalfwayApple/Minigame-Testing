@@ -197,5 +197,38 @@ namespace GameAPI.Tests
             Assert.Equal(oldLevel, hero.Level);
         }
 
+        [Theory]
+        // prevWeaponName, newWeaponName, expectedEquippedWeaponName, ExpectedBagCount
+        [InlineData(null, "Sword", "Sword", 0)]
+        [InlineData("Axe", "Sword", "Sword", 1)]
+        [InlineData("Spear", "Bow", "Bow", 1)]
+        public void EquipWeapon_ShouldHandleEquippedWeaponsCorrectly(string? prevWeaponName, string newWeaponName, string expectedEquippedWeaponName, int expectedBagCount)
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+
+            if (prevWeaponName != null)
+            {
+                hero.EquipWeapon(new Weapon { Name = prevWeaponName });
+            }
+
+            Weapon newWeapon = new Weapon { Name = newWeaponName };
+            // Act
+            hero.EquipWeapon(newWeapon);
+
+            //Log
+            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+
+            // Assert
+            Assert.Equal(expectedEquippedWeaponName, hero.EquippedWeapon?.Name);
+            Assert.Equal(expectedBagCount, hero.EquipmentInBag.Count);
+
+            if (expectedBagCount > 0)
+            {
+                //Log
+                _log.WriteLine($"antal vapen i bag: {hero.EquipmentInBag.Count}");
+                Assert.Contains(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == prevWeaponName);
+            }
+        }
     }
 }
