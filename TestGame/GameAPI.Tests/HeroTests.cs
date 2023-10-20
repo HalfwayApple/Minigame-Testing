@@ -4,6 +4,24 @@ namespace GameAPI.Tests
 {
     public class HeroTests
     {
+
+        [Theory]
+        [InlineData(1, 10)]   // 7 baseHp + 1*3+7 = 10 : level 1 blir maxHp 10
+        [InlineData(2, 13)]  // 7 baseHp + 3*2+7 = 13
+        [InlineData(3, 16)]  // 7 baseHp + 3*3+7 = 16
+        [InlineData(10, 37)] // 7 baseHp + 3*10+7 = 37
+        public void CalcMaxHp_AtVariousLevels_ShouldReturnCorrectHp(int level, int expectedHp)
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+
+            // Act
+            int maxHp = hero.CalcMaxHp(level);
+
+            // Assert
+            Assert.Equal(expectedHp, maxHp);
+        }
+
         [Fact]
         public void CalcNormalDamage_WithWeaponEquipped_ShouldReturnCombinedDamage()
         {

@@ -1,6 +1,9 @@
 ﻿using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("GameAPI.Tests")]
 
 namespace GameAPI.Data.Characters
 {
