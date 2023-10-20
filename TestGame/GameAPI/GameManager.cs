@@ -3,11 +3,10 @@ using GameAPI.Data.Events;
 using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
-using System;
 
 namespace GameAPI
 {
-    public class GameManager
+	public class GameManager
     {
         private GameState _state;
         public GameManager() 
@@ -21,6 +20,12 @@ namespace GameAPI
         }
 
 		#region Equip
+
+        /// <summary>
+        /// 1) Checks if the hero can currently equip items. 2) Checks the type of equipment. 3) Matches the type to the correct Equip function to equip the item
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns>GameState</returns>
 		public GameState Equip(int index)
         {
             if (CanEquip() == false) { return _state; }
@@ -41,6 +46,11 @@ namespace GameAPI
                 return _state;
             }
         }
+
+        /// <summary>
+        /// Checks if the hero can currently equip items
+        /// </summary>
+        /// <returns>True if location is Town, false otherwise</returns>
         internal bool CanEquip()
         {
             Location location = _state.Location;
@@ -50,11 +60,23 @@ namespace GameAPI
             }
             return false;
         }
+
+        /// <summary>
+        /// Equips the specified weapon
+        /// </summary>
+        /// <param name="weapon"></param>
+        /// <returns>GameState</returns>
         internal GameState EquipWeapon(Weapon weapon)
         {
             _state.Hero.EquipWeapon(weapon);
             return _state;
         }
+
+        /// <summary>
+        /// Equips the specified armor
+        /// </summary>
+        /// <param name="armor"></param>
+        /// <returns>GameState</returns>
 		internal GameState EquipArmor(Armor armor)
 		{
 			_state.Hero.EquipArmor(armor);
@@ -62,7 +84,13 @@ namespace GameAPI
 		}
 		#endregion
 
-        public GameState StartFight()
+		#region Battle admin
+
+        /// <summary>
+        /// Creates a Battle location with a random enemy from the EnemyList in GameState, and puts the game there
+        /// </summary>
+        /// <returns>GameState</returns>
+		public GameState StartFight()
         {
             Enemy enemy = ChooseRandomEnemy();
             _state.Location = new Battle("Battle", enemy);
@@ -70,6 +98,10 @@ namespace GameAPI
             return _state;
 		}
 
+        /// <summary>
+        /// Choses a random enemy from the GameStates EnemyList
+        /// </summary>
+        /// <returns>Random Enemy</returns>
         internal Enemy ChooseRandomEnemy()
         {
 			Random rng = new Random();
@@ -79,6 +111,11 @@ namespace GameAPI
             return enemy;
 		}
 
+		/// <summary>
+		/// Makes enemy drop loot if possible, gives xp, checks for potential levelup, and sets location back to Town
+		/// </summary>
+		/// <param name="enemy"></param>
+		/// <returns>GameState</returns>
 		internal GameState EndBattle(Enemy enemy)
 		{
 			Equipment? loot = enemy.DropEquipment();
@@ -93,18 +130,13 @@ namespace GameAPI
             return _state;
 		}
 
-        public GameState Attack()
-        {
-            Battle battleLocation = (Battle) _state.Location;
-            Enemy enemy = battleLocation.Enemy;
-
-            _state.Hero.Attack(enemy);
-
-            return EnemyTurn(enemy);
-		}
-
-        internal GameState EnemyTurn(Enemy enemy)
-        {
+		/// <summary>
+		/// Checks if enemy is still alive and either attacks the hero or ends the battle
+		/// </summary>
+		/// <param name="enemy"></param>
+		/// <returns>GameState</returns>
+		internal GameState EnemyTurn(Enemy enemy)
+		{
 			if (enemy.CurrentHP > 0)
 			{
 				enemy.Attack(_state.Hero);
@@ -114,6 +146,22 @@ namespace GameAPI
 			{
 				return EndBattle(enemy);
 			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Attacks enemy, then calls EnemyTurn() to either further the battle or end it
+		/// </summary>
+		/// <returns>GameState</returns>
+		public GameState Attack()
+        {
+            Battle battleLocation = (Battle) _state.Location;
+            Enemy enemy = battleLocation.Enemy;
+
+            _state.Hero.Attack(enemy);
+
+            return EnemyTurn(enemy);
 		}
 	}
 }

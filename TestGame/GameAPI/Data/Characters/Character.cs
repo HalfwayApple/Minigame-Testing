@@ -13,11 +13,18 @@
         public int AttackPower { get; set; }
         public int ArmorValue { get; set; }
 
-        public void Attack(Character enemy)
+        /// <summary>
+        /// Attacks input opponent and reduces their max hp
+        /// </summary>
+        /// <param name="opponent"></param>
+        public void Attack(Character opponent)
         {
             int firstRoundDamage = CalcNormalDamage();
-            int secondRoundDamage = firstRoundDamage - enemy.ArmorValue;
-            enemy.CurrentHP -= secondRoundDamage;
+            int secondRoundDamage = firstRoundDamage - opponent.ArmorValue;
+
+			if (secondRoundDamage > 0) { secondRoundDamage = 0; } // Stop high armor vs low damage attacks from becoming healing
+
+			opponent.CurrentHP -= secondRoundDamage;
         }
         abstract public int CalcNormalDamage();
     }

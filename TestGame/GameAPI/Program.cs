@@ -10,6 +10,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<GameManager>();
 
+// Add CORS policy to allow Localhost
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy("MyCorsPolicy",

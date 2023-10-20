@@ -32,18 +32,34 @@ namespace GameAPI.Data.Characters
                 return damage;
             }
         }
-        internal int CalcMaxHp(int level)
+
+		#region Calculations
+        /// <summary>
+        /// Calculate Hero MaxHp based on level
+        /// </summary>
+        /// <param name="level"></param>
+        /// <returns>Integer of Max Hp for specified level</returns>
+		internal int CalcMaxHp(int level)
         {
             int baseHp = 7;
             int leveledHp = 3 * level;
             return baseHp + leveledHp;
         }
-        internal int CalcMaxMana(int level)
+		/// <summary>
+		/// Calculate Hero MaxMana based on level
+		/// </summary>
+		/// <param name="level"></param>
+		/// <returns>Integer of Max Mana for specified level</returns>
+		internal int CalcMaxMana(int level)
         {
-            int baseHp = 3;
-            int leveledHp = 2 * level;
-            return baseHp + leveledHp;
+            int baseMana = 3;
+            int leveledMana = 2 * level;
+            return baseMana + leveledMana;
         }
+        /// <summary>
+        /// Calculate armor value based on equipped armor
+        /// </summary>
+        /// <returns>Armor value as Int</returns>
         public int CalcArmorValue()
         {
             if (EquippedArmor != null)
@@ -52,6 +68,11 @@ namespace GameAPI.Data.Characters
             }
             else { return 0; }
         }
+
+        /// <summary>
+        /// Calculate level based on xp/level formula
+        /// </summary>
+        /// <returns>Currene level</returns>
         public int CalcLevel()
         {
             int level = Xp / 10;
@@ -61,7 +82,13 @@ namespace GameAPI.Data.Characters
             }
             return level;
         }
-        public void SetStats()
+
+		#endregion
+
+        /// <summary>
+        /// Sets hero stats (Level, MaxHP, MaxMana, AttackPower according to currect formulas, and sets current hp/mana to max
+        /// </summary>
+		public void SetStats()
         {
             Level = CalcLevel();
             MaxHP = CalcMaxHp(Level);
@@ -70,6 +97,11 @@ namespace GameAPI.Data.Characters
             CurrentMana = MaxMana;
             AttackPower = Level;
         }
+
+        /// <summary>
+        /// Equips input weapon. If another weapon is already equipped, put that one in the bag
+        /// </summary>
+        /// <param name="weapon"></param>
         public void EquipWeapon(Weapon weapon)
         {
             if (EquippedWeapon != null)
@@ -79,7 +111,12 @@ namespace GameAPI.Data.Characters
             EquippedWeapon = weapon;
             EquipmentInBag.Remove(weapon);
         }
-        public void EquipArmor(Armor armor)
+
+		/// <summary>
+		/// Equips input armor. If another armor is already equipped, put that one in the bag
+		/// </summary>
+		/// <param name="armor"></param>
+		public void EquipArmor(Armor armor)
         {
             if (EquippedArmor != null)
             {
@@ -88,6 +125,10 @@ namespace GameAPI.Data.Characters
             EquippedArmor = armor;
 			EquipmentInBag.Remove(armor);
 		}
+
+        /// <summary>
+        /// Uses CalcLevel() to check if Hero should be higher level than currently. If so, sets the new level and recalculates the stats using SetStats()
+        /// </summary>
         public void LevelUpCheck()
         {
             int levelCheck = CalcLevel();
