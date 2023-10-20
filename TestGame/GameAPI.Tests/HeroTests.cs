@@ -120,8 +120,8 @@ namespace GameAPI.Tests
             Assert.Equal(expectedLevel, hero.Level);
             Assert.Equal(expectedMaxHp, hero.MaxHP);
             Assert.Equal(expectedMaxMana, hero.MaxMana);
-            Assert.Equal(expectedMaxHp, hero.CurrentHP);  // CurrentHP is set to MaxHP in SetStats
-            Assert.Equal(expectedMaxMana, hero.CurrentMana);  // CurrentMana is set to MaxMana in SetStats
+            Assert.Equal(expectedMaxHp, hero.CurrentHP);
+            Assert.Equal(expectedMaxMana, hero.CurrentMana);
             Assert.Equal(expectedAttackPower, hero.AttackPower);
         }
 
