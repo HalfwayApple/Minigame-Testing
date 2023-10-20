@@ -21,7 +21,7 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet("equip")]
-        public IActionResult Equip(int index)
+        public IActionResult Equip(int index) // Index for which item in inventory is being equipped
         {
             var gameState = _gameManager.Equip(index);
             return Ok(gameState);

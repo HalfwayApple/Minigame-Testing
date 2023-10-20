@@ -8,8 +8,8 @@ namespace GameAPI
     public class GameState
     {
         public Hero Hero { get; set; }
-        public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
-        public Location Location { get; set; }
+        public List<Enemy> EnemyList { get; set; } = new List<Enemy>(); // List of potential enemies
+        public Location Location { get; set; } // Current location (town or battle)
 
         public GameState() 
         {
@@ -28,7 +28,7 @@ namespace GameAPI
                 ArmorValue = 1
             };
 
-            // Create an enemy
+            // Create enemies
             Enemy enemy1 = new()
             {
                 Id = 2,
@@ -64,12 +64,11 @@ namespace GameAPI
             EnemyList.Add(enemy1);
             EnemyList.Add(enemy2);
 
+            // Give hero sword
             Hero.EquipmentInBag.Add(sword);
 
-			//Location testing
+			// Set first location to Town
 			Location = new Town("Town");
-			//Location = new Battle("Battle", enemy1);
-			//Location = new Location("Nowhere");
 		}
     }
 }
