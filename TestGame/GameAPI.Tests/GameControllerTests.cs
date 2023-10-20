@@ -71,14 +71,17 @@ namespace GameAPI.Tests
             using var application = new WebApplicationFactory<Program>();
             using var client = application.CreateClient();
 
-            // Act
+            // startar en Battle (måste göras för att Attack ska fungera)
+            await client.GetAsync("/game/battle");
+
+            // Act Attack efter att den startat Battle
             var response = await client.GetAsync("/game/attack");
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
             _log.WriteLine($"status kod: {response.StatusCode}");
 
-            //Log
+            // Log
             LogResponse(response);
         }
 
