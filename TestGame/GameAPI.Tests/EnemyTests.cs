@@ -1,6 +1,4 @@
-﻿using GameAPI.Data.Items.Equipment;
-
-namespace GameAPI.Tests
+﻿namespace GameAPI.Tests
 {
     public class EnemyTests
     {
@@ -16,6 +14,8 @@ namespace GameAPI.Tests
         [Fact]
         public void CalcNormalDamage_ReturnsAttackPowerValue()
         {
+            //testar det här bara för att se så metoden funkar på fiendes ap
+
             // Arrange
             var enemy = new Enemy();
             enemy.AttackPower = 25;
