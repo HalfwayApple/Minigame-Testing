@@ -22,7 +22,7 @@
             int firstRoundDamage = CalcNormalDamage();
             int secondRoundDamage = firstRoundDamage - opponent.ArmorValue;
 
-			if (secondRoundDamage > 0) { secondRoundDamage = 0; } // Stop high armor vs low damage attacks from becoming healing
+			if (secondRoundDamage < 0) { secondRoundDamage = 0; } // Stop high armor vs low damage attacks from becoming healing
 
 			opponent.CurrentHP -= secondRoundDamage;
         }
