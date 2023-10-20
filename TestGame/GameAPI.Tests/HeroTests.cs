@@ -1,9 +1,18 @@
 using GameAPI.Data.Items.Equipment.Weapons;
+using Xunit.Abstractions;
 
 namespace GameAPI.Tests
 {
     public class HeroTests
     {
+        #region Constructor
+        private readonly ITestOutputHelper _output;
+
+        public HeroTests(ITestOutputHelper output)
+        {
+            _output = output;
+        }
+        #endregion
 
         [Theory]
         [InlineData(1, 10)]   // 7 baseHp + 1*3+7 = 10 : level 1 blir maxHp 10
@@ -59,9 +68,12 @@ namespace GameAPI.Tests
             Hero hero = new Hero(1, "TestHero");
 
             // Act: ökar xp så hero borde lvla upp (10 xp för att lvla upp)
-            hero.Xp = 11;
+            hero.Xp = 20; //Behövs 20 xp för lvl 2
             var oldLevel = hero.Level;
             hero.LevelUpCheck();
+
+            //Log
+            _output.WriteLine($"Ny level för hero: {hero.Level} Gammal level för hero: {oldLevel}");
 
             // Assert
             Assert.True(hero.Level > oldLevel, "Du lvlade inte upp");
