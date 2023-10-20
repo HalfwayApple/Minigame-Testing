@@ -2,10 +2,11 @@
 
 namespace GameAPI.Data.Characters
 {
-    public class Enemy : Character
+    public class Enemy : Character, ICloneable
     {
         public Enemy()
         {
+            // does not work
             CurrentHP = MaxHP;
             CurrentMana = MaxMana;
         }
@@ -16,7 +17,13 @@ namespace GameAPI.Data.Characters
             int damage = AttackPower;
             return damage;
         }
-        public Equipment? DropEquipment()
+
+		public object Clone()
+		{
+            return MemberwiseClone();
+		}
+
+		public Equipment? DropEquipment()
         {
             if (LootTable == null || LootTable.Count == 0)
             {

@@ -1,4 +1,5 @@
 ﻿using GameAPI.Data.Characters;
+using GameAPI.Data.Events;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
 
@@ -8,13 +9,15 @@ namespace GameAPI
     {
         public Hero Hero { get; set; }
         public List<Enemy> EnemyList { get; set; } = new List<Enemy>();
+        public Location Location { get; set; }
+
         public GameState() 
         {
             // Create hero
             Hero = new(1, "Daniel");
 
-            // Create some loot
-            Weapon sword = new()
+			// Create some loot
+			Weapon sword = new()
             {
                 Name = "Sword",
                 AttackPower = 2
@@ -34,6 +37,7 @@ namespace GameAPI
                 Level = 1,
                 AttackPower = 1,
                 MaxHP = 5,
+                CurrentHP = 5,
                 MaxMana = 5,
                 ArmorValue = 0,
                 XpValue = 5,
@@ -49,6 +53,7 @@ namespace GameAPI
                 Level = 1,
                 AttackPower = 2,
                 MaxHP = 3,
+                CurrentHP = 3,
                 MaxMana = 3,
                 ArmorValue = 0,
                 XpValue = 5,
@@ -59,7 +64,12 @@ namespace GameAPI
             EnemyList.Add(enemy1);
             EnemyList.Add(enemy2);
 
-            Hero.EquipWeapon(sword);
-        }
+            Hero.EquipmentInBag.Add(sword);
+
+			//Location testing
+			Location = new Town("Town");
+			//Location = new Battle("Battle", enemy1);
+			//Location = new Location("Nowhere");
+		}
     }
 }
