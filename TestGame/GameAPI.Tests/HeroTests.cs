@@ -1,8 +1,6 @@
-using GameAPI.Data.Characters;
-
 namespace GameAPI.Tests
 {
-    public class UnitTest1
+    public class HeroTests
     {
         [Fact]
         public void LevelUpCheck_WhenXpIsEnough_ShouldLevelUp()
