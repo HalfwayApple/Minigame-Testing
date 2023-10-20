@@ -6,6 +6,7 @@ namespace GameAPI.Tests
 {
     public class HeroTests
     {
+        //använd _log för att logga i test explorer
         #region Constructor
         private readonly ITestOutputHelper _log;
 
