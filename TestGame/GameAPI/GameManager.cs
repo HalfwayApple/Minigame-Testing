@@ -74,7 +74,7 @@ namespace GameAPI
         {
 			Random rng = new Random();
 			int randomNumber = rng.Next(0, _state.EnemyList.Count);
-			Enemy enemy = _state.EnemyList[randomNumber];
+			Enemy enemy = (Enemy)_state.EnemyList[randomNumber].Clone();
 
             return enemy;
 		}
