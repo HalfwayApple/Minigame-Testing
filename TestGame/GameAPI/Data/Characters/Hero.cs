@@ -1,5 +1,5 @@
 ﻿using GameAPI.Data.Items.Equipment;
-using GameAPI.Data.Items.Equipment.Armor;
+using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
 
 namespace GameAPI.Data.Characters

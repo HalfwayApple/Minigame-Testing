@@ -1,5 +1,5 @@
 ﻿using GameAPI.Data.Characters;
-using GameAPI.Data.Items.Equipment.Armor;
+using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
 
 namespace GameAPI
@@ -58,6 +58,8 @@ namespace GameAPI
             // Add enemy to enemylist
             EnemyList.Add(enemy1);
             EnemyList.Add(enemy2);
+
+            Hero.EquipWeapon(sword);
         }
     }
 }
