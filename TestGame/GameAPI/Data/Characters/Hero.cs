@@ -15,7 +15,7 @@ namespace GameAPI.Data.Characters
             ArmorValue = CalcArmorValue();
         }
 
-        public int Xp { get; set; } = 0;
+        public int Xp { get; set; } = 10;
         public Weapon? EquippedWeapon { get; set; } = null;
         public Armor? EquippedArmor { get; set; } = null;
         public List<Equipment> EquipmentInBag { get; set; } = new List<Equipment>();
