@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
-using System.Net;
+﻿using System.Net;
 
 namespace GameAPI.Tests
 {
@@ -28,9 +27,66 @@ namespace GameAPI.Tests
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             //Log
-            _log.WriteLine($"Response HTTP Status Code: {response.StatusCode}");
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task Equip_ReturnsOk_WithGameState()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/equip?index=0");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            //Log
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task Battle_ReturnsOk_WithGameState()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/battle");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            //Log
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task Attack_ReturnsOk_WithGameState()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/attack");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"status kod: {response.StatusCode}");
+
+            //Log
+            LogResponse(response);
+        }
+
+        private async void LogResponse(HttpResponseMessage response)
+        {
+            _log.WriteLine($"http status (borde va ok): {response.StatusCode}");
             var content = await response.Content.ReadAsStringAsync();
-            _log.WriteLine($"Response Content: {content}");
+            _log.WriteLine($"objekt som svar: {content}");
         }
     }
 }
