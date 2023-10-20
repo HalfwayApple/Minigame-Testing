@@ -6,6 +6,7 @@ namespace GameAPI.Data.Characters
     {
         public Enemy()
         {
+            // does not work
             CurrentHP = MaxHP;
             CurrentMana = MaxMana;
         }

@@ -4,7 +4,7 @@ namespace GameAPI.Data.Events
 {
 	public class Town : Location
 	{
-		public Town(string name, Hero hero) : base(name, hero)
+		public Town(string name) : base(name)
 		{
 		}
 	}

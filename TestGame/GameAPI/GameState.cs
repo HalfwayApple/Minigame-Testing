@@ -37,6 +37,7 @@ namespace GameAPI
                 Level = 1,
                 AttackPower = 1,
                 MaxHP = 5,
+                CurrentHP = 5,
                 MaxMana = 5,
                 ArmorValue = 0,
                 XpValue = 5,
@@ -52,6 +53,7 @@ namespace GameAPI
                 Level = 1,
                 AttackPower = 2,
                 MaxHP = 3,
+                CurrentHP = 3,
                 MaxMana = 3,
                 ArmorValue = 0,
                 XpValue = 5,
@@ -65,9 +67,9 @@ namespace GameAPI
             Hero.EquipmentInBag.Add(sword);
 
 			//Location testing
-			Location = new Town("Town", Hero);
-			//Location = new Battle("Battle", Hero, enemy1);
-			//Location = new Location("Nowhere", Hero);
+			Location = new Town("Town");
+			//Location = new Battle("Battle", enemy1);
+			//Location = new Location("Nowhere");
 		}
     }
 }

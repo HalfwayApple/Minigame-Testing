@@ -26,5 +26,19 @@ namespace GameAPI.Controllers
             var gameState = _gameManager.Equip(index);
             return Ok(gameState);
         }
-    }
+
+		[HttpGet("battle")]
+		public IActionResult Battle()
+		{
+			var gameState = _gameManager.StartFight();
+			return Ok(gameState);
+		}
+
+		[HttpGet("attack")]
+		public IActionResult Attack()
+		{
+			var gameState = _gameManager.Attack();
+			return Ok(gameState);
+		}
+	}
 }
