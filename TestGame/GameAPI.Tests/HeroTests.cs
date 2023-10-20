@@ -169,7 +169,7 @@ namespace GameAPI.Tests
             Hero hero = new Hero(1, "TestHero");
 
             // Act: ökar xp så hero borde lvla upp (10 xp för att lvla upp)
-            hero.Xp = 20; //Behövs 20 xp för lvl 2
+            hero.Xp = 20; //Behövs 20 xp för lvl 2 (19 räcker inte)
             var oldLevel = hero.Level;
             hero.LevelUpCheck();
 
