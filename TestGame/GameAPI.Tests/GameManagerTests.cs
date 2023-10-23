@@ -61,10 +61,23 @@ namespace GameAPI.Tests
             var armor = new Armor() { ArmorValue = 10 };
             gameManager.GetGameState().Location = new Town("Town");
             gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
+            gameManager.Equip(gameManager.GetGameState().Hero.EquipmentInBag.Count() - 1);
 
-            gameManager.Equip(0);
+            _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor}");
+            Assert.NotNull(gameManager.GetGameState().Hero.EquippedArmor);
+        }
 
-            _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor.ArmorValue}");
+        [Fact]
+        public void EquipArmor_ShouldEquipToHero2()
+        {
+            //Testar equippa armor med equiparmor metoden vilket fungerar utmärkt tillskillnad från den ovanför
+            var gameManager = new GameManager();
+            var armor = new Armor() { ArmorValue = 10 };
+            gameManager.GetGameState().Location = new Town("Town");
+            gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
+            gameManager.EquipArmor(armor);
+
+            _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor}");
             Assert.NotNull(gameManager.GetGameState().Hero.EquippedArmor);
         }
 
