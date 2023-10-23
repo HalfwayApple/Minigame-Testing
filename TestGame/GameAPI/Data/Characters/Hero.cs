@@ -1,6 +1,9 @@
 ﻿using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("GameAPI.Tests")]
 
 namespace GameAPI.Data.Characters
 {
@@ -132,7 +135,7 @@ namespace GameAPI.Data.Characters
         public void LevelUpCheck()
         {
             int levelCheck = CalcLevel();
-            if (levelCheck > Level) 
+            if (levelCheck > Level)
             {
                 Console.WriteLine("Level up!");
                 Level = levelCheck;
