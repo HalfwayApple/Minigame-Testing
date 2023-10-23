@@ -25,6 +25,9 @@ namespace UI_Tests
 
             await page.GotoAsync("https://localhost:placeholder/");
 
+            //kan använda await page.ClickAsync("id på knappen"); för att klicka på knappar
+            //sen page.WaitForNavigationAsync(); för att vänta på att sidan laddas om
+            //den nedanför hämtar bara ut text värden på sidan med hjälp av id
             var placeHolder = await page.QuerySelectorAllAsync("med den här får man bara ut inre text från id på hemsidan");
 
             var placeHolderForPageText = placeHolder[0].InnerTextAsync();
