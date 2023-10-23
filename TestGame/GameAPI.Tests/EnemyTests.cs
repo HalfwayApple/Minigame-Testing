@@ -10,7 +10,19 @@
             _log = output;
         }
         #endregion
-
+        [Fact]
+        public void CalcNormalDamage_ReturnsZero_WhenEnemyIsDead()
+        {
+            // Arrange
+            var enemy = new Enemy();
+            enemy.CurrentHP = 0;
+            // Act
+            int damage = enemy.CalcNormalDamage();
+            //Log
+            _log.WriteLine($"fienden är död {damage} hp kvar");
+            // Assert
+            Assert.Equal(0, damage);
+        }
         [Fact]
         public void CalcNormalDamage_ReturnsAttackPowerValue()
         {
@@ -30,6 +42,7 @@
             Assert.Equal(25, damage);
         }
 
+        //Negativt scenario
         [Fact]
         public void DropEquipment_ReturnsNull_WhenLootTableIsEmpty()
         {
@@ -47,6 +60,7 @@
             Assert.Null(equipment);
         }
 
+        //Positivt scenario
         [Fact]
         public void DropEquipment_ReturnsEquipmentFromLootTable()
         {

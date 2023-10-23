@@ -158,6 +158,7 @@ namespace GameAPI.Tests
             Assert.Equal(expectedDamage, damage);
         }
 
+        //Positivt test scenario
         [Fact]
         public void LevelUpCheck_WhenXpIsEnough_ShouldLevelUp()
         {
@@ -176,6 +177,7 @@ namespace GameAPI.Tests
             Assert.True(hero.Level > oldLevel, "Du lvlade inte upp");
         }
 
+        //Negativt test scenario
         [Fact]
         public void LevelUpCheck_WhenXpIsNotEnough_ShouldNotLevelUp()
         {
