@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace GameAPI.Tests
+﻿namespace GameAPI.Tests
 {
     public class GameControllerTests
     {

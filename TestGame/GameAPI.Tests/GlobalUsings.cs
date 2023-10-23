@@ -4,5 +4,6 @@ global using GameAPI.Data.Items.Equipment.Armors;
 global using GameAPI.Data.Items.Equipment.Weapons;
 global using Microsoft.AspNetCore.Mvc.Testing;
 global using Moq;
+global using System.Net;
 global using Xunit;
 global using Xunit.Abstractions;
