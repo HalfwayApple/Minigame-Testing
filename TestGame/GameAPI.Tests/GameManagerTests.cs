@@ -1,6 +1,4 @@
-﻿using GameAPI.Data.Events;
-
-namespace GameAPI.Tests
+﻿namespace GameAPI.Tests
 {
     public class GameManagerTests
     {
@@ -109,15 +107,16 @@ namespace GameAPI.Tests
         public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
         {
             var gameManager = new GameManager();
-            var heroMock = new Mock<Hero>();
-            var enemy = new Enemy { CurrentHP = 100, AttackPower = 20 };
-            gameManager.GetGameState().Hero = heroMock.Object;
+            //var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
+            var heroMock = new Hero(1, "Testhero");
+            var enemy = new Enemy { CurrentHP = 100, AttackPower = 5 };
+            gameManager.GetGameState().Hero = heroMock;
             gameManager.GetGameState().Location = new Battle("Battle", enemy);
 
             gameManager.EnemyTurn(enemy);
 
-            _log.WriteLine($"Hero hp efter attack: {heroMock.Object.CurrentHP}");
-            Assert.NotEqual(heroMock.Object.MaxHP, heroMock.Object.CurrentHP);
+            _log.WriteLine($"Hero hp efter attack: {heroMock.CurrentHP} hp innan attack: {heroMock.MaxHP}");
+            Assert.NotEqual(heroMock.MaxHP, heroMock.CurrentHP);
         }
 
         [Fact]
