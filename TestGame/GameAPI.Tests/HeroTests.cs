@@ -13,7 +13,7 @@ namespace GameAPI.Tests
         #endregion
 
         [Theory]
-        [InlineData(1, 10)]  // 7 baseHp + 1*3 = 10 : level 1 blir maxHp 10
+        [InlineData(1, 10)]  // 7 baseHp + 3*1 = 10 : level 1 blir maxHp 10
         [InlineData(2, 13)]  // 7 baseHp + 3*2 = 13
         [InlineData(3, 16)]  // 7 baseHp + 3*3 = 16
         [InlineData(10, 37)] // 7 baseHp + 3*10 = 37
@@ -33,9 +33,9 @@ namespace GameAPI.Tests
         }
 
         [Theory]
-        [InlineData(1, 5)] // 3 baseMana + 1*2 = 5 //level 1 blir baseMana 5
-        [InlineData(2, 7)] // 3 baseMana + 1*2 = 5
-        [InlineData(10, 23)] // 3 baseMana + 1*2 = 5
+        [InlineData(1, 5)] // 3 baseMana + 2*1 = 5 //level 1 blir baseMana 5
+        [InlineData(2, 7)] // 3 baseMana + 2*2 = 7
+        [InlineData(10, 23)] // 3 baseMana + 2*10 = 23
         public void CalcMaxMana_AtVariousLevels_ShouldReturnCorrectMp(int level, int expectedMana)
         {
             //Arrange
