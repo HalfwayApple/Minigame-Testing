@@ -195,22 +195,16 @@ namespace GameAPI.Tests
             Assert.Equal(oldLevel, hero.Level);
         }
 
-        [Theory]
-        // prevWeaponName, newWeaponName, expectedEquippedWeaponName, ExpectedBagCount
-        [InlineData(null, "Sword", "Sword", 0)]
-        [InlineData("Axe", "Sword", "Sword", 1)]
-        [InlineData("Spear", "Bow", "Bow", 1)]
-        public void EquipWeapon_ShouldHandleEquippedWeaponsCorrectly(string? prevWeaponName, string newWeaponName, string expectedEquippedWeaponName, int expectedBagCount)
+        [Fact]
+        public void EquipWeapon_ShouldEquipWeapon_WhenNoWeaponEquipped()
         {
             // Arrange
             Hero hero = new Hero(1, "TestHero");
+            hero.EquippedWeapon = null;
+            Weapon newWeapon = new Weapon { Name = "TestWeapon" };
+            hero.EquipmentInBag.Add(newWeapon);
+            int amountInBagAtStart = hero.EquipmentInBag.Count();
 
-            if (prevWeaponName != null)
-            {
-                hero.EquipWeapon(new Weapon { Name = prevWeaponName });
-            }
-
-            Weapon newWeapon = new Weapon { Name = newWeaponName };
             // Act
             hero.EquipWeapon(newWeapon);
 
@@ -218,15 +212,77 @@ namespace GameAPI.Tests
             _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
 
             // Assert
-            Assert.Equal(expectedEquippedWeaponName, hero.EquippedWeapon?.Name);
-            Assert.Equal(expectedBagCount, hero.EquipmentInBag.Count);
+            Assert.Equal(hero.EquippedWeapon?.Name, newWeapon.Name);
+            Assert.Equal(amountInBagAtStart-1, hero.EquipmentInBag.Count);
+        }
 
-            if (expectedBagCount > 0)
-            {
-                //Log
-                _log.WriteLine($"antal vapen i bag: {hero.EquipmentInBag.Count}");
-                Assert.Contains(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == prevWeaponName);
-            }
+        [Fact]
+        public void EquipWeapon_ShouldSwapWeapons_WhenWeaponEquipped()
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+            Weapon equippedWeapon = new Weapon { Name = "InitiallyEquippedWeapon" };
+            Weapon weaponToBeEquipped = new Weapon { Name = "WeaponInitiallyInBag" };
+            hero.EquippedWeapon = equippedWeapon;
+            hero.EquipmentInBag.Add(weaponToBeEquipped);
+            int amountInBagAtStart = hero.EquipmentInBag.Count();
+
+            // Act
+            hero.EquipWeapon(weaponToBeEquipped);
+
+            //Log
+            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+
+            // Assert
+            Assert.Equal(weaponToBeEquipped, hero.EquippedWeapon);
+            Assert.Equal(amountInBagAtStart, hero.EquipmentInBag.Count);
+            Assert.Contains(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == equippedWeapon.Name);
+            Assert.DoesNotContain(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == weaponToBeEquipped.Name);
+        }
+
+        [Fact]
+        public void EquipArmor_ShouldEquipArmor_WhenNoArmorEquipped()
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+            hero.EquippedWeapon = null;
+            Armor newArmor = new Armor { Name = "TestArmor" };
+            hero.EquipmentInBag.Add(newArmor);
+            int amountInBagAtStart = hero.EquipmentInBag.Count();
+
+            // Act
+            hero.EquipArmor(newArmor);
+
+            //Log
+            _log.WriteLine($"hero armor: {hero.EquippedArmor?.Name}");
+
+            // Assert
+            Assert.Equal(hero.EquippedArmor, newArmor);
+            Assert.Equal(amountInBagAtStart - 1, hero.EquipmentInBag.Count);
+        }
+
+        [Fact]
+        public void EquipArmor_ShouldSwapArmors_WhenArmorEquipped()
+        {
+            // Arrange
+            Hero hero = new Hero(1, "TestHero");
+            Armor equippedArmor = new Armor { Name = "InitiallyEquippedArmor" };
+            Armor armorToBeEquipped = new Armor { Name = "ArmorInitiallyInBag" };
+            hero.EquippedArmor = equippedArmor;
+            hero.EquipmentInBag.Add(armorToBeEquipped);
+            int amountInBagAtStart = hero.EquipmentInBag.Count();
+
+            // Act
+            hero.EquipArmor(armorToBeEquipped);
+
+            //Log
+            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+
+            // Assert
+            Assert.Equal(armorToBeEquipped, hero.EquippedArmor);
+            Assert.Equal(amountInBagAtStart, hero.EquipmentInBag.Count);
+            Assert.Contains(hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == equippedArmor.Name);
+            Assert.DoesNotContain(hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == armorToBeEquipped.Name);
         }
     }
 }
