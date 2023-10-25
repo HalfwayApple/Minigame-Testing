@@ -26,6 +26,10 @@
 
 			opponent.CurrentHP -= secondRoundDamage;
         }
-        abstract public int CalcNormalDamage();
+        public int CalcNormalDamage()
+        {
+			int damage = AttackPower;
+			return damage;
+		}
     }
 }

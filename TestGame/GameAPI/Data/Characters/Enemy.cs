@@ -13,12 +13,6 @@ namespace GameAPI.Data.Characters
         public int XpValue { get; set; }
         public List<Equipment> LootTable { get; set; } = new List<Equipment>();
 
-        override public int CalcNormalDamage()
-        {
-            int damage = AttackPower;
-            return damage;
-        }
-
         /// <summary>
         /// Creates a clone of the enemy object
         /// </summary>
