@@ -15,26 +15,12 @@ namespace GameAPI.Data.Characters
             Name = name;
 
             SetStats();
-            ArmorValue = CalcArmorValue();
         }
 
         public int Xp { get; set; } = 10;
         public Weapon? EquippedWeapon { get; set; } = null;
         public Armor? EquippedArmor { get; set; } = null;
         public List<Equipment> EquipmentInBag { get; set; } = new List<Equipment>();
-        override public int CalcNormalDamage()
-        {
-            if (EquippedWeapon != null)
-            {
-                int damage = AttackPower + EquippedWeapon.AttackPower;
-                return damage;
-            }
-            else
-            {
-                int damage = AttackPower;
-                return damage;
-            }
-        }
 
 		#region Calculations
         /// <summary>
@@ -59,11 +45,23 @@ namespace GameAPI.Data.Characters
             int leveledMana = 2 * level;
             return baseMana + leveledMana;
         }
-        /// <summary>
-        /// Calculate armor value based on equipped armor
-        /// </summary>
-        /// <returns>Armor value as Int</returns>
-        public int CalcArmorValue()
+		/// <summary>
+		/// Calculate armor value based on equipped armor
+		/// </summary>
+		/// <returns>Armor value as Int</returns>
+		public int CalcAttackPower()
+		{
+			if (EquippedWeapon != null)
+			{
+				return Level + EquippedWeapon.AttackPower;
+			}
+			else { return Level; }
+		}
+		/// <summary>
+		/// Calculate armor value based on equipped armor
+		/// </summary>
+		/// <returns>Armor value as Int</returns>
+		public int CalcArmorValue()
         {
             if (EquippedArmor != null)
             {
@@ -98,7 +96,8 @@ namespace GameAPI.Data.Characters
             MaxMana = CalcMaxMana(Level);
             CurrentHP = MaxHP;
             CurrentMana = MaxMana;
-            AttackPower = Level;
+            AttackPower = CalcAttackPower();
+            ArmorValue = CalcArmorValue();
         }
 
         /// <summary>
@@ -113,6 +112,7 @@ namespace GameAPI.Data.Characters
             }
             EquippedWeapon = weapon;
             EquipmentInBag.Remove(weapon);
+            AttackPower = CalcAttackPower();
         }
 
 		/// <summary>
@@ -127,6 +127,7 @@ namespace GameAPI.Data.Characters
             }
             EquippedArmor = armor;
 			EquipmentInBag.Remove(armor);
+            ArmorValue = CalcArmorValue();
 		}
 
         /// <summary>

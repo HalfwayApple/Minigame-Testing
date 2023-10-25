@@ -129,13 +129,13 @@ namespace GameAPI.Tests
             Hero hero = new Hero(1, "TestHero");
             Weapon SulfuronHammer = new Weapon { AttackPower = 5 };
             hero.EquipWeapon(SulfuronHammer);
-            int expectedDamage = hero.AttackPower + SulfuronHammer.AttackPower;
+            int expectedDamage = hero.Level + SulfuronHammer.AttackPower;
 
             // Act
             int damage = hero.CalcNormalDamage();
 
             //Log
-            _log.WriteLine($"Basedamage: {hero.AttackPower} AttackPower med vapen som har 5 AP:{damage}");
+            _log.WriteLine($"Basedamage: {hero.Level} AttackPower med vapen som har 5 AP:{damage}");
 
             // Assert
             Assert.Equal(expectedDamage, damage);
