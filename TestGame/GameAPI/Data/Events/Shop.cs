@@ -4,9 +4,10 @@ namespace GameAPI.Data.Events
 {
 	public class Shop : Location
 	{
-		public List<Equipment> EquipmentForSale = new List<Equipment>();
+		public List<Equipment> EquipmentForSale { get; set; }
 		public Shop(string name) : base(name)
 		{
+			EquipmentForSale = new List<Equipment>();
 		}
 	}
 }
