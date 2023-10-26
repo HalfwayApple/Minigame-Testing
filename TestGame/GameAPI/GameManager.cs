@@ -68,7 +68,7 @@ namespace GameAPI
         public GameState Sell(int index)
         {
 			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
-			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the mount of items in the bag");
+			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the amount of items in the bag");
 
 			Equipment item = _state.Hero.EquipmentInBag[index];
 			_state.Hero.Money += item.Price;

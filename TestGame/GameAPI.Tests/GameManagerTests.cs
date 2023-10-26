@@ -4,10 +4,12 @@
     {
         #region Constructor
         private readonly ITestOutputHelper _log;
+        private GameManager gameManager;
 
         public GameManagerTests(ITestOutputHelper output)
         {
             _log = output;
+            gameManager = new GameManager();
         }
         #endregion
 
@@ -15,7 +17,6 @@
         public void CanEquip_InTown_ShouldReturnTrue()
         {
             //Arrange
-            var gameManager = new GameManager();
             gameManager.GetGameState().Location = new Town("Town");
 
             //Act
@@ -29,7 +30,6 @@
         [Fact]
         public void CanEquip_NotInTown_ShouldReturnFalse()
         {
-            var gameManager = new GameManager();
             gameManager.GetGameState().Location = new Battle("Battle", new Enemy());
 
             var result = gameManager.CanEquip();
@@ -41,7 +41,6 @@
         [Fact]
         public void EquipWeapon_ShouldEquipToHero()
         {
-            var gameManager = new GameManager();
             var weapon = new Weapon();
             gameManager.GetGameState().Location = new Town("Town");
             gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
@@ -55,7 +54,6 @@
         [Fact]
         public void EquipArmor_ShouldEquipToHero()
         {
-            var gameManager = new GameManager();
             var armor = new Armor() { ArmorValue = 10 };
             gameManager.GetGameState().Location = new Town("Town");
             gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
@@ -69,7 +67,6 @@
         public void EquipArmor_ShouldEquipToHero2()
         {
             //Testar equippa armor med equiparmor metoden vilket fungerar utmärkt tillskillnad från den ovanför
-            var gameManager = new GameManager();
             var armor = new Armor() { ArmorValue = 10 };
             gameManager.GetGameState().Location = new Town("Town");
             gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
@@ -82,8 +79,6 @@
         [Fact]
         public void StartFight_ShouldChangeLocationToBattle()
         {
-            var gameManager = new GameManager();
-
             gameManager.StartFight();
 
             _log.WriteLine($"Location efter startad battle: {gameManager.GetGameState().Location}");
@@ -93,7 +88,6 @@
         [Fact]
         public void Attack_ShouldInvokeHeroAttack()
         {
-            var gameManager = new GameManager();
             var enemyMock = new Mock<Enemy>();
             gameManager.GetGameState().Location = new Battle("Battle", enemyMock.Object);
 
@@ -106,7 +100,6 @@
         [Fact]
         public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
         {
-            var gameManager = new GameManager();
             //var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
             var heroMock = new Hero(1, "Testhero");
             var enemy = new Enemy { CurrentHP = 100, AttackPower = 5 };
@@ -122,7 +115,6 @@
         [Fact]
         public void EnemyTurn_WhenEnemyHasNoHP_ShouldEndBattle()
         {
-            var gameManager = new GameManager();
             var enemy = new Enemy { CurrentHP = 0 };
             gameManager.GetGameState().Location = new Battle("Battle", enemy);
 
@@ -131,5 +123,7 @@
             _log.WriteLine($"location efter fiende är död (borde va town?): {gameManager.GetGameState().Location}");
             Assert.IsType<Town>(gameManager.GetGameState().Location);
         }
+
+
     }
 }
