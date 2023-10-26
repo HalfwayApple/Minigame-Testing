@@ -21,6 +21,7 @@ namespace GameAPI.Data.Characters
         public Weapon? EquippedWeapon { get; set; } = null;
         public Armor? EquippedArmor { get; set; } = null;
         public List<Equipment> EquipmentInBag { get; set; } = new List<Equipment>();
+        public int Money { get; set; } = 0;
 
 		#region Calculations
         /// <summary>

@@ -124,6 +124,7 @@ namespace GameAPI
 				_state.Hero.EquipmentInBag.Add(loot);
 			}
 			_state.Hero.Xp += enemy.XpValue;
+            _state.Hero.Money += enemy.MoneyValue;
 			_state.Hero.LevelUpCheck();
             _state.Location = new Town("Town");
 

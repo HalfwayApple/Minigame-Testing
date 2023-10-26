@@ -66,6 +66,7 @@
         {
             // Arrange
             var enemy = new Enemy();
+            enemy.NoDropChance = 0;
             var mockEquipment = new Mock<Equipment>().Object;
             mockEquipment.Name = "infantry lasgun";
             enemy.LootTable.Add(mockEquipment);
