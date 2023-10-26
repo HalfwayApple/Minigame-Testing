@@ -1,6 +1,9 @@
 ﻿using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("GameAPI.Tests")]
 
 namespace GameAPI.Data.Characters
 {
@@ -12,26 +15,12 @@ namespace GameAPI.Data.Characters
             Name = name;
 
             SetStats();
-            ArmorValue = CalcArmorValue();
         }
 
         public int Xp { get; set; } = 10;
         public Weapon? EquippedWeapon { get; set; } = null;
         public Armor? EquippedArmor { get; set; } = null;
         public List<Equipment> EquipmentInBag { get; set; } = new List<Equipment>();
-        override public int CalcNormalDamage()
-        {
-            if (EquippedWeapon != null)
-            {
-                int damage = AttackPower + EquippedWeapon.AttackPower;
-                return damage;
-            }
-            else
-            {
-                int damage = AttackPower;
-                return damage;
-            }
-        }
 
 		#region Calculations
         /// <summary>
@@ -41,7 +30,9 @@ namespace GameAPI.Data.Characters
         /// <returns>Integer of Max Hp for specified level</returns>
 		internal int CalcMaxHp(int level)
         {
-            int baseHp = 7;
+            if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level), "Level cannot be negative or 0");
+
+			int baseHp = 7;
             int leveledHp = 3 * level;
             return baseHp + leveledHp;
         }
@@ -52,15 +43,29 @@ namespace GameAPI.Data.Characters
 		/// <returns>Integer of Max Mana for specified level</returns>
 		internal int CalcMaxMana(int level)
         {
-            int baseMana = 3;
+			if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level), "Level cannot be negative or 0");
+
+			int baseMana = 3;
             int leveledMana = 2 * level;
             return baseMana + leveledMana;
         }
-        /// <summary>
-        /// Calculate armor value based on equipped armor
-        /// </summary>
-        /// <returns>Armor value as Int</returns>
-        public int CalcArmorValue()
+		/// <summary>
+		/// Calculate armor value based on equipped armor
+		/// </summary>
+		/// <returns>Armor value as Int</returns>
+		public int CalcAttackPower()
+		{
+			if (EquippedWeapon != null)
+			{
+				return Level + EquippedWeapon.AttackPower;
+			}
+			else { return Level; }
+		}
+		/// <summary>
+		/// Calculate armor value based on equipped armor
+		/// </summary>
+		/// <returns>Armor value as Int</returns>
+		public int CalcArmorValue()
         {
             if (EquippedArmor != null)
             {
@@ -95,7 +100,8 @@ namespace GameAPI.Data.Characters
             MaxMana = CalcMaxMana(Level);
             CurrentHP = MaxHP;
             CurrentMana = MaxMana;
-            AttackPower = Level;
+            AttackPower = CalcAttackPower();
+            ArmorValue = CalcArmorValue();
         }
 
         /// <summary>
@@ -104,12 +110,15 @@ namespace GameAPI.Data.Characters
         /// <param name="weapon"></param>
         public void EquipWeapon(Weapon weapon)
         {
-            if (EquippedWeapon != null)
+            if (weapon == null) throw new ArgumentNullException(nameof(weapon), "Weapon cannot be null");
+
+			if (EquippedWeapon != null)
             {
                 EquipmentInBag.Add(EquippedWeapon);
             }
             EquippedWeapon = weapon;
             EquipmentInBag.Remove(weapon);
+            AttackPower = CalcAttackPower();
         }
 
 		/// <summary>
@@ -118,12 +127,15 @@ namespace GameAPI.Data.Characters
 		/// <param name="armor"></param>
 		public void EquipArmor(Armor armor)
         {
-            if (EquippedArmor != null)
+			if (armor == null) throw new ArgumentNullException(nameof(armor), "Armor cannot be null");
+
+			if (EquippedArmor != null)
             {
                 EquipmentInBag.Add(EquippedArmor);
             }
             EquippedArmor = armor;
 			EquipmentInBag.Remove(armor);
+            ArmorValue = CalcArmorValue();
 		}
 
         /// <summary>
@@ -132,7 +144,7 @@ namespace GameAPI.Data.Characters
         public void LevelUpCheck()
         {
             int levelCheck = CalcLevel();
-            if (levelCheck > Level) 
+            if (levelCheck > Level)
             {
                 Console.WriteLine("Level up!");
                 Level = levelCheck;
