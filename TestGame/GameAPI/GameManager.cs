@@ -51,7 +51,13 @@ namespace GameAPI
             if (_state.Location.GetType() != typeof(Shop)) { return _state; }
 
             Shop shopLocation = (Shop) _state.Location;
+
+            if (shopLocation.EquipmentForSale.Count == 0) {  return _state; }
+
             Equipment item = shopLocation.EquipmentForSale[index];
+
+            if (_state.Hero.Money < item.Price) { return _state; }
+
             _state.Hero.Money -= item.Price;
             _state.Hero.EquipmentInBag.Add(item);
             shopLocation.EquipmentForSale.Remove(item);
@@ -62,6 +68,7 @@ namespace GameAPI
         public GameState Sell(int index)
         {
 			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
+			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the mount of items in the bag");
 
 			Equipment item = _state.Hero.EquipmentInBag[index];
 			_state.Hero.Money += item.Price;
