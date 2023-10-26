@@ -137,9 +137,11 @@ namespace GameAPI
 		/// <returns>GameState</returns>
 		internal GameState EnemyTurn(Enemy enemy)
 		{
+			Battle battleLocation = (Battle)_state.Location;
+
 			if (enemy.CurrentHP > 0)
 			{
-				enemy.Attack(_state.Hero);
+				battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
 				return _state;
 			}
 			else
@@ -159,9 +161,9 @@ namespace GameAPI
             Battle battleLocation = (Battle) _state.Location;
             Enemy enemy = battleLocation.Enemy;
 
-            _state.Hero.Attack(enemy);
+            battleLocation.DamageDoneLastTurn = _state.Hero.Attack(enemy);
 
-            return EnemyTurn(enemy);
+			return EnemyTurn(enemy);
 		}
 	}
 }
