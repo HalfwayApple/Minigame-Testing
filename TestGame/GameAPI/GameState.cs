@@ -20,12 +20,14 @@ namespace GameAPI
 			Weapon sword = new()
             {
                 Name = "Sword",
-                AttackPower = 2
+                AttackPower = 2,
+                Price = 40
             };
             Armor breastplate = new()
             {
                 Name = "Breastplate",
-                ArmorValue = 1
+                ArmorValue = 1,
+                Price = 35
             };
 
             // Create enemies

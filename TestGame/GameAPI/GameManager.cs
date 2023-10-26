@@ -19,13 +19,37 @@ namespace GameAPI
             return _state;
         }
 
+		#region Shopping
+
+        public GameState Buy(int index)
+        {
+            Shop shopLocation = (Shop) _state.Location;
+            Equipment item = shopLocation.EquipmentForSale[index];
+            _state.Hero.Money -= item.Price;
+            _state.Hero.EquipmentInBag.Add(item);
+            shopLocation.EquipmentForSale.Remove(item);
+
+            return _state;
+        }
+
+        public GameState Sell(int index)
+        {
+            Equipment item = _state.Hero.EquipmentInBag[index];
+			_state.Hero.Money += item.Price;
+			_state.Hero.EquipmentInBag.Remove(item);
+
+            return _state;
+		}
+
+		#endregion
+
 		#region Equip
 
-        /// <summary>
-        /// 1) Checks if the hero can currently equip items. 2) Checks the type of equipment. 3) Matches the type to the correct Equip function to equip the item
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns>GameState</returns>
+		/// <summary>
+		/// 1) Checks if the hero can currently equip items. 2) Checks the type of equipment. 3) Matches the type to the correct Equip function to equip the item
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns>GameState</returns>
 		public GameState Equip(int index)
         {
             if (CanEquip() == false) { return _state; }
