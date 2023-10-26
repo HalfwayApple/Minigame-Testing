@@ -14,7 +14,7 @@ namespace GameAPI
         public GameState() 
         {
             // Create hero
-            Hero = new(1, "Daniel");
+            Hero = new(1, "Ted");
 
 			// Create some loot
 			Weapon sword = new()
@@ -41,13 +41,14 @@ namespace GameAPI
                 MaxMana = 5,
                 ArmorValue = 0,
                 XpValue = 5,
-            };
+				MoneyValue = 10
+			};
             enemy1.LootTable.Add(sword);
             enemy1.LootTable.Add(breastplate);
 
             Enemy enemy2 = new()
             {
-                Id = 33,
+                Id = 3,
                 Name = "Rat",
                 Description = "European first enemy",
                 Level = 1,
@@ -57,7 +58,8 @@ namespace GameAPI
                 MaxMana = 3,
                 ArmorValue = 0,
                 XpValue = 5,
-            };
+				MoneyValue = 10
+			};
             enemy2.LootTable.Add(breastplate);
 
             // Add enemy to enemylist
