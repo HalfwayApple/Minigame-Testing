@@ -124,6 +124,134 @@
             Assert.IsType<Town>(gameManager.GetGameState().Location);
         }
 
+		[Fact]
+		public void Buy_ShouldReturnSameState_IfNotInShop()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Town("Town");
+			int heroMoneyAtStart = 500;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
 
-    }
+			// Act
+			var result = gameManager.Buy(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart, result.Hero.Money);
+			Assert.Empty(result.Hero.EquipmentInBag);
+		}
+
+		[Fact]
+		public void Buy_ShouldReturnSameState_IfNoEquipmentForSale()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Shop("Shop");
+			var shopLocation = (Shop)gameManager.GetGameState().Location;
+			shopLocation.EquipmentForSale.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			int heroMoneyAtStart = 500;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+
+			// Act
+			var result = gameManager.Buy(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart, result.Hero.Money);
+			Assert.Empty(result.Hero.EquipmentInBag);
+			Assert.Empty(shopLocation.EquipmentForSale);
+		}
+
+		[Fact]
+		public void Buy_ShouldReturnSameState_IfNotEnoughMoney()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Shop("Shop");
+			var shopLocation = (Shop)gameManager.GetGameState().Location;
+			var item = new Equipment { Price = 100 };
+			shopLocation.EquipmentForSale.Add(item);
+			int heroMoneyAtStart = 50;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+
+
+			// Act
+			var result = gameManager.Buy(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart, result.Hero.Money);
+			Assert.Contains(item, shopLocation.EquipmentForSale);
+			Assert.DoesNotContain(item, result.Hero.EquipmentInBag);
+		}
+
+		[Fact]
+		public void Buy_ShouldUpdateState_IfAllConditionsMet()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Shop("Shop");
+			var shopLocation = (Shop)gameManager.GetGameState().Location;
+			shopLocation.EquipmentForSale.Clear();
+			var item = new Equipment { Price = 100 };
+			shopLocation.EquipmentForSale.Add(item);
+            int heroMoneyAtStart = 200;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+
+			// Act
+			var result = gameManager.Buy(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart - item.Price, result.Hero.Money);
+			Assert.Contains(item, result.Hero.EquipmentInBag);
+			Assert.DoesNotContain(item, shopLocation.EquipmentForSale);
+		}
+
+		[Fact]
+		public void Sell_ShouldReturnSameState_IfNotInShop()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Town("Town");
+			int heroMoneyAtStart = 500;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			var item = new Equipment { Price = 100 };
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(item);
+
+			// Act
+			var result = gameManager.Sell(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart, result.Hero.Money);
+			Assert.Contains(item, result.Hero.EquipmentInBag);
+		}
+
+		[Fact]
+		public void Sell_ShouldThrowException_IfIndexOutOfRange()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Shop("Shop");
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+
+			// Act & Assert
+			Assert.Throws<ArgumentOutOfRangeException>(() => gameManager.Sell(0));
+		}
+
+		[Fact]
+		public void Sell_ShouldUpdateState_IfAllConditionsMet()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Shop("Shop");
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			var item = new Equipment { Price = 100 };
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(item);
+			int heroMoneyAtStart = 0;
+			gameManager.GetGameState().Hero.Money = heroMoneyAtStart;
+
+			// Act
+			var result = gameManager.Sell(0);
+
+			// Assert
+			Assert.Equal(heroMoneyAtStart + item.Price, result.Hero.Money);
+			Assert.DoesNotContain(item, result.Hero.EquipmentInBag);
+		}
+	}
 }
