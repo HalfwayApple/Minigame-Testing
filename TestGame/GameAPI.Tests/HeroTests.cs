@@ -5,11 +5,13 @@ namespace GameAPI.Tests
         //använd _log för att logga i test explorer
         #region Constructor
         private readonly ITestOutputHelper _log;
+		private Hero _hero;
 
-        public HeroTests(ITestOutputHelper output)
+		public HeroTests(ITestOutputHelper output)
         {
             _log = output;
-        }
+			_hero = new Hero(1, "Test Hero");
+		}
         #endregion
 
         [Theory]
@@ -20,13 +22,11 @@ namespace GameAPI.Tests
         public void CalcMaxHp_AtVariousLevels_ShouldReturnCorrectHp(int level, int expectedHp)
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-
             // Act
-            int maxHp = hero.CalcMaxHp(level);
+            int maxHp = _hero.CalcMaxHp(level);
 
             //Log
-            _log.WriteLine($"Hero baseHp: {hero.MaxHP} Hero level: {level} Hero Hp: {maxHp}");
+            _log.WriteLine($"Hero baseHp: {_hero.MaxHP} Hero level: {level} Hero Hp: {maxHp}");
 
             // Assert
             Assert.Equal(expectedHp, maxHp);
@@ -39,13 +39,11 @@ namespace GameAPI.Tests
         public void CalcMaxMana_AtVariousLevels_ShouldReturnCorrectMp(int level, int expectedMana)
         {
             //Arrange
-            Hero hero = new Hero(1, "TestHero");
-
             //Act
-            int maxMana = hero.CalcMaxMana(level);
+            int maxMana = _hero.CalcMaxMana(level);
 
             //Log
-            _log.WriteLine($"Level: {level} Mp: {maxMana} baseMp: {hero.MaxMana}");
+            _log.WriteLine($"Level: {level} Mp: {maxMana} baseMp: {_hero.MaxMana}");
 
             //Assert
             Assert.Equal(expectedMana, maxMana);
@@ -57,18 +55,18 @@ namespace GameAPI.Tests
         [InlineData(30)]
         public void CalcArmorValue_WithVariousArmors_ShouldReturnUpdatedArmorValues(int armorVal)
         {
-            Hero hero = new Hero(1, "TestHero");
-            Armor testArmor = new Armor
+			//Arrange
+			Armor testArmor = new Armor
             {
                 ArmorValue = armorVal
             };
-            hero.EquipArmor(testArmor);
+            _hero.EquipArmor(testArmor);
 
             // Act
-            int armorValue = hero.CalcArmorValue();
+            int armorValue = _hero.CalcArmorValue();
 
             //Log
-            _log.WriteLine($"Armor value med armor: {hero.ArmorValue} ArmorValue utan armor: {armorValue}");
+            _log.WriteLine($"Armor value med armor: {_hero.ArmorValue} ArmorValue utan armor: {armorValue}");
 
             // Assert
             Assert.Equal(testArmor.ArmorValue, armorValue);
@@ -81,11 +79,10 @@ namespace GameAPI.Tests
         public void CalcLevel_XpLessThan10_ShouldReturnLevelOne(int heroxp, int expectedLevel)
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-            hero.Xp = heroxp;
+            _hero.Xp = heroxp;
 
             // Act
-            int level = hero.CalcLevel();
+            int level = _hero.CalcLevel();
 
             //Log
             _log.WriteLine($"xp du får in: {heroxp} vilket level du är/blir: {level}");
@@ -104,38 +101,36 @@ namespace GameAPI.Tests
         public void SetStats_GivenXp_ShouldSetCorrectStats(int xp, int expectedLevel, int expectedMaxHp, int expectedMaxMana, int expectedAttackPower)
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-            hero.Xp = xp;
+            _hero.Xp = xp;
 
             // Act
-            hero.SetStats();
+            _hero.SetStats();
 
             //Log
-            _log.WriteLine($"level: {hero.Level} max hp: {hero.MaxHP} max mana: {hero.MaxMana} attackpower: {hero.AttackPower}");
+            _log.WriteLine($"level: {_hero.Level} max hp: {_hero.MaxHP} max mana: {_hero.MaxMana} attackpower: {_hero.AttackPower}");
 
             // Assert
-            Assert.Equal(expectedLevel, hero.Level);
-            Assert.Equal(expectedMaxHp, hero.MaxHP);
-            Assert.Equal(expectedMaxMana, hero.MaxMana);
-            Assert.Equal(expectedMaxHp, hero.CurrentHP);
-            Assert.Equal(expectedMaxMana, hero.CurrentMana);
-            Assert.Equal(expectedAttackPower, hero.AttackPower);
+            Assert.Equal(expectedLevel, _hero.Level);
+            Assert.Equal(expectedMaxHp, _hero.MaxHP);
+            Assert.Equal(expectedMaxMana, _hero.MaxMana);
+            Assert.Equal(expectedMaxHp, _hero.CurrentHP);
+            Assert.Equal(expectedMaxMana, _hero.CurrentMana);
+            Assert.Equal(expectedAttackPower, _hero.AttackPower);
         }
 
         [Fact]
         public void CalcNormalDamage_WithWeaponEquipped_ShouldReturnCombinedDamage()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
             Weapon SulfuronHammer = new Weapon { AttackPower = 5 };
-            hero.EquipWeapon(SulfuronHammer);
-            int expectedDamage = hero.Level + SulfuronHammer.AttackPower;
+            _hero.EquipWeapon(SulfuronHammer);
+            int expectedDamage = _hero.Level + SulfuronHammer.AttackPower;
 
             // Act
-            int damage = hero.CalcNormalDamage();
+            int damage = _hero.CalcNormalDamage();
 
             //Log
-            _log.WriteLine($"Basedamage: {hero.Level} AttackPower med vapen som har 5 AP:{damage}");
+            _log.WriteLine($"Basedamage: {_hero.Level} AttackPower med vapen som har 5 AP:{damage}");
 
             // Assert
             Assert.Equal(expectedDamage, damage);
@@ -145,14 +140,13 @@ namespace GameAPI.Tests
         public void CalcNormalDamage_WithoutWeaponEquipped_ShouldReturnHeroAttackPower()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-            int expectedDamage = hero.AttackPower;
+            int expectedDamage = _hero.AttackPower;
 
             // Act
-            int damage = hero.CalcNormalDamage();
+            int damage = _hero.CalcNormalDamage();
 
             //Log
-            _log.WriteLine($"Basedamage: {hero.AttackPower} AttackPower utan vapen:{damage}");
+            _log.WriteLine($"Basedamage: {_hero.AttackPower} AttackPower utan vapen:{damage}");
 
             // Assert
             Assert.Equal(expectedDamage, damage);
@@ -163,18 +157,16 @@ namespace GameAPI.Tests
         public void LevelUpCheck_WhenXpIsEnough_ShouldLevelUp()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-
-            // Act: ökar xp så hero borde lvla upp (10 xp för att lvla upp)
-            hero.Xp = 20; //Behövs 20 xp för lvl 2 (19 räcker inte)
-            var oldLevel = hero.Level;
-            hero.LevelUpCheck();
+            // Act: ökar xp så _hero borde lvla upp (10 xp för att lvla upp)
+            _hero.Xp = 20; //Behövs 20 xp för lvl 2 (19 räcker inte)
+            var oldLevel = _hero.Level;
+            _hero.LevelUpCheck();
 
             //Log
-            _log.WriteLine($"Ny level för hero: {hero.Level} Gammal level för hero: {oldLevel}");
+            _log.WriteLine($"Ny level för _hero: {_hero.Level} Gammal level för _hero: {oldLevel}");
 
             // Assert
-            Assert.True(hero.Level > oldLevel, "Du lvlade inte upp");
+            Assert.True(_hero.Level > oldLevel, "Du lvlade inte upp");
         }
 
         //Negativt test scenario
@@ -182,107 +174,137 @@ namespace GameAPI.Tests
         public void LevelUpCheck_WhenXpIsNotEnough_ShouldNotLevelUp()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-
             // Act öka inte xp, borde inte lvla upp
-            var oldLevel = hero.Level;
-            hero.LevelUpCheck();
+            var oldLevel = _hero.Level;
+            _hero.LevelUpCheck();
 
             //Log
-            _log.WriteLine($"Ny level för hero: {hero.Level} Gammal level för hero: {oldLevel}");
+            _log.WriteLine($"Ny level för _hero: {_hero.Level} Gammal level för _hero: {oldLevel}");
 
             // Assert
-            Assert.Equal(oldLevel, hero.Level);
+            Assert.Equal(oldLevel, _hero.Level);
         }
 
         [Fact]
         public void EquipWeapon_ShouldEquipWeapon_WhenNoWeaponEquipped()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-            hero.EquippedWeapon = null;
+            _hero.EquippedWeapon = null;
             Weapon newWeapon = new Weapon { Name = "TestWeapon" };
-            hero.EquipmentInBag.Add(newWeapon);
-            int amountInBagAtStart = hero.EquipmentInBag.Count();
+            _hero.EquipmentInBag.Add(newWeapon);
+            int amountInBagAtStart = _hero.EquipmentInBag.Count();
 
             // Act
-            hero.EquipWeapon(newWeapon);
+            _hero.EquipWeapon(newWeapon);
 
             //Log
-            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+            _log.WriteLine($"_hero weapon: {_hero.EquippedWeapon?.Name}");
 
             // Assert
-            Assert.Equal(hero.EquippedWeapon?.Name, newWeapon.Name);
-            Assert.Equal(amountInBagAtStart-1, hero.EquipmentInBag.Count);
+            Assert.Equal(_hero.EquippedWeapon?.Name, newWeapon.Name);
+            Assert.Equal(amountInBagAtStart-1, _hero.EquipmentInBag.Count);
         }
 
         [Fact]
         public void EquipWeapon_ShouldSwapWeapons_WhenWeaponEquipped()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
             Weapon equippedWeapon = new Weapon { Name = "InitiallyEquippedWeapon" };
             Weapon weaponToBeEquipped = new Weapon { Name = "WeaponInitiallyInBag" };
-            hero.EquippedWeapon = equippedWeapon;
-            hero.EquipmentInBag.Add(weaponToBeEquipped);
-            int amountInBagAtStart = hero.EquipmentInBag.Count();
+            _hero.EquippedWeapon = equippedWeapon;
+            _hero.EquipmentInBag.Add(weaponToBeEquipped);
+            int amountInBagAtStart = _hero.EquipmentInBag.Count();
 
             // Act
-            hero.EquipWeapon(weaponToBeEquipped);
+            _hero.EquipWeapon(weaponToBeEquipped);
 
             //Log
-            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+            _log.WriteLine($"_hero weapon: {_hero.EquippedWeapon?.Name}");
 
             // Assert
-            Assert.Equal(weaponToBeEquipped, hero.EquippedWeapon);
-            Assert.Equal(amountInBagAtStart, hero.EquipmentInBag.Count);
-            Assert.Contains(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == equippedWeapon.Name);
-            Assert.DoesNotContain(hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == weaponToBeEquipped.Name);
+            Assert.Equal(weaponToBeEquipped, _hero.EquippedWeapon);
+            Assert.Equal(amountInBagAtStart, _hero.EquipmentInBag.Count);
+            Assert.Contains(_hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == equippedWeapon.Name);
+            Assert.DoesNotContain(_hero.EquipmentInBag, equipment => equipment is Weapon w && w.Name == weaponToBeEquipped.Name);
         }
 
         [Fact]
         public void EquipArmor_ShouldEquipArmor_WhenNoArmorEquipped()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
-            hero.EquippedWeapon = null;
+            _hero.EquippedWeapon = null;
             Armor newArmor = new Armor { Name = "TestArmor" };
-            hero.EquipmentInBag.Add(newArmor);
-            int amountInBagAtStart = hero.EquipmentInBag.Count();
+            _hero.EquipmentInBag.Add(newArmor);
+            int amountInBagAtStart = _hero.EquipmentInBag.Count();
 
             // Act
-            hero.EquipArmor(newArmor);
+            _hero.EquipArmor(newArmor);
 
             //Log
-            _log.WriteLine($"hero armor: {hero.EquippedArmor?.Name}");
+            _log.WriteLine($"_hero armor: {_hero.EquippedArmor?.Name}");
 
             // Assert
-            Assert.Equal(hero.EquippedArmor, newArmor);
-            Assert.Equal(amountInBagAtStart - 1, hero.EquipmentInBag.Count);
+            Assert.Equal(_hero.EquippedArmor, newArmor);
+            Assert.Equal(amountInBagAtStart - 1, _hero.EquipmentInBag.Count);
         }
 
         [Fact]
         public void EquipArmor_ShouldSwapArmors_WhenArmorEquipped()
         {
             // Arrange
-            Hero hero = new Hero(1, "TestHero");
             Armor equippedArmor = new Armor { Name = "InitiallyEquippedArmor" };
             Armor armorToBeEquipped = new Armor { Name = "ArmorInitiallyInBag" };
-            hero.EquippedArmor = equippedArmor;
-            hero.EquipmentInBag.Add(armorToBeEquipped);
-            int amountInBagAtStart = hero.EquipmentInBag.Count();
+            _hero.EquippedArmor = equippedArmor;
+            _hero.EquipmentInBag.Add(armorToBeEquipped);
+            int amountInBagAtStart = _hero.EquipmentInBag.Count();
 
             // Act
-            hero.EquipArmor(armorToBeEquipped);
+            _hero.EquipArmor(armorToBeEquipped);
 
             //Log
-            _log.WriteLine($"hero weapon: {hero.EquippedWeapon?.Name}");
+            _log.WriteLine($"_hero weapon: {_hero.EquippedWeapon?.Name}");
 
             // Assert
-            Assert.Equal(armorToBeEquipped, hero.EquippedArmor);
-            Assert.Equal(amountInBagAtStart, hero.EquipmentInBag.Count);
-            Assert.Contains(hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == equippedArmor.Name);
-            Assert.DoesNotContain(hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == armorToBeEquipped.Name);
+            Assert.Equal(armorToBeEquipped, _hero.EquippedArmor);
+            Assert.Equal(amountInBagAtStart, _hero.EquipmentInBag.Count);
+            Assert.Contains(_hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == equippedArmor.Name);
+            Assert.DoesNotContain(_hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == armorToBeEquipped.Name);
         }
-    }
+
+		[Fact]
+		public void EquipWeapon_WhenWeaponIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => _hero.EquipWeapon(null));
+		}
+
+		[Fact]
+		public void EquipArmor_WhenArmorIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => _hero.EquipArmor(null));
+		}
+
+		[Theory]
+		[InlineData(-1)]
+		[InlineData(0)]
+		public void CalcMaxHp_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxHp(level));
+		}
+
+		[Theory]
+		[InlineData(-1)]
+		[InlineData(0)]
+		public void CalcMaxMana_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxMana(level));
+		}
+
+		[Fact]
+		public void CalcLevel_WhenXpIsLessThanTen_ReturnsOne()
+		{
+			_hero.Xp = 5;
+			var result = _hero.CalcLevel();
+			Assert.Equal(1, result);
+		}
+	}
 }
