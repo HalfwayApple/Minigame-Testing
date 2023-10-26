@@ -18,17 +18,9 @@ const PlayGame = () => {
         }
     }
 
-    // console.log(currentGameState);
-
     const displayInventory = () => {
         getInventory();
     }
-
-    // const clearScreen = () => {
-    //     var e = document.getElementById("text-display"); 
-    //     e.innerHTML = "";
-    // }
-
     
   return (
     <div className="game-container">

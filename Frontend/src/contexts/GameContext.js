@@ -31,6 +31,7 @@ export const GameContextProvider = ({ children }) => {
 
     const getInventory = async () => {
         await setCurrentItems(currentGameState.hero.equipmentInBag);
+        console.log(currentGameState);
         console.log(currentItems);
     }
 
