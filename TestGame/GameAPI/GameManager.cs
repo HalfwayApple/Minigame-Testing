@@ -3,6 +3,7 @@ using GameAPI.Data.Events;
 using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
+using System.Xml.Linq;
 
 namespace GameAPI
 {
@@ -19,10 +20,36 @@ namespace GameAPI
             return _state;
         }
 
+        public GameState ReturnToTown()
+        {
+			_state.Location = new Town("Town");
+            return _state;
+		}
+
 		#region Shopping
 
-        public GameState Buy(int index)
+        public GameState EnterShop()
         {
+			if (_state.Location.GetType() != typeof(Town)) { return _state; }
+
+            Shop shop = new ("Shop");
+			Armor breastplate = new()
+			{
+				Name = "Breastplate",
+				ArmorValue = 1,
+				Price = 35
+			};
+            shop.EquipmentForSale.Add(breastplate);
+
+			_state.Location = shop;
+
+            return _state;
+		}
+
+		public GameState Buy(int index)
+        {
+            if (_state.Location.GetType() != typeof(Shop)) { return _state; }
+
             Shop shopLocation = (Shop) _state.Location;
             Equipment item = shopLocation.EquipmentForSale[index];
             _state.Hero.Money -= item.Price;
@@ -34,7 +61,9 @@ namespace GameAPI
 
         public GameState Sell(int index)
         {
-            Equipment item = _state.Hero.EquipmentInBag[index];
+			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
+
+			Equipment item = _state.Hero.EquipmentInBag[index];
 			_state.Hero.Money += item.Price;
 			_state.Hero.EquipmentInBag.Remove(item);
 
@@ -150,9 +179,8 @@ namespace GameAPI
 			_state.Hero.Xp += enemy.XpValue;
             _state.Hero.Money += enemy.MoneyValue;
 			_state.Hero.LevelUpCheck();
-            _state.Location = new Town("Town");
 
-            return _state;
+            return ReturnToTown();
 		}
 
 		/// <summary>

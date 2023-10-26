@@ -9,7 +9,6 @@ namespace GameAPI.Data.Events
         public int DamageTakenLastTurn { get; set; }
         public Battle(string name, Enemy enemy) : base(name)
         {
-            Name = name;
             Enemy = enemy;
         }
     }
