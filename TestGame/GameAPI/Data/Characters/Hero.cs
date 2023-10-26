@@ -30,7 +30,9 @@ namespace GameAPI.Data.Characters
         /// <returns>Integer of Max Hp for specified level</returns>
 		internal int CalcMaxHp(int level)
         {
-            int baseHp = 7;
+            if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level), "Level cannot be negative or 0");
+
+			int baseHp = 7;
             int leveledHp = 3 * level;
             return baseHp + leveledHp;
         }
@@ -41,7 +43,9 @@ namespace GameAPI.Data.Characters
 		/// <returns>Integer of Max Mana for specified level</returns>
 		internal int CalcMaxMana(int level)
         {
-            int baseMana = 3;
+			if (level <= 0) throw new ArgumentOutOfRangeException(nameof(level), "Level cannot be negative or 0");
+
+			int baseMana = 3;
             int leveledMana = 2 * level;
             return baseMana + leveledMana;
         }
@@ -106,7 +110,9 @@ namespace GameAPI.Data.Characters
         /// <param name="weapon"></param>
         public void EquipWeapon(Weapon weapon)
         {
-            if (EquippedWeapon != null)
+            if (weapon == null) throw new ArgumentNullException(nameof(weapon), "Weapon cannot be null");
+
+			if (EquippedWeapon != null)
             {
                 EquipmentInBag.Add(EquippedWeapon);
             }
@@ -121,7 +127,9 @@ namespace GameAPI.Data.Characters
 		/// <param name="armor"></param>
 		public void EquipArmor(Armor armor)
         {
-            if (EquippedArmor != null)
+			if (armor == null) throw new ArgumentNullException(nameof(armor), "Armor cannot be null");
+
+			if (EquippedArmor != null)
             {
                 EquipmentInBag.Add(EquippedArmor);
             }

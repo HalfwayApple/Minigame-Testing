@@ -270,5 +270,41 @@ namespace GameAPI.Tests
             Assert.Contains(_hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == equippedArmor.Name);
             Assert.DoesNotContain(_hero.EquipmentInBag, equipment => equipment is Armor a && a.Name == armorToBeEquipped.Name);
         }
-    }
+
+		[Fact]
+		public void EquipWeapon_WhenWeaponIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => _hero.EquipWeapon(null));
+		}
+
+		[Fact]
+		public void EquipArmor_WhenArmorIsNull_ThrowsArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => _hero.EquipArmor(null));
+		}
+
+		[Theory]
+		[InlineData(-1)]
+		[InlineData(0)]
+		public void CalcMaxHp_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxHp(level));
+		}
+
+		[Theory]
+		[InlineData(-1)]
+		[InlineData(0)]
+		public void CalcMaxMana_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxMana(level));
+		}
+
+		[Fact]
+		public void CalcLevel_WhenXpIsLessThanTen_ReturnsOne()
+		{
+			_hero.Xp = 5;
+			var result = _hero.CalcLevel();
+			Assert.Equal(1, result);
+		}
+	}
 }
