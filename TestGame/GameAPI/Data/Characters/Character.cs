@@ -17,14 +17,16 @@
         /// Attacks input opponent and reduces their max hp
         /// </summary>
         /// <param name="opponent"></param>
-        public void Attack(Character opponent)
+        public int Attack(Character opponent)
         {
-            int firstRoundDamage = CalcNormalDamage();
-            int secondRoundDamage = firstRoundDamage - opponent.ArmorValue;
+            int unmigitatedDamage = CalcNormalDamage();
+            int totalDamageDealt = unmigitatedDamage - opponent.ArmorValue;
 
-			if (secondRoundDamage < 0) { secondRoundDamage = 0; } // Stop high armor vs low damage attacks from becoming healing
+			if (totalDamageDealt < 0) { totalDamageDealt = 0; } // Stop high armor vs low damage attacks from becoming healing
 
-			opponent.CurrentHP -= secondRoundDamage;
+			opponent.CurrentHP -= totalDamageDealt;
+
+            return totalDamageDealt;
         }
         public int CalcNormalDamage()
         {
