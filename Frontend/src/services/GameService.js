@@ -44,4 +44,19 @@ const GetAttackAsync = async () => {
     
 }
 
-export {GetGameStateAsync, GetBattleStartAsync, GetAttackAsync}
+const EquipItemAsync = async (index) => {
+
+    try{
+        const res = await fetch(`https://localhost:7003/Game/equip?index=${index}`, {
+        method: "GET"
+    })
+    const data = await res.json()
+    return data;
+
+    }catch(err){
+        console.error(err);
+    }
+    
+}
+
+export {GetGameStateAsync, GetBattleStartAsync, GetAttackAsync, EquipItemAsync}

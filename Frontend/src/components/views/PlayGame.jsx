@@ -4,22 +4,32 @@ import { GameContext } from "../../contexts/GameContext";
 
 const PlayGame = () => {
 
-    const {currentGameState, setCurrentGameState, enterBattle, attackEnemy} = useContext(GameContext);
+    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem} = useContext(GameContext);
+
+    const [showItems, setShowItems] = useState(false);
 
     let enemyImage = "";
 
-    if(currentGameState.location.name != "Town"){
+    if(currentGameState.location.name !== "Town"){
         if (currentGameState.location.enemy.name === "Slime"){
             enemyImage = "https://cdn.discordapp.com/attachments/1024651946721824768/1164949923725316096/slimepicfixxed.png?ex=65451329&is=65329e29&hm=e29ccf5814c4ff09a6d1ecf2285877fc2b8036f8d41062fe6b9e0a2e2053a0bd&"
         }else if(currentGameState.location.enemy.name === "Rat"){
             enemyImage = "https://i.pinimg.com/originals/2f/7c/78/2f7c78c4378b7aae8d237e083732884f.png"
         }
     }
+
+    // console.log(currentGameState);
+
+    const displayInventory = () => {
+        getInventory();
+    }
+
+    // const clearScreen = () => {
+    //     var e = document.getElementById("text-display"); 
+    //     e.innerHTML = "";
+    // }
+
     
-
-    console.log("bajs");
-    console.log(currentGameState);
-
   return (
     <div className="game-container">
         {currentGameState ? (
@@ -35,27 +45,52 @@ const PlayGame = () => {
                     ) : (
                         <p>Weapon: Unarmed</p>
                     )}
-                    <p>Armor: {currentGameState.hero.armorValue}</p>
+                    {currentGameState.hero.equippedArmor ? (
+                        <p>Armor: {currentGameState.hero.equippedArmor.name} + {currentGameState.hero.equippedArmor.armorValue}</p>
+                    ) : (
+                        <p>Armor: Unarmored</p>
+                    )}
+                    <p>Armor Value: {currentGameState.hero.armorValue}</p>
                     <p>Attack Power: {currentGameState.hero.attackPower}</p>
                     <p>Experience: {currentGameState.hero.xp}</p>
                 </div>
             
                 <div>
-                    <ul className="action-flow">
-                        <li>You are currently in: {currentGameState.location.name}</li>
+                    <h1 className="game-area-text">You are currently in: {currentGameState.location.name}</h1>
+                    <ul id="text-display" className="action-flow">
+                        {showItems === true && 
+                            currentItems.map(listItem => {
+                                return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
+                                <button 
+                                onClick={() => {
+                                    equipItem(currentItems.indexOf(listItem));
+                                    setShowItems(false);
+                                }}>Equip</button></li>
+                            })
+                        }
+                        
                     </ul>
                     <div className="button-container">
-                        {currentGameState.location.name != "Battle" &&
-                            <button className="game-button" onClick={() => enterBattle()}>Challenge an enemy</button>
+                        {currentGameState.location.name !== "Battle" &&
+                            <button className="game-button" onClick={() =>{
+                                enterBattle();
+                                setShowItems(false);
+                            }}>Challenge an enemy</button>
                         }
-                        {currentGameState.location.name == "Battle" &&
+                        {currentGameState.location.name === "Battle" &&
                             <button className="game-button" onClick={() => attackEnemy()}>Attack</button>
                         }
-                        <button className="game-button">Continue</button>
+                        {currentGameState.location.name !== "Battle" &&
+                            <button className="game-button" onClick={() => {
+                                displayInventory();
+                                setShowItems(true);
+                            }}>Check inventory</button>
+                        }
+                        
                     </div>
                 </div>
                 
-                {currentGameState.location.name != "Town" &&
+                {currentGameState.location.name !== "Town" &&
                     <div className="enemy-card">
                         <img className="fighterImage" src={enemyImage} alt="Enemy" />
                         <h3>{currentGameState.location.enemy.name}</h3>

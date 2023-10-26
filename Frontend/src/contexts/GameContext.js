@@ -1,13 +1,18 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { GetBattleStartAsync, GetGameStateAsync, GetAttackAsync } from "../services/GameService";
+import { createContext, useState, useEffect } from "react";
+import { GetBattleStartAsync, GetGameStateAsync, GetAttackAsync, EquipItemAsync } from "../services/GameService";
 
 export const GameContext = createContext();
 export const GameContextProvider = ({ children }) => {
     const [currentGameState, setCurrentGameState] = useState();
+    const [currentItems, setCurrentItems] = useState([]);
 
     useEffect(() => {
-        setGameState()
+        setGameState();
     }, []);
+
+    useEffect(() => {
+        getInventory();
+    }, [currentGameState]);
 
     const setGameState = async () => {
         let currentState = await GetGameStateAsync();
@@ -24,10 +29,21 @@ export const GameContextProvider = ({ children }) => {
         setCurrentGameState(currentState);
     }
 
+    const getInventory = async () => {
+        await setCurrentItems(currentGameState.hero.equipmentInBag);
+        console.log(currentItems);
+    }
+
+    const equipItem = async (index) => {
+        let currentState = await EquipItemAsync(index);
+        setCurrentGameState(currentState);
+    }
+
+    
     
     
     return (
-        <GameContext.Provider value={{currentGameState, setCurrentGameState, enterBattle, attackEnemy}}>
+        <GameContext.Provider value={{currentGameState, setCurrentGameState, enterBattle, attackEnemy, getInventory, equipItem, currentItems}}>
             {children}
         </GameContext.Provider>
     );
