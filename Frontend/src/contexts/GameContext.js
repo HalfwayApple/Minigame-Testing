@@ -30,9 +30,12 @@ export const GameContextProvider = ({ children }) => {
     }
 
     const getInventory = async () => {
-        await setCurrentItems(currentGameState.hero.equipmentInBag);
-        console.log(currentGameState);
-        console.log(currentItems);
+        if(currentGameState && currentGameState.hero){
+            await setCurrentItems(currentGameState.hero.equipmentInBag);
+        }else{
+            console.log("Game state or hero not available");
+        }
+        
     }
 
     const equipItem = async (index) => {
