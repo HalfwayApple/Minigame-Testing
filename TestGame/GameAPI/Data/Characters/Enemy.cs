@@ -10,7 +10,9 @@ namespace GameAPI.Data.Characters
             CurrentHP = MaxHP;
             CurrentMana = MaxMana;
         }
+        public int NoDropChance { get; set; } = 80; // int between 0 and 100 indication % chance to not drop items on death (80 = 80% chance of no loot)
         public int XpValue { get; set; }
+        public int MoneyValue { get; set; }
         public List<Equipment> LootTable { get; set; } = new List<Equipment>();
 
         /// <summary>
@@ -28,15 +30,20 @@ namespace GameAPI.Data.Characters
         /// <returns>Equipment or null</returns>
 		public Equipment? DropEquipment()
         {
-            if (LootTable == null || LootTable.Count == 0)
-            {
-                return null;
-            }
-            Random rng = new Random();
-            int randomNumber = rng.Next(0, LootTable.Count);
-            Equipment loot = LootTable[randomNumber];
+            // Check for empty loot table
+            if (LootTable == null || LootTable.Count == 0) { return null; }
 
-            return loot;
-        }
+			Random rng = new Random();
+
+            // Check for no drop chance
+			int randomNumber = rng.Next(0, 100);
+            if (randomNumber < NoDropChance) { return null; }
+
+            // Choose item to drop
+			randomNumber = rng.Next(0, LootTable.Count);
+			Equipment loot = LootTable[randomNumber];
+
+			return loot;
+		}
     }
 }
