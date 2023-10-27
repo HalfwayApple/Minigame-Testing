@@ -1,17 +1,18 @@
-import './App.css';
-import GameContextProvider from './contexts/GameContext';
-import RouteElements from './RouteElements';
-import { BrowserRouter } from 'react-router-dom';
+import './App.css'
+import GameContextProvider from './contexts/GameContext'
+import RouteElements from './RouteElements'
+import AudioPlayer from './components/music/AudioPlayer'
+import { BrowserRouter } from 'react-router-dom'
 
 function App() {
   return (
     <BrowserRouter>
+      <AudioPlayer />
       <GameContextProvider>
         <RouteElements />
       </GameContextProvider>
     </BrowserRouter>
-    
-  );
+  )
 }
 
-export default App;
+export default App

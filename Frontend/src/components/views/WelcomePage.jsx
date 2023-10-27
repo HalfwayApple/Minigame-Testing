@@ -1,18 +1,21 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
+import './WelcomePage.css';  // Make sure to import the CSS file
 
 const WelcomePage = () => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate('/PlayGame')
+        setTimeout(() => {
+            navigate('/PlayGame');
+        }, 500);
     }
 
-  return (
-    <div>
-      <button onClick={() => handleClick()}>Start game</button>
-    </div>
-  )
+    return (
+        <div className="welcome-container">
+            <button className="button" onClick={() => handleClick()}>Start Game</button>
+        </div>
+    )
 }
 
 export default WelcomePage
