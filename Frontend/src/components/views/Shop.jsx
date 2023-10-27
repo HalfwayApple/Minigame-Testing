@@ -15,8 +15,12 @@ const Shop = () => {
     const handleClick = () => { navigate('/PlayGame'); currentGameState.location.name = "Town"; }
 
     return (
-        <div className="shop-container">
+    <div className="game-container">
+        {currentGameState ? (
+            <div className="shop-container">
+            
             <h2>Shop Inventory</h2>
+            {/* <h2>for sell: {currentGameState.location.equipmentForSale[1]}</h2 */}
             <ul>
             {currentItems.map(listItem => {
                     return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
@@ -47,7 +51,7 @@ const Shop = () => {
                             <button 
                             onClick={() => {
                                 currentItems.indexOf(listItem);
-                            }}>Equip</button></li>
+                            }}>Sell</button></li>
                         })
                     }
                     
@@ -55,37 +59,25 @@ const Shop = () => {
                 <ul id="text-display" className="action-flow">
                     { 
                         currentItems.map(listItem => {
-                            return <li key={currentItems.indexOf(listItem)}>{listItem.name}
+                            return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
                             <button 
                             onClick={() => {
                                 currentItems.indexOf(listItem);
-                            }}>Equip</button></li>
+                            }}>Buy</button></li>
                         })
                     }
                     
                 </ul>
-                <div className="button-container">
-                    
-                    {currentGameState.location.name !== "Battle" &&
-                        <button className="game-button" onClick={() => {
-                            displayInventory();
-                        }}>Check inventory</button>
-                    }
-
-                    {currentGameState.location.name !== "Battle" &&
-                        <button className="game-button" onClick={() =>{
-                            // enterStore();
-                            // handleClick();
-                        }}>Enter Store</button>
-                    }
-                    
-                </div>
             </div>
             <button className="button" onClick={() => handleClick()}>Leave</button>
         </div>
-
-        
-    );
+            
+        ) : (
+            <p>Error Loading game</p>
+        )}
+      
+    </div>
+  )
 }
 
 export default Shop;
