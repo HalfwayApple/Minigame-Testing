@@ -4,9 +4,8 @@ import {
   GetGameStateAsync,
   GetAttackAsync,
   EquipItemAsync,
-  EnterShopAsync,
+  GetEnterStoreAsync,
 } from '../services/GameService'
-console.log(EnterShopAsync)
 export const GameContext = createContext()
 export const GameContextProvider = ({ children }) => {
   const [currentGameState, setCurrentGameState] = useState()
@@ -48,8 +47,8 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
-  const enterShop = async () => {
-    let currentState = await EnterShopAsync()
+  const enterStore = async () => {
+    let currentState = await GetEnterStoreAsync()
     setCurrentGameState(currentState)
   }
 
@@ -62,8 +61,8 @@ export const GameContextProvider = ({ children }) => {
         attackEnemy,
         getInventory,
         equipItem,
+        enterStore,
         currentItems,
-        enterShop,
       }}
     >
       {children}

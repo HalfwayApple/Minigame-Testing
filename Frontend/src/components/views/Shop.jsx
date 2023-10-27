@@ -9,12 +9,12 @@ const Shop = ({ exitShop }) => {
         <div className="shop-container">
             <h2>Shop Inventory</h2>
             <ul>
-                {currentGameState.shop.EquipmentForSale.map((item, index) => (
-                    <li key={index}>
-                        {item.name} - Price: {item.price}
-                        <button onClick={() => {/* buy */}}>Buy</button>
-                    </li>
-                ))}
+            {currentGameState.Shop.map((item, index) => (
+                <li key={index}>
+                    {item.name} - Price: {item.price}
+                    <button onClick={() => {/* buy logic */}}>Buy</button>
+                </li>
+            ))}
             </ul>
 
             <h2>Your Inventory</h2>
@@ -27,7 +27,7 @@ const Shop = ({ exitShop }) => {
                 ))}
             </ul>
 
-            <button onClick={exitShop}>Exit Shop</button>  // Using the prop to exit the shop
+            <button onClick={exitShop}>Exit Shop</button>
         </div>
     );
 }

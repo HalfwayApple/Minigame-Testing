@@ -49,7 +49,7 @@ const EquipItemAsync = async (index) => {
   }
 }
 
-const EnterShopAsync = async () => {
+const GetEnterStoreAsync = async () => {
   try {
     const res = await fetch('https://localhost:7003/Game/enterStore', {
       method: 'GET',
@@ -66,5 +66,5 @@ export {
   GetBattleStartAsync,
   GetAttackAsync,
   EquipItemAsync,
-  EnterShopAsync,
+  GetEnterStoreAsync,
 }
