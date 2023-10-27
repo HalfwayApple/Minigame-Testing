@@ -1,20 +1,28 @@
 import React, { useContext } from 'react';
 import { GameContext } from '../../contexts/GameContext';
+import { useNavigate } from "react-router-dom";
 import './Shop.css';
 
 
-const Shop = ({ exitShop }) => {
-    const { currentGameState } = useContext(GameContext);
+const Shop = () => {
+    const { currentGameState, currentItems, getInventory, } = useContext(GameContext);
+
+    const displayInventory = () => {
+        getInventory();
+    }
+
+    const navigate = useNavigate();
+    const handleClick = () => { navigate('/PlayGame'); }
 
     return (
         <div className="shop-container">
             <h2>Shop Inventory</h2>
             <ul>
-            {currentGameState.map(listItem => {
-                    return <li key={currentGameState.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
+            {currentItems.map(listItem => {
+                    return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
                     <button 
                     onClick={() => {
-                        currentGameState.indexOf(listItem);
+                        currentItems.indexOf(listItem);
                     }}>Equip</button></li>
                 })
             }
@@ -30,8 +38,41 @@ const Shop = ({ exitShop }) => {
                 ))}
             </ul>
 
-            <button onClick={exitShop}>Exit Shop</button>
+            <div>
+                    <h1 className="game-area-text">You are currently in: {currentGameState.location.name}</h1>
+                    <ul id="text-display" className="action-flow">
+                        { 
+                            currentItems.map(listItem => {
+                                return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
+                                <button 
+                                onClick={() => {
+                                    currentItems.indexOf(listItem);
+                                }}>Equip</button></li>
+                            })
+                        }
+                        
+                    </ul>
+                    <div className="button-container">
+                        
+                        {currentGameState.location.name !== "Battle" &&
+                            <button className="game-button" onClick={() => {
+                                displayInventory();
+                            }}>Check inventory</button>
+                        }
+
+                        {currentGameState.location.name !== "Battle" &&
+                            <button className="game-button" onClick={() =>{
+                                // enterStore();
+                                // handleClick();
+                            }}>Enter Store</button>
+                        }
+                        
+                    </div>
+                </div>
+                <button className="button" onClick={() => handleClick()}>Leave</button>
         </div>
+
+        
     );
 }
 
