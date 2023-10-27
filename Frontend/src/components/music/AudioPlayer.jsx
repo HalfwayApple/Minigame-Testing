@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import './AudioPlayer.css';
-import osrsSound from './osrs.mp3';  // import the sound
+import osrsSound from './osrs.mp3';
 
 const AudioPlayer = () => {
     const [volume, setVolume] = useState(1);

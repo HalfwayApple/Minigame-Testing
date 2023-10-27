@@ -6,7 +6,6 @@ const WelcomePage = () => {
     const navigate = useNavigate()
 
     const handleClick = () => {
-        // Adding a timeout to create a delay for the transition effect
         setTimeout(() => {
             navigate('/PlayGame');
         }, 500);

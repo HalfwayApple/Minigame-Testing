@@ -1,11 +1,9 @@
-/* WelcomePage.css */
-
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #1a1a1a; /* You can adjust this if you don't want the gray background */
+    background-color: #1a1a1a;
     margin: 0;
     padding: 0;
-    overflow: hidden; /* To prevent unwanted scrolling */
+    overflow: hidden;
 }
 
 .welcome-container {
