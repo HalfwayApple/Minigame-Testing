@@ -1,10 +1,12 @@
 import "./PlayGame.css";
 import { React, useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { GameContext } from "../../contexts/GameContext";
 
 const PlayGame = () => {
 
-    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem} = useContext(GameContext);
+    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterShop} = useContext(GameContext);
+    const navigate = useNavigate()
 
     const [showItems, setShowItems] = useState(false);
 
@@ -16,6 +18,12 @@ const PlayGame = () => {
         }else if(currentGameState.location.enemy.name === "Rat"){
             enemyImage = "https://i.pinimg.com/originals/2f/7c/78/2f7c78c4378b7aae8d237e083732884f.png"
         }
+    }
+
+    const handleClick = () => {
+        setTimeout(() => {
+            navigate('/Shop');
+        }, 500);
     }
 
     const displayInventory = () => {
@@ -78,6 +86,14 @@ const PlayGame = () => {
                                 setShowItems(true);
                             }}>Check inventory</button>
                         }
+
+                        {currentGameState.location.name === "Town" &&
+                            <button className="game-button" onClick={() => {
+                                handleClick();
+                                enterShop(true);
+                            }}>Enter Shop</button>
+                        }
+                        
                         
                     </div>
                 </div>
