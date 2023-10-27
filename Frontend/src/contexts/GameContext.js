@@ -49,7 +49,6 @@ export const GameContextProvider = ({ children }) => {
 
   const enterStore = async () => {
     let currentState = await GetEnterStoreAsync()
-    await setCurrentItems(currentGameState.hero.equipmentInBag)
     setCurrentGameState(currentState)
   }
 
