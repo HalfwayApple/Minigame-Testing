@@ -2,7 +2,6 @@ import "./PlayGame.css";
 import { React, useContext, useState } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import { useNavigate } from "react-router-dom";
-import { Shop } from "./Shop";
 
 const PlayGame = () => {
 

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { GameContext } from '../../contexts/GameContext';
 import './Shop.css';
 
+
 const Shop = ({ exitShop }) => {
     const { currentGameState } = useContext(GameContext);
 
@@ -9,12 +10,14 @@ const Shop = ({ exitShop }) => {
         <div className="shop-container">
             <h2>Shop Inventory</h2>
             <ul>
-            {currentGameState.Shop.map((item, index) => (
-                <li key={index}>
-                    {item.name} - Price: {item.price}
-                    <button onClick={() => {/* buy logic */}}>Buy</button>
-                </li>
-            ))}
+            {currentGameState.map(listItem => {
+                    return <li key={currentGameState.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
+                    <button 
+                    onClick={() => {
+                        currentGameState.indexOf(listItem);
+                    }}>Equip</button></li>
+                })
+            }
             </ul>
 
             <h2>Your Inventory</h2>
