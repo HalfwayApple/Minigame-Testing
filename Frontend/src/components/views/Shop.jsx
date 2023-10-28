@@ -5,7 +5,7 @@ import './Shop.css';
 
 
 const Shop = () => {
-    const { currentGameState, currentItems, getInventory, getEquipmentForSale } = useContext(GameContext);
+    const { currentGameState, currentItems, getInventory, getEquipmentForSale, returnToTown, } = useContext(GameContext);
 
     const displayInventory = () => {
         getInventory();
@@ -13,7 +13,7 @@ const Shop = () => {
     getEquipmentForSale();
 
     const navigate = useNavigate();
-    const handleClick = () => { navigate('/PlayGame'); currentGameState.location.name = "Town"; }
+    const handleClick = () => { navigate('/PlayGame'); returnToTown(); currentGameState.location.name = "Town"; }
 
     return (
     <div className="game-container">

@@ -61,10 +61,23 @@ const GetEnterStoreAsync = async () => {
   }
 }
 
+const GetReturnToTownAsync = async () => {
+  try {
+    const res = await fetch('https://localhost:7003/Game/returnToTown', {
+      method: 'GET',
+    })
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export {
   GetGameStateAsync,
   GetBattleStartAsync,
   GetAttackAsync,
   EquipItemAsync,
   GetEnterStoreAsync,
+  GetReturnToTownAsync,
 }

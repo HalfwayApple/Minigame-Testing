@@ -5,6 +5,7 @@ import {
   GetAttackAsync,
   EquipItemAsync,
   GetEnterStoreAsync,
+  GetReturnToTownAsync,
 } from '../services/GameService'
 export const GameContext = createContext()
 export const GameContextProvider = ({ children }) => {
@@ -26,6 +27,11 @@ export const GameContextProvider = ({ children }) => {
 
   const enterBattle = async () => {
     let currentState = await GetBattleStartAsync()
+    setCurrentGameState(currentState)
+  }
+
+  const returnToTown = async () => {
+    let currentState = await GetReturnToTownAsync()
     setCurrentGameState(currentState)
   }
 
@@ -71,6 +77,7 @@ export const GameContextProvider = ({ children }) => {
         equipItem,
         enterStore,
         getEquipmentForSale,
+        returnToTown,
         currentItems,
       }}
     >
