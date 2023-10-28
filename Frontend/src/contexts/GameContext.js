@@ -52,6 +52,14 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
+  const getEquipmentForSale = async () => {
+    if (currentGameState && currentGameState.location.name === 'Shop') {
+      await setCurrentItems(currentGameState.location.equipmentForSale)
+    } else {
+      console.log('Game state or store not available')
+    }
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -62,6 +70,7 @@ export const GameContextProvider = ({ children }) => {
         getInventory,
         equipItem,
         enterStore,
+        getEquipmentForSale,
         currentItems,
       }}
     >

@@ -5,11 +5,12 @@ import './Shop.css';
 
 
 const Shop = () => {
-    const { currentGameState, currentItems, getInventory, enterStore } = useContext(GameContext);
+    const { currentGameState, currentItems, getInventory, getEquipmentForSale } = useContext(GameContext);
 
     const displayInventory = () => {
         getInventory();
     }
+    getEquipmentForSale();
 
     const navigate = useNavigate();
     const handleClick = () => { navigate('/PlayGame'); currentGameState.location.name = "Town"; }
@@ -18,56 +19,32 @@ const Shop = () => {
     <div className="game-container">
         {currentGameState ? (
             <div className="shop-container">
-            
-            <h2>Shop Inventory</h2>
+
+            <div>
+                <h1 className="game-area-text">You are currently in: {currentGameState.location.name}</h1>
+                <h2>Shop Inventory</h2>
             {/* <h2>for sell: {currentGameState.location.equipmentForSale[1]}</h2 */}
-            <ul>
+            <ul id="text-display" className="action-flow">
             {currentItems.map(listItem => {
                     return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
                     <button 
                     onClick={() => {
                         currentItems.indexOf(listItem);
-                    }}>Equip</button></li>
+                    }}>Buy</button></li>
                 })
             }
             </ul>
 
             <h2>Your Inventory</h2>
-            <ul>
+            <ul id="text-display" className="action-flow">
                 {currentGameState.hero.equipmentInBag.map((item, index) => (
                     <li key={index}>
-                        {item.name}
+                        {item.name} + {item.attackPower}{item.armorValue}
                         <button onClick={() => {/* sell */}}>Sell</button>
                     </li>
                 ))}
             </ul>
 
-            <div>
-                <h1 className="game-area-text">You are currently in: {currentGameState.location.name}</h1>
-                <ul id="text-display" className="action-flow">
-                    { 
-                        currentItems.map(listItem => {
-                            return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                            <button 
-                            onClick={() => {
-                                currentItems.indexOf(listItem);
-                            }}>Sell</button></li>
-                        })
-                    }
-                    
-                </ul>
-                <ul id="text-display" className="action-flow">
-                    { 
-                        currentItems.map(listItem => {
-                            return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                            <button 
-                            onClick={() => {
-                                currentItems.indexOf(listItem);
-                            }}>Buy</button></li>
-                        })
-                    }
-                    
-                </ul>
             </div>
             <button className="button" onClick={() => handleClick()}>Leave</button>
         </div>
