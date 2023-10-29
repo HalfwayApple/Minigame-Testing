@@ -6,6 +6,8 @@ import {
   EquipItemAsync,
   GetEnterStoreAsync,
   GetReturnToTownAsync,
+  SellItemAsync,
+  BuyItemAsync,
 } from '../services/GameService'
 export const GameContext = createContext()
 export const GameContextProvider = ({ children }) => {
@@ -40,6 +42,8 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
+  //Kan nog göra om denna till getEquipment och ändra if satser för att minska repetition
+  //så kan man ta bort metoden getEquipmentForSale som jag (ted) Gjorde nedanför
   const getInventory = async () => {
     if (currentGameState && currentGameState.hero) {
       await setCurrentItems(currentGameState.hero.equipmentInBag)
@@ -66,6 +70,16 @@ export const GameContextProvider = ({ children }) => {
     }
   }
 
+  const sellItem = async (index) => {
+    let currentState = await SellItemAsync(index)
+    setCurrentGameState(currentState)
+  }
+
+  const buyItem = async (index) => {
+    let currentState = await BuyItemAsync(index)
+    setCurrentGameState(currentState)
+  }
+
   return (
     <GameContext.Provider
       value={{
@@ -78,6 +92,8 @@ export const GameContextProvider = ({ children }) => {
         enterStore,
         getEquipmentForSale,
         returnToTown,
+        sellItem,
+        buyItem,
         currentItems,
       }}
     >

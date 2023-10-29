@@ -5,7 +5,7 @@ import './Shop.css';
 
 
 const Shop = () => {
-    const { currentGameState, currentItems, getInventory, getEquipmentForSale, returnToTown, } = useContext(GameContext);
+    const { currentGameState, currentItems, getInventory, getEquipmentForSale, returnToTown, buyItem, sellItem, } = useContext(GameContext);
 
     const displayInventory = () => {
         getInventory();
@@ -29,7 +29,7 @@ const Shop = () => {
                     return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
                     <button 
                     onClick={() => {
-                        currentItems.indexOf(listItem);
+                        buyItem(currentItems.indexOf(listItem));
                     }}>Buy</button></li>
                 })
             }
@@ -40,7 +40,7 @@ const Shop = () => {
                 {currentGameState.hero.equipmentInBag.map((item, index) => (
                     <li key={index}>
                         {item.name} + {item.attackPower}{item.armorValue}
-                        <button onClick={() => {/* sell */}}>Sell</button>
+                        <button onClick={() => {sellItem(index)}}>Sell</button>
                     </li>
                 ))}
             </ul>

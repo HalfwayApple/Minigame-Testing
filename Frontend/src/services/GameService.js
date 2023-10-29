@@ -73,6 +73,30 @@ const GetReturnToTownAsync = async () => {
   }
 }
 
+const SellItemAsync = async (index) => {
+  try {
+    const res = await fetch(`https://localhost:7003/Game/sell?index=${index}`, {
+      method: 'GET',
+    })
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+const BuyItemAsync = async (index) => {
+  try {
+    const res = await fetch(`https://localhost:7003/Game/buy?index=${index}`, {
+      method: 'GET',
+    })
+    const data = await res.json()
+    return data
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export {
   GetGameStateAsync,
   GetBattleStartAsync,
@@ -80,4 +104,6 @@ export {
   EquipItemAsync,
   GetEnterStoreAsync,
   GetReturnToTownAsync,
+  SellItemAsync,
+  BuyItemAsync,
 }
