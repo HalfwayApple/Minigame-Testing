@@ -27,11 +27,11 @@ const PlayGame = () => {
     }
     
   return (
-    <div className="game-container">
+    <div className="game-container" id="game-container">
         {currentGameState ? (
             <>
-                <div className="hero-card">
-                    <img className="fighterImage" src="https://cdn.discordapp.com/attachments/1068620070227562659/1164550263479226449/imageedit_4_5377634979.gif?ex=65439ef3&is=653129f3&hm=0a989bec8fefb11f7c983f22dff0c21443ac03f6a8a5a4ca7d105d99c034b2d6&" alt="Hero" />
+                <div className="hero-card" id="hero-card">
+                    <img className="fighterImage" id="hero-image" src="https://cdn.discordapp.com/attachments/1068620070227562659/1164550263479226449/imageedit_4_5377634979.gif?ex=65439ef3&is=653129f3&hm=0a989bec8fefb11f7c983f22dff0c21443ac03f6a8a5a4ca7d105d99c034b2d6&" alt="Hero" />
                     <h3>{currentGameState.hero.name} The Hero</h3>
                     <p>Level: {currentGameState.hero.level}</p>
                     <p>Money: {currentGameState.hero.money}</p>
@@ -52,8 +52,8 @@ const PlayGame = () => {
                     <p>Experience: {currentGameState.hero.xp}</p>
                 </div>
             
-                <div>
-                    <h1 className="game-area-text">You are currently in: {currentGameState.location.name}</h1>
+                <div id="game-info">
+                    <h1 className="game-area-text" id="location-text">You are currently in: {currentGameState.location.name}</h1>
                     <ul id="text-display" className="action-flow">
                         {showItems === true && 
                             currentItems.map(listItem => {
@@ -67,25 +67,25 @@ const PlayGame = () => {
                         }
                         
                     </ul>
-                    <div className="button-container">
+                    <div className="button-container" id="game-buttons">
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" onClick={() =>{
+                            <button className="game-button" id="startbattle-button" onClick={() =>{
                                 enterBattle();
                                 setShowItems(false);
                             }}>Challenge an enemy</button>
                         }
                         {currentGameState.location.name === "Battle" &&
-                            <button className="game-button" onClick={() => attackEnemy()}>Attack</button>
+                            <button className="game-button" id="attack-button" onClick={() => attackEnemy()}>Attack</button>
                         }
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" onClick={() => {
+                            <button className="game-button" id="checkinventory-button" onClick={() => {
                                 displayInventory();
                                 setShowItems(true);
                             }}>Check inventory</button>
                         }
 
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" onClick={() =>{
+                            <button className="game-button" id="enterStore-button" onClick={() =>{
                                 enterStore();
                                 handleClick();
                             }}>Enter Store</button>
@@ -95,8 +95,8 @@ const PlayGame = () => {
                 </div>
                 
                 {currentGameState.location.name !== "Town" &&
-                    <div className="enemy-card">
-                        <img className="fighterImage" src={enemyImage} alt="Enemy" />
+                    <div className="enemy-card" id="enemy-card">
+                        <img className="fighterImage" id="enemy-image" src={enemyImage} alt="Enemy" />
                         <h3>{currentGameState.location.enemy.name}</h3>
                         <p>Level: {currentGameState.location.enemy.level}</p>
                         <p>HP: {currentGameState.location.enemy.currentHP}/{currentGameState.location.enemy.maxHP}</p>
@@ -110,7 +110,7 @@ const PlayGame = () => {
             </>
             
         ) : (
-            <p>Error Loading game</p>
+            <p id="error-message">Error Loading game</p>
         )}
       
     </div>
