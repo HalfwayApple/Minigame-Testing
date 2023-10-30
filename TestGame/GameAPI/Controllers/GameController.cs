@@ -104,15 +104,31 @@ namespace GameAPI.Controllers
 		[HttpGet("defend")]
 		public IActionResult Defend()
 		{
-			var gameState = _gameManager.Defend();
-			return Ok(gameState);
+			try
+			{
+				var gameState = _gameManager.Defend();
+				return Ok(gameState);
+			}
+			catch (Exception ex)
+			{
+				BadRequest(ex.Message);
+			}
+			return BadRequest();
 		}
 
 		[HttpGet("dodge")]
 		public IActionResult Dodge()
 		{
-			var gameState = _gameManager.Dodge();
-			return Ok(gameState);
+			try
+			{
+				var gameState = _gameManager.Dodge();
+				return Ok(gameState);
+			}
+			catch (Exception ex)
+			{
+				BadRequest(ex.Message);
+			}
+			return BadRequest();
 		}
 
 
