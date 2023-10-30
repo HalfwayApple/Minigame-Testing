@@ -12,6 +12,8 @@
         public int CurrentMana { get; set; }
         public int AttackPower { get; set; }
         public int ArmorValue { get; set; }
+        public int CritChance { get; set; }
+        public int DodgeChance { get; set; }
 
         /// <summary>
         /// Attacks input opponent and reduces their max hp
@@ -20,7 +22,11 @@
         public int Attack(Character opponent)
         {
             int unmigitatedDamage = CalcNormalDamage();
-            int totalDamageDealt = unmigitatedDamage - opponent.ArmorValue;
+            int mitigatedDamage = unmigitatedDamage - opponent.ArmorValue;
+            int critMultiplier = CalcCriticalDamage(CritChance);
+            int dodgeMultiplier = CalcDodge(opponent.DodgeChance);
+
+            int totalDamageDealt = mitigatedDamage * critMultiplier * dodgeMultiplier;
 
 			if (totalDamageDealt < 0) { totalDamageDealt = 0; } // Stop high armor vs low damage attacks from becoming healing
 
@@ -33,5 +39,45 @@
 			int damage = AttackPower;
 			return damage;
 		}
+
+        /// <summary>
+        /// Takes in crit chance and checks if damage crits
+        /// </summary>
+        /// <param name="critChance"></param>
+        /// <returns>Damage multiplier (1 for failed crit)</returns>
+        public int CalcCriticalDamage(int critChance)
+        {
+			Random rng = new Random();
+			int randomNumber = rng.Next(0, 100);
+
+			if (randomNumber < critChance)
+			{
+				return 2;
+			}
+			else
+			{
+				return 1;
+			}
+		}
+
+        /// <summary>
+        /// Takes in dodge chance and calculates if damage is negated. Since it returns a multiplier to be used in damage calculation, returning 0 means a sucessful dodge (since dodging multiplies damage by zero and negates it)
+        /// </summary>
+        /// <param name="dodgeChance"></param>
+        /// <returns>Damage multiplier: 0 for sucessful dodge, 1 for failed dodge</returns>
+        public int CalcDodge(int dodgeChance)
+        {
+            Random rng = new Random();
+            int randomNumber = rng.Next(0, 100);
+
+            if (randomNumber < dodgeChance)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
+        }
     }
 }
