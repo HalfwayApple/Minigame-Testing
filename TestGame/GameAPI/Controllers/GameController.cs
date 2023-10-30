@@ -16,44 +16,89 @@ namespace GameAPI.Controllers
         [HttpGet("state")]
         public IActionResult GetGameState()
         {
-            var gameState = _gameManager.GetGameState();
-            return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.GetGameState();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("returnToTown")]
 		public IActionResult ReturnToTown()
 		{
-			var gameState = _gameManager.ReturnToTown();
-			return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.ReturnToTown();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }            
 		}
 
 		[HttpGet("enterStore")]
 		public IActionResult EnterShop()
 		{
-			var gameState = _gameManager.EnterShop();
-			return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.EnterShop();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }            
 		}
 
 
 		[HttpGet("equip")]
         public IActionResult Equip(int index) // Index for which item in inventory is being equipped
         {
-            var gameState = _gameManager.Equip(index);
-            return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.Equip(index);
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
 		[HttpGet("battle")]
 		public IActionResult Battle()
 		{
-			var gameState = _gameManager.StartFight();
-			return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.StartFight();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            
 		}
 
 		[HttpGet("attack")]
-		public IActionResult Attack()
+        public IActionResult Attack()
 		{
-			var gameState = _gameManager.Attack();
-			return Ok(gameState);
+            try
+            {
+                var gameState = _gameManager.Attack();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
+            return BadRequest();
 		}
 
         [HttpGet("buy")]
@@ -74,8 +119,16 @@ namespace GameAPI.Controllers
 		[HttpGet("sell")]
 		public IActionResult Sell(int index)
 		{
-			var gameState = _gameManager.Sell(index);
-			return Ok(gameState);
+			try
+			{
+                var gameState = _gameManager.Sell(index);
+                return Ok(gameState);
+            }
+            catch(Exception ex)
+			{
+                return BadRequest(ex.Message);
+			}
+			
 		}
 	}
 }

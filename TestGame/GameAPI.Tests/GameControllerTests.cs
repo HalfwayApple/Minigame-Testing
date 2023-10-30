@@ -29,6 +29,41 @@
         }
 
         [Fact]
+        public async Task GetGameState_ReturnsBadRequest()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/state");
+            response.StatusCode = HttpStatusCode.BadRequest;
+            
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            //Log
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task GetGameState_ReturnsNotFound_IfUriWrong()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/stäjt");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+
+            //Log
+            LogResponse(response);
+        }
+
+        [Fact]
         public async Task Equip_ReturnsOk_WithGameState()
         {
             //Arrange
@@ -40,6 +75,23 @@
 
             // Assert
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            //Log
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task Equip_ReturnsBadRequest_IfIndexIncorrect()
+        {
+            //Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/equip?index=ä");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
             //Log
             LogResponse(response);
@@ -132,7 +184,7 @@
         }
 
         [Fact]
-        public async Task Buy_ReturnsBadRequest_WithException()
+        public async Task Buy_ReturnsBadRequest_IfIndexIncorrect()
         {
             // Arrange
             using var application = new WebApplicationFactory<Program>();
@@ -158,6 +210,21 @@
 
             // Assert 
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+        }
+
+        [Fact]
+        public async Task Sell_ReturnsBadRequest_IfIndexIncorrect()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act;
+            var response = await client.GetAsync("/game/sell?index=å");
+
+            // Assert 
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             _log.WriteLine($"Status kod: {response.StatusCode}");
         }
 
