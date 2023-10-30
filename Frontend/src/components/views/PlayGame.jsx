@@ -34,6 +34,7 @@ const PlayGame = () => {
                     <img className="fighterImage" src="https://cdn.discordapp.com/attachments/1068620070227562659/1164550263479226449/imageedit_4_5377634979.gif?ex=65439ef3&is=653129f3&hm=0a989bec8fefb11f7c983f22dff0c21443ac03f6a8a5a4ca7d105d99c034b2d6&" alt="Hero" />
                     <h3>{currentGameState.hero.name} The Hero</h3>
                     <p>Level: {currentGameState.hero.level}</p>
+                    <p>Money: {currentGameState.hero.money}</p>
                     <p>HP: {currentGameState.hero.currentHP}/{currentGameState.hero.maxHP}</p>
                     <p>Mana: {currentGameState.hero.currentMana}/{currentGameState.hero.maxMana}</p>
                     {currentGameState.hero.equippedWeapon ? (
