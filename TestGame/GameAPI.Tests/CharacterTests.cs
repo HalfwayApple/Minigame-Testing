@@ -52,5 +52,61 @@
             Assert.Equal(70, enemy.CurrentHP); // 100 - (40 - 10) = 70 fiende borde ha 70hp
         }
 
-    }
+		[Fact]
+		public void CalcCriticalDamage_ReturnsHigherMultiplier_IfCritOccurs()
+		{
+			// Arrange
+			var attacker = new TestCharacter();
+            attacker.CritChance = 100;
+
+			// Act
+			int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
+
+			// Assert
+            Assert.True( damageMultiplier > 1 );
+		}
+
+		[Fact]
+		public void CalcCriticalDamage_ReturnsOne_IfCritFails()
+		{
+			// Arrange
+			var attacker = new TestCharacter();
+			attacker.CritChance = 0;
+
+			// Act
+			int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
+
+			// Assert
+			Assert.True(damageMultiplier == 1);
+		}
+
+		[Fact]
+		public void CalcDodge_ReturnsZero_IfDodgeOccurs()
+		{
+			// Arrange
+			var attacker = new TestCharacter();
+			attacker.DodgeChance = 100;
+
+			// Act
+			int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+
+			// Assert
+			Assert.True(damageMultiplier == 0);
+		}
+
+		[Fact]
+		public void CalcDodge_ReturnsOne_IfFailsOccurs()
+		{
+			// Arrange
+			var attacker = new TestCharacter();
+			attacker.DodgeChance = 0;
+
+
+			// Act
+			int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+
+			// Assert
+			Assert.True(damageMultiplier == 1);
+		}
+	}
 }
