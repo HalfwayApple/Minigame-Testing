@@ -37,6 +37,7 @@ namespace GameAPI.Data.Characters
             int leveledHp = 3 * level;
             return baseHp + leveledHp;
         }
+
 		/// <summary>
 		/// Calculate Hero MaxMana based on level
 		/// </summary>
@@ -50,6 +51,7 @@ namespace GameAPI.Data.Characters
             int leveledMana = 2 * level;
             return baseMana + leveledMana;
         }
+
 		/// <summary>
 		/// Calculate armor value based on equipped armor
 		/// </summary>
@@ -62,6 +64,7 @@ namespace GameAPI.Data.Characters
 			}
 			else { return Level; }
 		}
+
 		/// <summary>
 		/// Calculate armor value based on equipped armor
 		/// </summary>
