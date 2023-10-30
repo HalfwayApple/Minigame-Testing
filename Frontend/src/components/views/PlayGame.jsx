@@ -48,7 +48,7 @@ const PlayGame = () => {
                         <p>Armor: Unarmored</p>
                     )}
                     <p>Armor Value: {currentGameState.hero.armorValue}</p>
-                    <p>Attack Power: {currentGameState.hero.attackPower}</p>
+                    <p id="attackpower-tag">Attack Power: {currentGameState.hero.attackPower}</p>
                     <p>Experience: {currentGameState.hero.xp}</p>
                 </div>
             
@@ -58,7 +58,7 @@ const PlayGame = () => {
                         {showItems === true && 
                             currentItems.map(listItem => {
                                 return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                                <button 
+                                <button id="equip-button"
                                 onClick={() => {
                                     equipItem(currentItems.indexOf(listItem));
                                     setShowItems(false);

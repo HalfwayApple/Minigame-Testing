@@ -6,35 +6,67 @@ namespace UI_Tests
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
-
-            // startar playwright
-            using var playwright = await Playwright.CreateAsync();
-
-            // gör detta för att kunna köra playwright med microsoft edge
-            var edgeExecutablePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";  // This is a common default path, adjust if necessary
-
-            await using var browser = await playwright.Chromium.LaunchAsync(new()
+            try
             {
-                Headless = true,
-                ExecutablePath = edgeExecutablePath
-            });
+                Console.WriteLine("Test has begun");
 
-            var context = await browser.NewContextAsync();
-            var page = await context.NewPageAsync();
+                // startar playwright
+                using var playwright = await Playwright.CreateAsync();
 
-            await page.GotoAsync("https://localhost:placeholder/");
+                // detta är bara för att använda microsoft edge (funkar bättre enligt mig)
+                var edgeExecutablePath = @"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
 
-            //kan använda await page.ClickAsync("id på knappen"); för att klicka på knappar
-            //sen page.WaitForNavigationAsync(); för att vänta på att sidan laddas om
-            //den nedanför hämtar bara ut text värden på sidan med hjälp av id
-            var placeHolder = await page.QuerySelectorAllAsync("med den här får man bara ut inre text från id på hemsidan");
+                await using var browser = await playwright.Chromium.LaunchAsync(new()
+                {
+                    Headless = true,
+                    ExecutablePath = edgeExecutablePath
+                });
 
-            var placeHolderForPageText = placeHolder[0].InnerTextAsync();
+                var context = await browser.NewContextAsync();
+                var page = await context.NewPageAsync();
 
+                await page.GotoAsync("http://localhost:3000/");
 
-            Console.WriteLine($"nånting händer kanske skriva vad");
-            Console.ReadLine();
+                // klickar på starta spelet
+                await page.ClickAsync("#startgame-button");
+                await page.WaitForNavigationAsync();
+                Console.WriteLine("Clicked start game button");
+
+                // skriver ut attack power innan svärdet är på
+                var startattackpower = await page.InnerTextAsync("#attackpower-tag");
+                Console.WriteLine("Attack power before equip: " + startattackpower + "'.");
+
+                // kollar inventory
+                await page.ClickAsync("#checkinventory-button");
+                await page.WaitForSelectorAsync("#equip-button");
+                Console.WriteLine("Clicked check inventory button");
+
+                // sätter på svärdet
+                await page.ClickAsync("#equip-button");
+                await page.WaitForTimeoutAsync(1000);
+                Console.WriteLine("Clicked equip button");
+
+                var attackPower = await page.InnerTextAsync("#attackpower-tag");
+                if (attackPower != "Attack Power: 3")
+                {
+                    Console.WriteLine("Test failed: Expected attack power to be '3', but found '" + attackPower + "'.");
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("Test passed: Attack power has increased to 3");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("An error occurred: " + ex.Message);
+            }
+
+            finally
+            {
+                Console.WriteLine("Test completed successfully!");
+                Console.ReadLine();
+            }
         }
     }
 }
