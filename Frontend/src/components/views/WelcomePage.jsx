@@ -13,7 +13,7 @@ const WelcomePage = () => {
 
     return (
         <div className="welcome-container">
-            <button className="button" onClick={() => handleClick()}>Start Game</button>
+            <button className="button" id='startgame-button' onClick={() => handleClick()}>Start Game</button>
         </div>
     )
 }
