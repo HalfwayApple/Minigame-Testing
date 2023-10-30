@@ -1,11 +1,13 @@
 import "./PlayGame.css";
 import { React, useContext, useState } from "react";
 import { GameContext } from "../../contexts/GameContext";
+import { useNavigate } from "react-router-dom";
 
 const PlayGame = () => {
 
-    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem} = useContext(GameContext);
+    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterStore} = useContext(GameContext);
 
+    const navigate = useNavigate();
     const [showItems, setShowItems] = useState(false);
 
     let enemyImage = "";
@@ -17,6 +19,8 @@ const PlayGame = () => {
             enemyImage = "https://i.pinimg.com/originals/2f/7c/78/2f7c78c4378b7aae8d237e083732884f.png"
         }
     }
+
+    const handleClick = () => { navigate('/Shop'); }
 
     const displayInventory = () => {
         getInventory();
@@ -77,6 +81,13 @@ const PlayGame = () => {
                                 displayInventory();
                                 setShowItems(true);
                             }}>Check inventory</button>
+                        }
+
+                        {currentGameState.location.name !== "Battle" &&
+                            <button className="game-button" onClick={() =>{
+                                enterStore();
+                                handleClick();
+                            }}>Enter Store</button>
                         }
                         
                     </div>
