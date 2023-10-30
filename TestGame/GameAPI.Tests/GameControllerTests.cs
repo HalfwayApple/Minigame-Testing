@@ -83,6 +83,84 @@
             LogResponse(response);
         }
 
+        [Fact]
+        public async Task ReturnToTown_ReturnsOk_WithGameState()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/returnToTown");
+
+            // Assert
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+
+            // Log
+            LogResponse(response);
+        }
+
+        [Fact]
+        public async Task EnterShop_ReturnsOk_WithGameState()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act
+            var response = await client.GetAsync("/game/enterStore");
+
+            // Assert 
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+        }
+
+        [Fact]
+        public async Task Buy_ReturnsOk_WithGameState()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act;
+            var response = await client.GetAsync("/game/buy?index=0");
+
+            // Assert 
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+        }
+
+        [Fact]
+        public async Task Buy_ReturnsBadRequest_WithException()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act;
+            var response = await client.GetAsync("/game/buy?index=ö");
+
+            // Assert 
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+        }
+
+        [Fact]
+        public async Task Sell_ReturnsOk_WithGameState()
+        {
+            // Arrange
+            using var application = new WebApplicationFactory<Program>();
+            using var client = application.CreateClient();
+
+            // Act;
+            var response = await client.GetAsync("/game/sell?index=0");
+
+            // Assert 
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            _log.WriteLine($"Status kod: {response.StatusCode}");
+        }
+
         private async void LogResponse(HttpResponseMessage response)
         {
             _log.WriteLine($"http status (borde va ok): {response.StatusCode}");

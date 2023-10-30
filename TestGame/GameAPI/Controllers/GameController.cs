@@ -59,8 +59,16 @@ namespace GameAPI.Controllers
         [HttpGet("buy")]
         public IActionResult Buy(int index)
         {
-            var gameState = _gameManager.Buy(index);
-            return Ok(gameState);
+			try
+			{
+                var gameState = _gameManager.Buy(index);
+                return Ok(gameState);
+            }
+            catch(Exception ex)
+			{
+				return BadRequest(ex.Message);
+			}
+            
         }
 
 		[HttpGet("sell")]
