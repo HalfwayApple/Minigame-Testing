@@ -3,6 +3,7 @@ using GameAPI.Data.Events;
 using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
+using System;
 using System.Xml.Linq;
 
 namespace GameAPI
@@ -187,7 +188,9 @@ namespace GameAPI
             _state.Hero.Money += enemy.MoneyValue;
 			_state.Hero.LevelUpCheck();
 
-            return ReturnToTown();
+			ReturnToTown();
+
+			return _state;
 		}
 
 		/// <summary>
@@ -199,15 +202,28 @@ namespace GameAPI
 		{
 			Battle battleLocation = (Battle)_state.Location;
 
-			if (enemy.CurrentHP > 0)
+			battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
+
+			return _state;
+		}
+
+		/// <summary>
+		/// Checks enemy HP and either lets enemy take a turn, or ends the battle
+		/// </summary>
+		/// <param name="enemy"></param>
+		/// <returns>GameState after EnemyTurn or EndBattle</returns>
+		internal GameState EnemyOrEnd(Enemy enemy)
+        {
+			if (enemy.CurrentHP <= 0)
 			{
-				battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
-				return _state;
+				EndBattle(enemy);
 			}
 			else
 			{
-				return EndBattle(enemy);
+				EnemyTurn(enemy);
 			}
+
+            return _state;
 		}
 
 		#endregion
@@ -217,13 +233,55 @@ namespace GameAPI
 		/// </summary>
 		/// <returns>GameState</returns>
 		public GameState Attack()
-        {
-            Battle battleLocation = (Battle) _state.Location;
-            Enemy enemy = battleLocation.Enemy;
+		{
+			Battle battleLocation = (Battle)_state.Location;
+			Enemy enemy = battleLocation.Enemy;
 
-            battleLocation.DamageDoneLastTurn = _state.Hero.Attack(enemy);
+			battleLocation.DamageDoneLastTurn = _state.Hero.Attack(enemy);
 
-			return EnemyTurn(enemy);
+            EnemyOrEnd(enemy);
+
+			return _state;
+		}
+
+		/// <summary>
+		/// Doubles the heroes armor value, lets the enemy take a swing, then returns to normal value
+		/// </summary>
+		/// <returns>GameState</returns>
+		public GameState Defend()
+		{
+			Battle battleLocation = (Battle)_state.Location;
+			Enemy enemy = battleLocation.Enemy;
+
+			int originalArmor = _state.Hero.ArmorValue;
+			int defendingArmor = originalArmor * 2;
+			_state.Hero.ArmorValue = defendingArmor;
+
+			EnemyOrEnd(enemy);
+
+			_state.Hero.ArmorValue = originalArmor;
+
+			return _state;
+		}
+
+		/// <summary>
+		/// Doubles the heroes dodge chance, lets the enemy take a swing, then revets back to normal dodge chance
+		/// </summary>
+		/// <returns>GameState</returns>
+		public GameState Dodge()
+		{
+			Battle battleLocation = (Battle)_state.Location;
+			Enemy enemy = battleLocation.Enemy;
+
+			int originalDodge = _state.Hero.DodgeChance;
+			int dodgingChance = originalDodge * 2;
+			_state.Hero.DodgeChance = dodgingChance;
+
+			EnemyOrEnd(enemy);
+
+			_state.Hero.DodgeChance = originalDodge;
+
+			return _state;
 		}
 	}
 }
