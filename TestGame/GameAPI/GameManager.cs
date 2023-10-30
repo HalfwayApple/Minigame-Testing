@@ -243,5 +243,45 @@ namespace GameAPI
 
 			return _state;
 		}
+
+		/// <summary>
+		/// Doubles the heroes armor value, lets the enemy take a swing, then returns to normal value
+		/// </summary>
+		/// <returns>GameState</returns>
+		public GameState Defend()
+		{
+			Battle battleLocation = (Battle)_state.Location;
+			Enemy enemy = battleLocation.Enemy;
+
+			int originalArmor = _state.Hero.ArmorValue;
+			int defendingArmor = originalArmor * 2;
+			_state.Hero.ArmorValue = defendingArmor;
+
+			EnemyOrEnd(enemy);
+
+			_state.Hero.ArmorValue = originalArmor;
+
+			return _state;
+		}
+
+		/// <summary>
+		/// Doubles the heroes dodge chance, lets the enemy take a swing, then revets back to normal dodge chance
+		/// </summary>
+		/// <returns>GameState</returns>
+		public GameState Dodge()
+		{
+			Battle battleLocation = (Battle)_state.Location;
+			Enemy enemy = battleLocation.Enemy;
+
+			int originalDodge = _state.Hero.DodgeChance;
+			int dodgingChance = originalDodge * 2;
+			_state.Hero.DodgeChance = dodgingChance;
+
+			EnemyOrEnd(enemy);
+
+			_state.Hero.DodgeChance = originalDodge;
+
+			return _state;
+		}
 	}
 }

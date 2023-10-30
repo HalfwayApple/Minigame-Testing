@@ -56,7 +56,22 @@ namespace GameAPI.Controllers
 			return Ok(gameState);
 		}
 
-        [HttpGet("buy")]
+		[HttpGet("defend")]
+		public IActionResult Defend()
+		{
+			var gameState = _gameManager.Defend();
+			return Ok(gameState);
+		}
+
+		[HttpGet("dodge")]
+		public IActionResult Dodge()
+		{
+			var gameState = _gameManager.Dodge();
+			return Ok(gameState);
+		}
+
+
+		[HttpGet("buy")]
         public IActionResult Buy(int index)
         {
             var gameState = _gameManager.Buy(index);
