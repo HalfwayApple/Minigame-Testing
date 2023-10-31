@@ -53,6 +53,10 @@ namespace GameAPI
 		/// <returns>GameState</returns>
 		public GameState Equip(int index)
         {
+			if (index < 0) throw new ArgumentOutOfRangeException("index cannot be less than 0");
+			if (index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException("index cannot be higher than number of items in bag");
+			if (_state.Hero.EquipmentInBag == null) throw new ArgumentNullException("Bag does not exist");
+
             if (CanEquip() == false) { return _state; }
 
             var item = _state.Hero.EquipmentInBag[index];
@@ -68,7 +72,7 @@ namespace GameAPI
             }
             else
             {
-                return _state;
+				throw new ArgumentException("Item type not in list of allowed equipment");
             }
         }
 
@@ -79,6 +83,8 @@ namespace GameAPI
         /// <returns>GameState</returns>
         internal GameState EquipWeapon(Weapon weapon)
         {
+			if (weapon == null) throw new ArgumentNullException("Weapon cannot be null");
+
             _state.Hero.EquipWeapon(weapon);
             return _state;
         }
@@ -90,6 +96,8 @@ namespace GameAPI
         /// <returns>GameState</returns>
 		internal GameState EquipArmor(Armor armor)
 		{
+			if (armor == null) throw new ArgumentNullException("Armor cannot be null");
+
 			_state.Hero.EquipArmor(armor);
 			return _state;
 		}

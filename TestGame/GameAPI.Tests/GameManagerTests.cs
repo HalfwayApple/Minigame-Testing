@@ -49,45 +49,391 @@ namespace GameAPI.Tests
 			Assert.Throws<ArgumentNullException>(() => gameManager.CanEquip());
 		}
 		#endregion
+		#region Equip
+		[Fact]
+		public void Equip_EquippingWeapon_WhenUnarmed_ShouldRemoveWeaponFromBag()
+		{
+			Weapon weapon = new Weapon();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.Empty(gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_EquippingWeapon_WhenArmed_ShouldRemoveWeaponFromBag()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.DoesNotContain(newWeapon, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_EquippingWeapon_WhenUnarmed_ShouldEquipWeaponToHero()
+		{
+			Weapon weapon = new Weapon();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Equal(weapon, gameManager.GetGameState().Hero.EquippedWeapon);
+		}
+		[Fact]
+		public void Equip_EquippingWeapon_WhenArmed_ShouldEquipWeaponToHero()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Equal(newWeapon, gameManager.GetGameState().Hero.EquippedWeapon);
+		}
+		[Fact]
+		public void Equip_EquippingWeapon_WhenArmed_ShouldPutInitialWeaponInBag()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Contains(initialWeapon, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_EquippingArmor_WhenUnarmored_ShouldRemoveArmorFromBag()
+		{
+			Armor armor = new Armor();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.Empty(gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_EquippingArmor_WhenArmored_ShouldRemoveArmorFromBag()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.DoesNotContain(newArmor, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_EquippingArmor_WhenUnarmored_ShouldEquipArmorToHero()
+		{
+			Armor armor = new Armor();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Equal(armor, gameManager.GetGameState().Hero.EquippedArmor);
+		}
+		[Fact]
+		public void Equip_EquippingArmor_WhenArmored_ShouldEquipArmorToHero()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Equal(newArmor, gameManager.GetGameState().Hero.EquippedArmor);
+		}
+		[Fact]
+		public void Equip_EquippingArmor_WhenArmored_ShouldPutInitialArmorInBag()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.Equip(0);
+
+			_log.WriteLine($"Hero equipped armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Contains(initialArmor, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void Equip_IndexLessThanZero_ShouldThrowArgumentOutOfRangeException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			Assert.Throws<ArgumentOutOfRangeException>(() => gameManager.Equip(-1));
+		}
+		[Fact]
+		public void Equip_IndexMoreThanNumberOfItemsInBag_ShouldThrowArgumentOutOfRangeException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(new Armor());
+
+			Assert.Throws<ArgumentOutOfRangeException>(() => gameManager.Equip(5));
+		}
+		[Fact]
+		public void Equip_EquipmentInBagIsNull_ShouldThrowArgumentNullException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquipmentInBag = null;
+
+			Assert.Throws<ArgumentNullException>(() => gameManager.Equip(0));
+		}
+		[Fact]
+		public void Equip_ItemIsNotAcceptedDerivativeOfEquipment_ShouldThrowArgumentException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(new Equipment());
+
+			Assert.Throws<ArgumentException>(() => gameManager.Equip(0));
+		}
+		#endregion
 		#region EquipWeapon
 		[Fact]
-        public void EquipWeapon_ShouldEquipToHero()
-        {
-            var weapon = new Weapon();
-            gameManager.GetGameState().Location = new Town("Town");
-            gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
+		public void EquipWeapon_EquippingWeapon_WhenUnarmed_ShouldRemoveWeaponFromBag()
+		{
+			Weapon weapon = new Weapon();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
 
-            gameManager.Equip(0);
+			gameManager.EquipWeapon(weapon);
 
-            _log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
-            Assert.NotNull(gameManager.GetGameState().Hero.EquippedWeapon);
-        }
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.Empty(gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipWeapon_EquippingWeapon_WhenArmed_ShouldRemoveWeaponFromBag()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.EquipWeapon(newWeapon);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.DoesNotContain(newWeapon, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipWeapon_EquippingWeapon_WhenUnarmed_ShouldEquipWeaponToHero()
+		{
+			Weapon weapon = new Weapon();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(weapon);
+
+			gameManager.EquipWeapon(weapon);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Equal(weapon, gameManager.GetGameState().Hero.EquippedWeapon);
+		}
+		[Fact]
+		public void EquipWeapon_EquippingWeapon_WhenArmed_ShouldEquipWeaponToHero()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.EquipWeapon(newWeapon);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Equal(newWeapon, gameManager.GetGameState().Hero.EquippedWeapon);
+		}
+		[Fact]
+		public void EquipWeapon_EquippingWeapon_WhenArmed_ShouldPutInitialWeaponInBag()
+		{
+			Weapon initialWeapon = new Weapon();
+			initialWeapon.Name = "InitialWeapon";
+			Weapon newWeapon = new Weapon();
+			newWeapon.Name = "NewWeapon";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedWeapon = initialWeapon;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newWeapon);
+
+			gameManager.EquipWeapon(newWeapon);
+
+			_log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
+			Assert.Contains(initialWeapon, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipWeapon_ItemIsNotWeapon_ShouldThrowArgumentException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			Weapon weapon = null;
+
+			Assert.Throws<ArgumentNullException>(() => gameManager.EquipWeapon(weapon));
+		}
 		#endregion
 		#region EquipArmor
 		[Fact]
-        public void EquipArmor_ShouldEquipToHero()
-        {
-            var armor = new Armor() { ArmorValue = 10 };
-            gameManager.GetGameState().Location = new Town("Town");
-            gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
-            gameManager.Equip(gameManager.GetGameState().Hero.EquipmentInBag.Count() - 1);
+		public void EquipArmor_EquippingArmor_WhenUnarmored_ShouldRemoveArmorFromBag()
+		{
+			Armor armor = new Armor();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
 
-            _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor}");
-            Assert.NotNull(gameManager.GetGameState().Hero.EquippedArmor);
-        }
+			gameManager.EquipArmor(armor);
 
-        [Fact]
-        public void EquipArmor_ShouldEquipToHero2()
-        {
-            //Testar equippa armor med equiparmor metoden vilket fungerar utmärkt tillskillnad från den ovanför
-            var armor = new Armor() { ArmorValue = 10 };
-            gameManager.GetGameState().Location = new Town("Town");
-            gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
-            gameManager.EquipArmor(armor);
+			_log.WriteLine($"Hero equipped armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
 
-            _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor}");
-            Assert.NotNull(gameManager.GetGameState().Hero.EquippedArmor);
-        }
+			Assert.Empty(gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipArmor_EquippingArmor_WhenArmored_ShouldRemoveArmorFromBag()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.EquipArmor(newArmor);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			_log.WriteLine($"Hero bag: {gameManager.GetGameState().Hero.EquipmentInBag}");
+
+			Assert.DoesNotContain(newArmor, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipArmor_EquippingArmor_WhenUnarmored_ShouldEquipArmorToHero()
+		{
+			Armor armor = new Armor();
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = null;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(armor);
+
+			gameManager.EquipArmor(armor);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Equal(armor, gameManager.GetGameState().Hero.EquippedArmor);
+		}
+		[Fact]
+		public void EquipArmor_EquippingArmor_WhenArmored_ShouldEquipArmorToHero()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.EquipArmor(newArmor);
+
+			_log.WriteLine($"Hero equipped Armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Equal(newArmor, gameManager.GetGameState().Hero.EquippedArmor);
+		}
+		[Fact]
+		public void EquipArmor_EquippingArmor_WhenArmored_ShouldPutInitialArmorInBag()
+		{
+			Armor initialArmor = new Armor();
+			initialArmor.Name = "InitialArmor";
+			Armor newArmor = new Armor();
+			newArmor.Name = "NewArmor";
+			gameManager.GetGameState().Location = new Town("Town");
+			gameManager.GetGameState().Hero.EquippedArmor = initialArmor;
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+			gameManager.GetGameState().Hero.EquipmentInBag.Add(newArmor);
+
+			gameManager.EquipArmor(newArmor);
+
+			_log.WriteLine($"Hero equipped armor: {gameManager.GetGameState().Hero.EquippedArmor}");
+			Assert.Contains(initialArmor, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EquipArmor_ItemIsNotArmor_ShouldThrowArgumentException()
+		{
+			gameManager.GetGameState().Location = new Town("Town");
+			Armor armor = null;
+
+			Assert.Throws<ArgumentNullException>(() => gameManager.EquipArmor(armor));
+		}
 		#endregion
 		#region StartFight
 		[Fact]
