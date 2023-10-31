@@ -99,34 +99,21 @@ namespace GameAPI.Tests
             Assert.IsType<Battle>(gameManager.GetGameState().Location);
         }
 		#endregion
-		#region Attack
-		[Fact]
-        public void Attack_ShouldInvokeHeroAttack()
-        {
-            var enemyMock = new Mock<Enemy>();
-            gameManager.GetGameState().Location = new Battle("Battle", enemyMock.Object);
-
-            gameManager.Attack();
-
-            _log.WriteLine($"Enemy hp efter attack: {enemyMock.Object.CurrentHP}");
-            Assert.NotEqual(enemyMock.Object.MaxHP, enemyMock.Object.CurrentHP);
-        }
-		#endregion
 		#region EnemyTurn
 		[Fact]
-        public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
-        {
-            //var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
-            var heroMock = new Hero(1, "Testhero");
-            var enemy = new Enemy { CurrentHP = 100, AttackPower = 5 };
-            gameManager.GetGameState().Hero = heroMock;
-            gameManager.GetGameState().Location = new Battle("Battle", enemy);
+		public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
+		{
+			//var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
+			var heroMock = new Hero(1, "Testhero");
+			var enemy = new Enemy { CurrentHP = 100, AttackPower = 5 };
+			gameManager.GetGameState().Hero = heroMock;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
 
-            gameManager.EnemyTurn(enemy);
+			gameManager.EnemyTurn(enemy);
 
-            _log.WriteLine($"Hero hp efter attack: {heroMock.CurrentHP} hp innan attack: {heroMock.MaxHP}");
-            Assert.NotEqual(heroMock.MaxHP, heroMock.CurrentHP);
-        }
+			_log.WriteLine($"Hero hp efter attack: {heroMock.CurrentHP} hp innan attack: {heroMock.MaxHP}");
+			Assert.NotEqual(heroMock.MaxHP, heroMock.CurrentHP);
+		}
 
 		/*
         [Fact]
@@ -141,6 +128,19 @@ namespace GameAPI.Tests
             Assert.IsType<Town>(gameManager.GetGameState().Location);
         }
 		*/
+		#endregion
+		#region Attack
+		[Fact]
+        public void Attack_ShouldInvokeHeroAttack()
+        {
+            var enemyMock = new Mock<Enemy>();
+            gameManager.GetGameState().Location = new Battle("Battle", enemyMock.Object);
+
+            gameManager.Attack();
+
+            _log.WriteLine($"Enemy hp efter attack: {enemyMock.Object.CurrentHP}");
+            Assert.NotEqual(enemyMock.Object.MaxHP, enemyMock.Object.CurrentHP);
+        }
 		#endregion
 		#region Buy
 		[Fact]

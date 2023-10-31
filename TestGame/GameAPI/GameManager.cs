@@ -27,60 +27,24 @@ namespace GameAPI
             return _state;
 		}
 
-		#region Shopping
 
-        public GameState EnterShop()
-        {
-			if (_state.Location.GetType() != typeof(Town)) { return _state; }
-
-            Shop shop = new ("Shop");
-			Armor breastplate = new()
-			{
-				Name = "Breastplate",
-				ArmorValue = 1,
-				Price = 35
-			};
-            shop.EquipmentForSale.Add(breastplate);
-
-			_state.Location = shop;
-
-            return _state;
-		}
-
-		public GameState Buy(int index)
-        {
-            if (_state.Location.GetType() != typeof(Shop)) { return _state; }
-
-            Shop shopLocation = (Shop) _state.Location;
-
-            if (shopLocation.EquipmentForSale.Count == 0) {  return _state; }
-
-            Equipment item = shopLocation.EquipmentForSale[index];
-
-            if (_state.Hero.Money < item.Price) { return _state; }
-
-            _state.Hero.Money -= item.Price;
-            _state.Hero.EquipmentInBag.Add(item);
-            shopLocation.EquipmentForSale.Remove(item);
-
-            return _state;
-        }
-
-        public GameState Sell(int index)
-        {
-			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
-			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the amount of items in the bag");
-
-			Equipment item = _state.Hero.EquipmentInBag[index];
-			_state.Hero.Money += item.Price;
-			_state.Hero.EquipmentInBag.Remove(item);
-
-            return _state;
-		}
-
-		#endregion
 
 		#region Equip
+
+		/// <summary>
+		/// Checks if the hero can currently equip items
+		/// </summary>
+		/// <returns>True if location is Town, false otherwise</returns>
+		internal bool CanEquip()
+		{
+			if (_state.Location == null) throw new ArgumentNullException("No location in state");
+			Location location = _state.Location;
+			if (location.GetType() == typeof(Town))
+			{
+				return true;
+			}
+			return false;
+		}
 
 		/// <summary>
 		/// 1) Checks if the hero can currently equip items. 2) Checks the type of equipment. 3) Matches the type to the correct Equip function to equip the item
@@ -109,21 +73,6 @@ namespace GameAPI
         }
 
         /// <summary>
-        /// Checks if the hero can currently equip items
-        /// </summary>
-        /// <returns>True if location is Town, false otherwise</returns>
-        internal bool CanEquip()
-        {
-			if (_state.Location == null) throw new ArgumentNullException("No location in state");
-            Location location = _state.Location;
-            if (location.GetType() == typeof(Town))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        /// <summary>
         /// Equips the specified weapon
         /// </summary>
         /// <param name="weapon"></param>
@@ -144,6 +93,7 @@ namespace GameAPI
 			_state.Hero.EquipArmor(armor);
 			return _state;
 		}
+
 		#endregion
 
 		#region Battle admin
@@ -229,6 +179,7 @@ namespace GameAPI
 
 		#endregion
 
+		#region Battle actions
 		/// <summary>
 		/// Attacks enemy, then calls EnemyTurn() to either further the battle or end it
 		/// </summary>
@@ -284,5 +235,60 @@ namespace GameAPI
 
 			return _state;
 		}
+
+		#endregion
+
+		#region Shopping
+
+		public GameState EnterShop()
+		{
+			if (_state.Location.GetType() != typeof(Town)) { return _state; }
+
+			Shop shop = new("Shop");
+			Armor breastplate = new()
+			{
+				Name = "Breastplate",
+				ArmorValue = 1,
+				Price = 35
+			};
+			shop.EquipmentForSale.Add(breastplate);
+
+			_state.Location = shop;
+
+			return _state;
+		}
+
+		public GameState Buy(int index)
+		{
+			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
+
+			Shop shopLocation = (Shop)_state.Location;
+
+			if (shopLocation.EquipmentForSale.Count == 0) { return _state; }
+
+			Equipment item = shopLocation.EquipmentForSale[index];
+
+			if (_state.Hero.Money < item.Price) { return _state; }
+
+			_state.Hero.Money -= item.Price;
+			_state.Hero.EquipmentInBag.Add(item);
+			shopLocation.EquipmentForSale.Remove(item);
+
+			return _state;
+		}
+
+		public GameState Sell(int index)
+		{
+			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
+			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the amount of items in the bag");
+
+			Equipment item = _state.Hero.EquipmentInBag[index];
+			_state.Hero.Money += item.Price;
+			_state.Hero.EquipmentInBag.Remove(item);
+
+			return _state;
+		}
+
+		#endregion
 	}
 }
