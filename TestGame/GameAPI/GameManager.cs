@@ -114,6 +114,7 @@ namespace GameAPI
         /// <returns>True if location is Town, false otherwise</returns>
         internal bool CanEquip()
         {
+			if (_state.Location == null) throw new ArgumentNullException("No location in state");
             Location location = _state.Location;
             if (location.GetType() == typeof(Town))
             {

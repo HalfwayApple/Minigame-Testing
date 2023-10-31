@@ -1,4 +1,6 @@
-﻿namespace GameAPI.Tests
+﻿using GameAPI.Data.Characters;
+
+namespace GameAPI.Tests
 {
     public class GameManagerTests
     {
@@ -11,9 +13,10 @@
             _log = output;
             gameManager = new GameManager();
         }
-        #endregion
+		#endregion
 
-        [Fact]
+		#region CanEquip
+		[Fact]
         public void CanEquip_InTown_ShouldReturnTrue()
         {
             //Arrange
@@ -38,7 +41,16 @@
             Assert.False(result);
         }
 
-        [Fact]
+		[Fact]
+		public void CanEquip_LocationIsNull_ShouldThrowArgumentNullException()
+		{
+			gameManager.GetGameState().Location = null;
+
+			Assert.Throws<ArgumentNullException>(() => gameManager.CanEquip());
+		}
+		#endregion
+		#region EquipWeapon
+		[Fact]
         public void EquipWeapon_ShouldEquipToHero()
         {
             var weapon = new Weapon();
@@ -50,8 +62,9 @@
             _log.WriteLine($"Hero equipped wepon: {gameManager.GetGameState().Hero.EquippedWeapon}");
             Assert.NotNull(gameManager.GetGameState().Hero.EquippedWeapon);
         }
-
-        [Fact]
+		#endregion
+		#region EquipArmor
+		[Fact]
         public void EquipArmor_ShouldEquipToHero()
         {
             var armor = new Armor() { ArmorValue = 10 };
@@ -75,8 +88,9 @@
             _log.WriteLine($"Hero equip armor samt armor val: {gameManager.GetGameState().Hero.EquippedArmor}");
             Assert.NotNull(gameManager.GetGameState().Hero.EquippedArmor);
         }
-
-        [Fact]
+		#endregion
+		#region StartFight
+		[Fact]
         public void StartFight_ShouldChangeLocationToBattle()
         {
             gameManager.StartFight();
@@ -84,8 +98,9 @@
             _log.WriteLine($"Location efter startad battle: {gameManager.GetGameState().Location}");
             Assert.IsType<Battle>(gameManager.GetGameState().Location);
         }
-
-        [Fact]
+		#endregion
+		#region Attack
+		[Fact]
         public void Attack_ShouldInvokeHeroAttack()
         {
             var enemyMock = new Mock<Enemy>();
@@ -96,8 +111,9 @@
             _log.WriteLine($"Enemy hp efter attack: {enemyMock.Object.CurrentHP}");
             Assert.NotEqual(enemyMock.Object.MaxHP, enemyMock.Object.CurrentHP);
         }
-
-        [Fact]
+		#endregion
+		#region EnemyTurn
+		[Fact]
         public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
         {
             //var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
@@ -125,7 +141,8 @@
             Assert.IsType<Town>(gameManager.GetGameState().Location);
         }
 		*/
-
+		#endregion
+		#region Buy
 		[Fact]
 		public void Buy_ShouldReturnSameState_IfNotInShop()
 		{
@@ -206,7 +223,8 @@
 			Assert.Contains(item, result.Hero.EquipmentInBag);
 			Assert.DoesNotContain(item, shopLocation.EquipmentForSale);
 		}
-
+		#endregion
+		#region Sell
 		[Fact]
 		public void Sell_ShouldReturnSameState_IfNotInShop()
 		{
@@ -255,5 +273,6 @@
 			Assert.Equal(heroMoneyAtStart + item.Price, result.Hero.Money);
 			Assert.DoesNotContain(item, result.Hero.EquipmentInBag);
 		}
+		#endregion
 	}
 }
