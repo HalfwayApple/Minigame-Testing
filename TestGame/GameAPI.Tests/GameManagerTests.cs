@@ -513,6 +513,136 @@ namespace GameAPI.Tests
 			Assert.Throws<ArgumentOutOfRangeException>(() => gameManager.ChooseRandomEnemy());
 		}
 		#endregion
+		#region EndBattle
+		[Fact]
+		public void EndBattle_WhenLootDrops_ShouldAddLootToHero()
+		{
+			// Arrange
+			Equipment loot = new Weapon();
+			Enemy enemy = new Enemy()
+			{
+				NoDropChance = 0
+			};
+			enemy.LootTable.Clear();
+			enemy.LootTable.Add(loot);
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.Contains(loot, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EndBattle_WhenLootDoesntDrop_ShouldNotAddLootToHero()
+		{
+			// Arrange
+			Equipment loot = new Weapon();
+			Enemy enemy = new Enemy()
+			{
+				NoDropChance = 100
+			};
+			enemy.LootTable.Clear();
+			enemy.LootTable.Add(loot);
+			gameManager.GetGameState().Hero.EquipmentInBag.Clear();
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.DoesNotContain(loot, gameManager.GetGameState().Hero.EquipmentInBag);
+		}
+		[Fact]
+		public void EndBattle_ShouldAddXpToHero()
+		{
+			// Arrange
+			Enemy enemy = new Enemy()
+			{
+				XpValue = 100
+			};
+			gameManager.GetGameState().Hero.Xp = 0;
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.Equal(gameManager.GetGameState().Hero.Xp, enemy.XpValue);
+		}
+		[Fact]
+		public void EndBattle_ShouldAddMoneyToHero()
+		{
+			// Arrange
+			Enemy enemy = new Enemy()
+			{
+				MoneyValue = 100
+			};
+			gameManager.GetGameState().Hero.Money = 0;
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.Equal(gameManager.GetGameState().Hero.Money, enemy.MoneyValue);
+		}
+		[Fact]
+		public void EndBattle_IfNewXpIsEnough_ShouldLevelUpHero()
+		{
+			// Arrange
+			Equipment loot = new Weapon();
+			Enemy enemy = new Enemy()
+			{
+				XpValue = 1000
+			};
+			gameManager.GetGameState().Hero.Xp = 0;
+			gameManager.GetGameState().Hero.Level = 1;
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.True(gameManager.GetGameState().Hero.Level > 1);
+		}
+		[Fact]
+		public void EndBattle_IfNewXpIsNotEnough_ShouldNotLevelUpHero()
+		{
+			// Arrange
+			Equipment loot = new Weapon();
+			Enemy enemy = new Enemy()
+			{
+				XpValue = 1
+			};
+			gameManager.GetGameState().Hero.Xp = 0;
+			gameManager.GetGameState().Hero.Level = 1;
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.False(gameManager.GetGameState().Hero.Level > 1);
+		}
+		[Fact]
+		public void EndBattle_ShouldReturnHeroToTown()
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			gameManager.EndBattle(enemy);
+
+			// Assert
+			Assert.IsType<Town>(gameManager.GetGameState().Location);
+		}
+		[Fact]
+		public void EndBattle_IfEnemyIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = null;
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EndBattle(enemy));
+		}
+		#endregion
 		#region EnemyTurn
 		[Fact]
 		public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()

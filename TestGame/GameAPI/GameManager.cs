@@ -144,6 +144,8 @@ namespace GameAPI
 		/// <returns>GameState</returns>
 		internal GameState EndBattle(Enemy enemy)
 		{
+			if (enemy == null) throw new ArgumentNullException("Enemy is null");
+
 			Equipment? loot = enemy.DropEquipment();
 			if (loot != null)
 			{
