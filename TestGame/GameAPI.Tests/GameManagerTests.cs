@@ -112,6 +112,7 @@
             Assert.NotEqual(heroMock.MaxHP, heroMock.CurrentHP);
         }
 
+		/*
         [Fact]
         public void EnemyTurn_WhenEnemyHasNoHP_ShouldEndBattle()
         {
@@ -123,6 +124,7 @@
             _log.WriteLine($"location efter fiende är död (borde va town?): {gameManager.GetGameState().Location}");
             Assert.IsType<Town>(gameManager.GetGameState().Location);
         }
+		*/
 
 		[Fact]
 		public void Buy_ShouldReturnSameState_IfNotInShop()

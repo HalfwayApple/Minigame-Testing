@@ -20,9 +20,9 @@ namespace GameAPI.Data.Characters
         /// </summary>
         /// <returns>Clone of the object</returns>
 		public object Clone()
-		{
+        {
             return MemberwiseClone();
-		}
+        }
 
         /// <summary>
         /// Checks for Equipment in enemy loot table, picks one at random, and returns it (or null for empty loot tables)
@@ -31,19 +31,20 @@ namespace GameAPI.Data.Characters
 		public Equipment? DropEquipment()
         {
             // Check for empty loot table
+            if (NoDropChance < 0 || NoDropChance > 100) { throw new ArgumentOutOfRangeException(nameof(NoDropChance), "NoDropChance cannot be negative or surpass 100"); }
             if (LootTable == null || LootTable.Count == 0) { return null; }
 
-			Random rng = new Random();
+            Random rng = new Random();
 
             // Check for no drop chance
-			int randomNumber = rng.Next(0, 100);
+            int randomNumber = rng.Next(0, 100);
             if (randomNumber < NoDropChance) { return null; }
 
             // Choose item to drop
-			randomNumber = rng.Next(0, LootTable.Count);
-			Equipment loot = LootTable[randomNumber];
+            randomNumber = rng.Next(0, LootTable.Count);
+            Equipment loot = LootTable[randomNumber];
 
-			return loot;
-		}
+            return loot;
+        }
     }
 }

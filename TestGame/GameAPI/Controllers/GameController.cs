@@ -101,7 +101,38 @@ namespace GameAPI.Controllers
             return BadRequest();
 		}
 
-        [HttpGet("buy")]
+		[HttpGet("defend")]
+		public IActionResult Defend()
+		{
+			try
+			{
+				var gameState = _gameManager.Defend();
+				return Ok(gameState);
+			}
+			catch (Exception ex)
+			{
+				BadRequest(ex.Message);
+			}
+			return BadRequest();
+		}
+
+		[HttpGet("dodge")]
+		public IActionResult Dodge()
+		{
+			try
+			{
+				var gameState = _gameManager.Dodge();
+				return Ok(gameState);
+			}
+			catch (Exception ex)
+			{
+				BadRequest(ex.Message);
+			}
+			return BadRequest();
+		}
+
+
+		[HttpGet("buy")]
         public IActionResult Buy(int index)
         {
 			try
