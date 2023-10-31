@@ -9,22 +9,22 @@ using System.Xml.Linq;
 namespace GameAPI
 {
 	public class GameManager
-    {
-        private GameState _state;
-        public GameManager() 
-        {
-            _state = new GameState();
-        }
+	{
+		private GameState _state;
+		public GameManager()
+		{
+			_state = new GameState();
+		}
 
-        public GameState GetGameState()
-        {
-            return _state;
-        }
+		public GameState GetGameState()
+		{
+			return _state;
+		}
 
-        public GameState ReturnToTown()
-        {
+		public GameState ReturnToTown()
+		{
 			_state.Location = new Town("Town");
-            return _state;
+			return _state;
 		}
 
 
@@ -52,48 +52,48 @@ namespace GameAPI
 		/// <param name="index"></param>
 		/// <returns>GameState</returns>
 		public GameState Equip(int index)
-        {
+		{
 			if (index < 0) throw new ArgumentOutOfRangeException("index cannot be less than 0");
 			if (index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException("index cannot be higher than number of items in bag");
 			if (_state.Hero.EquipmentInBag == null) throw new ArgumentNullException("Bag does not exist");
 
-            if (CanEquip() == false) { return _state; }
+			if (CanEquip() == false) { return _state; }
 
-            var item = _state.Hero.EquipmentInBag[index];
+			var item = _state.Hero.EquipmentInBag[index];
 			Type itemType = item.GetType();
 
-            if (itemType == typeof(Weapon))
-            {
-                return EquipWeapon((Weapon)item);
-            }
-            else if (itemType == typeof(Armor))
-            {
-                return EquipArmor((Armor)item);
-            }
-            else
-            {
+			if (itemType == typeof(Weapon))
+			{
+				return EquipWeapon((Weapon)item);
+			}
+			else if (itemType == typeof(Armor))
+			{
+				return EquipArmor((Armor)item);
+			}
+			else
+			{
 				throw new ArgumentException("Item type not in list of allowed equipment");
-            }
-        }
+			}
+		}
 
-        /// <summary>
-        /// Equips the specified weapon
-        /// </summary>
-        /// <param name="weapon"></param>
-        /// <returns>GameState</returns>
-        internal GameState EquipWeapon(Weapon weapon)
-        {
+		/// <summary>
+		/// Equips the specified weapon
+		/// </summary>
+		/// <param name="weapon"></param>
+		/// <returns>GameState</returns>
+		internal GameState EquipWeapon(Weapon weapon)
+		{
 			if (weapon == null) throw new ArgumentNullException("Weapon cannot be null");
 
-            _state.Hero.EquipWeapon(weapon);
-            return _state;
-        }
+			_state.Hero.EquipWeapon(weapon);
+			return _state;
+		}
 
-        /// <summary>
-        /// Equips the specified armor
-        /// </summary>
-        /// <param name="armor"></param>
-        /// <returns>GameState</returns>
+		/// <summary>
+		/// Equips the specified armor
+		/// </summary>
+		/// <param name="armor"></param>
+		/// <returns>GameState</returns>
 		internal GameState EquipArmor(Armor armor)
 		{
 			if (armor == null) throw new ArgumentNullException("Armor cannot be null");
@@ -106,29 +106,35 @@ namespace GameAPI
 
 		#region Battle admin
 
-        /// <summary>
-        /// Creates a Battle location with a random enemy from the EnemyList in GameState, and puts the game there
-        /// </summary>
-        /// <returns>GameState</returns>
+		/// <summary>
+		/// Creates a Battle location with a random enemy from the EnemyList in GameState, and puts the game there
+		/// </summary>
+		/// <returns>GameState</returns>
 		public GameState StartFight()
-        {
-            Enemy enemy = ChooseRandomEnemy();
-            _state.Location = new Battle("Battle", enemy);
+		{
+			Enemy enemy = ChooseRandomEnemy();
 
-            return _state;
+			if (enemy == null) throw new NullReferenceException("Enemy chosen is null");
+
+			_state.Location = new Battle("Battle", enemy);
+
+			return _state;
 		}
 
-        /// <summary>
-        /// Choses a random enemy from the GameStates EnemyList
-        /// </summary>
-        /// <returns>Random Enemy</returns>
+		/// <summary>
+		/// Choses a random enemy from the GameStates EnemyList
+		/// </summary>
+		/// <returns>Random Enemy</returns>
         internal Enemy ChooseRandomEnemy()
-        {
+		{
+			if (_state.EnemyList == null) throw new NullReferenceException("EnemyList is Null");
+			if (_state.EnemyList.Count() == 0) throw new ArgumentOutOfRangeException("EnemyList is empty");
+
 			Random rng = new Random();
 			int randomNumber = rng.Next(0, _state.EnemyList.Count);
 			Enemy enemy = (Enemy)_state.EnemyList[randomNumber].Clone();
 
-            return enemy;
+			return enemy;
 		}
 
 		/// <summary>
@@ -144,7 +150,7 @@ namespace GameAPI
 				_state.Hero.EquipmentInBag.Add(loot);
 			}
 			_state.Hero.Xp += enemy.XpValue;
-            _state.Hero.Money += enemy.MoneyValue;
+			_state.Hero.Money += enemy.MoneyValue;
 			_state.Hero.LevelUpCheck();
 
 			ReturnToTown();
@@ -172,7 +178,7 @@ namespace GameAPI
 		/// <param name="enemy"></param>
 		/// <returns>GameState after EnemyTurn or EndBattle</returns>
 		internal GameState EnemyOrEnd(Enemy enemy)
-        {
+		{
 			if (enemy.CurrentHP <= 0)
 			{
 				EndBattle(enemy);
@@ -182,7 +188,7 @@ namespace GameAPI
 				EnemyTurn(enemy);
 			}
 
-            return _state;
+			return _state;
 		}
 
 		#endregion
@@ -199,7 +205,7 @@ namespace GameAPI
 
 			battleLocation.DamageDoneLastTurn = _state.Hero.Attack(enemy);
 
-            EnemyOrEnd(enemy);
+			EnemyOrEnd(enemy);
 
 			return _state;
 		}

@@ -1,4 +1,5 @@
 ﻿using GameAPI.Data.Characters;
+using GameAPI.Data.Items.Equipment.Armors;
 
 namespace GameAPI.Tests
 {
@@ -442,8 +443,75 @@ namespace GameAPI.Tests
             gameManager.StartFight();
 
             _log.WriteLine($"Location efter startad battle: {gameManager.GetGameState().Location}");
+
             Assert.IsType<Battle>(gameManager.GetGameState().Location);
         }
+		[Fact]
+		public void StartFight_ShouldAddAnEnemyToBattle()
+		{
+			gameManager.StartFight();
+			Battle battleLocation = (Battle) gameManager.GetGameState().Location;
+
+			_log.WriteLine($"Location efter startad battle: {gameManager.GetGameState().Location}");
+
+			Assert.IsType<Enemy>(battleLocation.Enemy);
+		}
+		// ADD TEST FOR CHECKING NULLREFERENCE WHEN NO ENEMY IS IN BATTLE! ASK TED!
+		#endregion
+		#region ChooseRandomEnemy
+		[Fact]
+		public void ChooseRandomEnemy_ReturnsMemberwiseClonePart_NotSameObject()
+		{
+			// Arrange
+			var enemyList = new List<Enemy>
+			{
+				new Enemy() {Name = "OnlyEnemy"}
+			};
+			gameManager.GetGameState().EnemyList = enemyList;
+
+			// Act
+			Enemy enemyResult = gameManager.ChooseRandomEnemy();
+
+			// Assert
+			Assert.DoesNotContain(enemyResult, gameManager.GetGameState().EnemyList);
+			Assert.NotEqual(enemyResult, gameManager.GetGameState().EnemyList[0]);
+			// The enemyResult is functionally the same as the enemy in the EnemyList but since it
+			// is a clone, DoesNotContain and NotEquals shows us it is not the same object
+		}
+		[Fact]
+		public void ChooseRandomEnemy_ReturnsMemberwiseClonePart_SameProperties()
+		{
+			// Arrange
+			var enemyList = new List<Enemy>
+			{
+				new Enemy() {Name = "OnlyEnemy"}
+			};
+			gameManager.GetGameState().EnemyList = enemyList;
+
+			// Act
+			Enemy enemyResult = gameManager.ChooseRandomEnemy();
+
+			// Assert
+			Assert.Equal(enemyResult.Name, gameManager.GetGameState().EnemyList[0].Name);
+		}
+		[Fact]
+		public void ChooseRandomEnemy_WhenEnemyListIsNull_ShouldThrowNullReferenceException()
+		{
+			// Arrange
+			gameManager.GetGameState().EnemyList = null;
+
+			// Assert
+			Assert.Throws<NullReferenceException>(() => gameManager.ChooseRandomEnemy());
+		}
+		[Fact]
+		public void ChooseRandomEnemy_WhenEnemyListIsEmpty_ShouldThrowArgumentOutOfRangeException()
+		{
+			// Arrange
+			gameManager.GetGameState().EnemyList = new List<Enemy>();
+
+			// Assert
+			Assert.Throws<ArgumentOutOfRangeException>(() => gameManager.ChooseRandomEnemy());
+		}
 		#endregion
 		#region EnemyTurn
 		[Fact]
