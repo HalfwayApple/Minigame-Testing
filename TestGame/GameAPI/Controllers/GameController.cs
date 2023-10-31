@@ -6,7 +6,7 @@ namespace GameAPI.Controllers
     [Route("[controller]")]
     public class GameController : ControllerBase
     {
-        private readonly GameManager _gameManager;
+        protected virtual GameManager _gameManager { get; }
 
         public GameController(GameManager gameManager)
         {
@@ -28,8 +28,8 @@ namespace GameAPI.Controllers
         }
 
         [HttpGet("returnToTown")]
-		public IActionResult ReturnToTown()
-		{
+        public IActionResult ReturnToTown()
+        {
             try
             {
                 var gameState = _gameManager.ReturnToTown();
@@ -38,12 +38,12 @@ namespace GameAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }            
-		}
+            }
+        }
 
-		[HttpGet("enterStore")]
-		public IActionResult EnterShop()
-		{
+        [HttpGet("enterStore")]
+        public IActionResult EnterShop()
+        {
             try
             {
                 var gameState = _gameManager.EnterShop();
@@ -52,11 +52,11 @@ namespace GameAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }            
-		}
+            }
+        }
 
 
-		[HttpGet("equip")]
+        [HttpGet("equip")]
         public IActionResult Equip(int index) // Index for which item in inventory is being equipped
         {
             try
@@ -68,12 +68,12 @@ namespace GameAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
+
         }
 
-		[HttpGet("battle")]
-		public IActionResult Battle()
-		{
+        [HttpGet("battle")]
+        public IActionResult Battle()
+        {
             try
             {
                 var gameState = _gameManager.StartFight();
@@ -83,12 +83,12 @@ namespace GameAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            
-		}
 
-		[HttpGet("attack")]
+        }
+
+        [HttpGet("attack")]
         public IActionResult Attack()
-		{
+        {
             try
             {
                 var gameState = _gameManager.Attack();
@@ -99,67 +99,67 @@ namespace GameAPI.Controllers
                 BadRequest(ex.Message);
             }
             return BadRequest();
-		}
+        }
 
-		[HttpGet("defend")]
-		public IActionResult Defend()
-		{
-			try
-			{
-				var gameState = _gameManager.Defend();
-				return Ok(gameState);
-			}
-			catch (Exception ex)
-			{
-				BadRequest(ex.Message);
-			}
-			return BadRequest();
-		}
+        [HttpGet("defend")]
+        public IActionResult Defend()
+        {
+            try
+            {
+                var gameState = _gameManager.Defend();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
+            return BadRequest();
+        }
 
-		[HttpGet("dodge")]
-		public IActionResult Dodge()
-		{
-			try
-			{
-				var gameState = _gameManager.Dodge();
-				return Ok(gameState);
-			}
-			catch (Exception ex)
-			{
-				BadRequest(ex.Message);
-			}
-			return BadRequest();
-		}
+        [HttpGet("dodge")]
+        public IActionResult Dodge()
+        {
+            try
+            {
+                var gameState = _gameManager.Dodge();
+                return Ok(gameState);
+            }
+            catch (Exception ex)
+            {
+                BadRequest(ex.Message);
+            }
+            return BadRequest();
+        }
 
 
-		[HttpGet("buy")]
+        [HttpGet("buy")]
         public IActionResult Buy(int index)
         {
-			try
-			{
+            try
+            {
                 var gameState = _gameManager.Buy(index);
                 return Ok(gameState);
             }
-            catch(Exception ex)
-			{
-				return BadRequest(ex.Message);
-			}
-            
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
-		[HttpGet("sell")]
-		public IActionResult Sell(int index)
-		{
-			try
-			{
+        [HttpGet("sell")]
+        public IActionResult Sell(int index)
+        {
+            try
+            {
                 var gameState = _gameManager.Sell(index);
                 return Ok(gameState);
             }
-            catch(Exception ex)
-			{
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
-			}
-			
-		}
-	}
+            }
+
+        }
+    }
 }
