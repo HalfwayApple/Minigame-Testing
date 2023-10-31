@@ -1,5 +1,7 @@
 ﻿using GameAPI.Data.Characters;
 using GameAPI.Data.Items.Equipment.Armors;
+using System.Reflection;
+using Xunit.Sdk;
 
 namespace GameAPI.Tests
 {
@@ -645,33 +647,126 @@ namespace GameAPI.Tests
 		#endregion
 		#region EnemyTurn
 		[Fact]
-		public void EnemyTurn_WhenEnemyHasHP_ShouldInvokeEnemyAttack()
+		public void EnemyTurn_IfEnemyDoesDamage_ShouldUpdateDamageTakenValue()
 		{
-			//var heroMock = new Mock<Hero>(); försökte mocka innan och skicka som objekt men fungerade inte
-			var heroMock = new Hero(1, "Testhero");
-			var enemy = new Enemy { CurrentHP = 100, AttackPower = 5 };
-			gameManager.GetGameState().Hero = heroMock;
+			// Arrange
+			gameManager.GetGameState().Hero.ArmorValue = 0;
+			Enemy enemy = new Enemy()
+			{
+				AttackPower = 2
+			};
 			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Battle battleLocation = (Battle) gameManager.GetGameState().Location;
+			battleLocation.DamageTakenLastTurn = 0;
 
+			// Act
 			gameManager.EnemyTurn(enemy);
 
-			_log.WriteLine($"Hero hp efter attack: {heroMock.CurrentHP} hp innan attack: {heroMock.MaxHP}");
-			Assert.NotEqual(heroMock.MaxHP, heroMock.CurrentHP);
+			// Assert
+			Assert.Equal(battleLocation.DamageTakenLastTurn, enemy.AttackPower);
+		}
+		[Fact]
+		public void EnemyTurn_IfEnemyDoesDamage_ShouldDealDamageToHero()
+		{
+			// Arrange
+			int heroFullHp = 10;
+			gameManager.GetGameState().Hero.ArmorValue = 0;
+			gameManager.GetGameState().Hero.MaxHP = heroFullHp;
+			gameManager.GetGameState().Hero.CurrentHP = heroFullHp;
+
+			Enemy enemy = new Enemy()
+			{
+				AttackPower = 2
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			gameManager.EnemyTurn(enemy);
+
+			// Assert
+			Assert.Equal(gameManager.GetGameState().Hero.CurrentHP, heroFullHp - enemy.AttackPower);
+		}
+		[Fact]
+		public void EnemyTurn_IfHeroArmorHigherThanEnemyAttackPower_ShouldSetDamageTakenValueToZero()
+		{
+			// Arrange
+			gameManager.GetGameState().Hero.ArmorValue = 5000;
+			Enemy enemy = new Enemy()
+			{
+				AttackPower = 2
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Battle battleLocation = (Battle)gameManager.GetGameState().Location;
+			battleLocation.DamageTakenLastTurn = 10;
+
+			// Act
+			gameManager.EnemyTurn(enemy);
+
+			// Assert
+			Assert.Equal(0, battleLocation.DamageTakenLastTurn);
+		}
+		[Fact]
+		public void EnemyTurn_IfHeroArmorHigherThanEnemyAttackPower_ShouldNotDealDamageToHero()
+		{
+			// Arrange
+			int heroFullHp = 10;
+			gameManager.GetGameState().Hero.ArmorValue = 5000;
+			gameManager.GetGameState().Hero.MaxHP = heroFullHp;
+			gameManager.GetGameState().Hero.CurrentHP = heroFullHp;
+
+			Enemy enemy = new Enemy()
+			{
+				AttackPower = 2
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			gameManager.EnemyTurn(enemy);
+
+			// Assert
+			Assert.Equal(gameManager.GetGameState().Hero.CurrentHP, heroFullHp);
+		}
+		[Fact]
+		public void EnemyTurn_IfEnemyIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = null;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EnemyTurn(enemy));
+		}
+		[Fact]
+		public void EnemyTurn_IfLocationIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = null;
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EnemyTurn(enemy));
 		}
 
-		/*
-        [Fact]
-        public void EnemyTurn_WhenEnemyHasNoHP_ShouldEndBattle()
-        {
-            var enemy = new Enemy { CurrentHP = 0 };
-            gameManager.GetGameState().Location = new Battle("Battle", enemy);
+		public class LocationDataAttribute : DataAttribute
+		{
+			public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+			{
+				yield return new object[] { new Location("NonDerivedLocation") };
+				yield return new object[] { new Town("Town") };
+				yield return new object[] { new Shop("Shop") };
+			}
+		}
+		[Theory]
+		[LocationData]
+		public void EnemyTurn_IfLocationIsNotBattle_ShouldThrowArgumentException(Location location)
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = location;
 
-            gameManager.EnemyTurn(enemy);
-
-            _log.WriteLine($"location efter fiende är död (borde va town?): {gameManager.GetGameState().Location}");
-            Assert.IsType<Town>(gameManager.GetGameState().Location);
-        }
-		*/
+			// Assert
+			Assert.Throws<ArgumentException>(() => gameManager.EnemyTurn(enemy));
+		}
 		#endregion
 		#region Attack
 		[Fact]

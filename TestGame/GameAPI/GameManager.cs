@@ -167,6 +167,10 @@ namespace GameAPI
 		/// <returns>GameState</returns>
 		internal GameState EnemyTurn(Enemy enemy)
 		{
+			if (enemy == null) throw new ArgumentNullException("Enemy cant be null");
+			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
+			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
+
 			Battle battleLocation = (Battle)_state.Location;
 
 			battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
