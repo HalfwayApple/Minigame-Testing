@@ -419,7 +419,7 @@
         Motivering till varför vi inte kan testa mer (vad vi kan säga till Robert när vi redovisar)
         Huvud funktionerna testas men utöver det testas även hyptetiska scenarion som inte kan uppstå i spelet.
         T.ex. att köpa/sälja ett item som inte finns i shopen eller att sälja ett item som inte finns i inventory.
-        Detta är inte möjligt att testa då det inte är möjligt att skicka in felaktiga värden till dessa funktioner.
+        Detta samt att vi testar scenarion genom att skicka in värden som inte är tillåtna eller går att få i spelet.
         Vi testar även alla negativa scenarion där vi får fel status kod tillbaka för alla scenarion.
         utifrån ett metods perspektiv så testar vi alla scenarion som kan uppstå.
          */
