@@ -56,6 +56,61 @@ namespace UI_Tests
                 {
                     Console.WriteLine("Test passed: Attack power has increased to 3");
                 }
+                Console.WriteLine("------------TEST CONTINUES------------");
+
+
+                await page.WaitForTimeoutAsync(1000);
+                for (int i = 0; i < 4; i++)
+                {
+                    // Startar en battle
+                    await page.ClickAsync("#startbattle-button");
+                    await page.WaitForTimeoutAsync(1000);
+                    Console.WriteLine("Battle started");
+
+                    // klickar på attack
+                    await page.ClickAsync("#attack-button");
+                    await page.WaitForTimeoutAsync(1000);
+                    Console.WriteLine("Clicked attack button");
+
+                    while (true)
+                    {
+                        try
+                        {
+                            await page.WaitForSelectorAsync("#attack-button");
+                            await page.WaitForTimeoutAsync(1000);
+                            await page.ClickAsync("#attack-button");
+                            await page.WaitForTimeoutAsync(1000);
+
+                            Console.WriteLine("Clicked attack button");
+                        }
+                        catch
+                        {
+                            break;
+                        }
+                    }
+
+                    Console.WriteLine("Enemy has died");
+                    await page.WaitForTimeoutAsync(1000);
+                    var myMoney = await page.InnerTextAsync("#money-tag");
+                    Console.WriteLine(myMoney);
+                }
+
+                await page.ClickAsync("#enterStore-button");
+                await page.WaitForTimeoutAsync(1000);
+                Console.WriteLine("Clicked enter store button");
+
+                await page.ClickAsync("#buy-button");
+                await page.WaitForTimeoutAsync(1000);
+                Console.WriteLine("item successfully bought from store");
+
+                await page.ClickAsync("#leave-button");
+                await page.WaitForTimeoutAsync(1000);
+                Console.WriteLine("left store and went to town");
+
+                var myMoneyAfterPurchase = await page.InnerTextAsync("#money-tag");
+                Console.WriteLine("opens wallet and checks money");
+                Console.WriteLine(myMoneyAfterPurchase);
+
             }
             catch (Exception ex)
             {
