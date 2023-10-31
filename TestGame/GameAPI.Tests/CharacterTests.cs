@@ -52,61 +52,166 @@
             Assert.Equal(70, enemy.CurrentHP); // 100 - (40 - 10) = 70 fiende borde ha 70hp
         }
 
-		[Fact]
-		public void CalcCriticalDamage_ReturnsHigherMultiplier_IfCritOccurs()
-		{
-			// Arrange
-			var attacker = new TestCharacter();
+        [Fact]
+        public void Attack_ShouldNotHealEnemy_WhenHighArmorAndLowAttackPower()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+
+            attacker.TestCalcNormalDamage(10);
+            attacker.AttackPower = 10;
+            enemy.ArmorValue = 50;
+            enemy.CurrentHP = 100;
+
+            // Act
+            attacker.Attack(enemy);
+
+            // Assert
+            Assert.Equal(100, enemy.CurrentHP); // dmg borde inte heal enemy
+        }
+
+        [Fact]
+        public void Attack_ShouldThrowException_WhenOpponentIsNull()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+
+            // Act & Assert
+            Assert.Throws<ArgumentNullException>(() => attacker.Attack(null));
+        }
+
+        [Fact]
+        public void CalcNormalDamage_ShouldReturnAttackPower()
+        {
+            // Arrange
+            var character = new TestCharacter();
+            character.AttackPower = 20;
+
+            // Act
+            int damage = character.CalcNormalDamage();
+
+            // Assert
+            Assert.Equal(20, damage);
+        }
+
+        [Theory]
+        [InlineData(25)]
+        [InlineData(75)]
+        [InlineData(50)]
+        public void CalcCriticalDamage_ShouldBeDeterministic_GivenFixedCritChance(int critChance)
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            attacker.CritChance = critChance;
+
+            // Act & Assert
+            for (int i = 0; i < 100; i++)
+            {
+                int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
+                Assert.True(damageMultiplier == 1 || damageMultiplier == 2);
+            }
+        }
+
+        [Fact]
+        public void CalcCriticalDamage_ReturnsHigherMultiplier_IfCritOccurs()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
             attacker.CritChance = 100;
 
-			// Act
-			int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
+            // Act
+            int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
 
-			// Assert
-            Assert.True( damageMultiplier > 1 );
-		}
+            // Assert
+            Assert.True(damageMultiplier > 1);
+        }
 
-		[Fact]
-		public void CalcCriticalDamage_ReturnsOne_IfCritFails()
-		{
-			// Arrange
-			var attacker = new TestCharacter();
-			attacker.CritChance = 0;
+        [Fact]
+        public void CalcCriticalDamage_ReturnsOne_IfCritFails()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            attacker.CritChance = 0;
 
-			// Act
-			int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
+            // Act
+            int damageMultiplier = attacker.CalcCriticalDamage(attacker.CritChance);
 
-			// Assert
-			Assert.True(damageMultiplier == 1);
-		}
+            // Assert
+            Assert.True(damageMultiplier == 1);
+        }
 
-		[Fact]
-		public void CalcDodge_ReturnsZero_IfDodgeOccurs()
-		{
-			// Arrange
-			var attacker = new TestCharacter();
-			attacker.DodgeChance = 100;
+        [Theory]
+        [InlineData(-5)]
+        [InlineData(-10)]
+        public void CalcCriticalDamage_ShouldThrowException_WhenCritChanceOutOfBounds(int invalidCritChance)
+        {
+            // Arrange
+            var attacker = new TestCharacter();
 
-			// Act
-			int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+            _log.WriteLine($"invalidCritChance: {invalidCritChance}");
 
-			// Assert
-			Assert.True(damageMultiplier == 0);
-		}
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => attacker.CalcCriticalDamage(invalidCritChance));
+        }
 
-		[Fact]
-		public void CalcDodge_ReturnsOne_IfFailsOccurs()
-		{
-			// Arrange
-			var attacker = new TestCharacter();
-			attacker.DodgeChance = 0;
+        [Theory]
+        [InlineData(25)]
+        [InlineData(75)]
+        [InlineData(50)]
+        public void CalcDodge_ShouldBeDeterministic_GivenFixedDodgeChance(int dodgeChance)
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            attacker.DodgeChance = dodgeChance;
+
+            // Act & Assert
+            for (int i = 0; i < 100; i++)
+            {
+                int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+                Assert.True(damageMultiplier == 0 || damageMultiplier == 1);
+            }
+        }
+
+        [Fact]
+        public void CalcDodge_ReturnsZero_IfDodgeOccurs()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            attacker.DodgeChance = 100;
+
+            // Act
+            int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+
+            // Assert
+            Assert.True(damageMultiplier == 0);
+        }
+
+        [Fact]
+        public void CalcDodge_ReturnsOne_IfFailsOccurs()
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+            attacker.DodgeChance = 0;
 
 
-			// Act
-			int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+            // Act
+            int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
 
-			// Assert
-			Assert.True(damageMultiplier == 1);
-		}
-	}
+            // Assert
+            Assert.True(damageMultiplier == 1);
+        }
+
+        [Theory]
+        [InlineData(-5)]
+        [InlineData(-10)]
+        public void CalcDodge_ShouldThrowException_WhenDodgeChanceOutOfBounds(int invalidDodgeChance)
+        {
+            // Arrange
+            var attacker = new TestCharacter();
+
+            // Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => attacker.CalcDodge(invalidDodgeChance));
+        }
+    }
 }
