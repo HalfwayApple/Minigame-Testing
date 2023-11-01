@@ -1,5 +1,5 @@
 import "./PlayGame.css";
-import { React, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { GameContext } from "../../contexts/GameContext";
 import { useNavigate } from "react-router-dom";
 
@@ -27,14 +27,14 @@ const PlayGame = () => {
     }
     
   return (
-    <div className="game-container" id="game-container">
+    <div>
         {currentGameState ? (
-            <>
+            <div className="game-container" id="game-container">
                 <div className="hero-card" id="hero-card">
                     <img className="fighterImage" id="hero-image" src="https://cdn.discordapp.com/attachments/1068620070227562659/1164550263479226449/imageedit_4_5377634979.gif?ex=65439ef3&is=653129f3&hm=0a989bec8fefb11f7c983f22dff0c21443ac03f6a8a5a4ca7d105d99c034b2d6&" alt="Hero" />
                     <h3>{currentGameState.hero.name} The Hero</h3>
                     <p>Level: {currentGameState.hero.level}</p>
-                    <p>Money: {currentGameState.hero.money}</p>
+                    <p id="money-tag">Money: {currentGameState.hero.money}</p>
                     <p>HP: {currentGameState.hero.currentHP}/{currentGameState.hero.maxHP}</p>
                     <p>Mana: {currentGameState.hero.currentMana}/{currentGameState.hero.maxMana}</p>
                     {currentGameState.hero.equippedWeapon ? (
@@ -78,7 +78,7 @@ const PlayGame = () => {
                             <button className="game-button" id="attack-button" onClick={() => attackEnemy()}>Attack</button>
                         }
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" id="checkinventory-button" onClick={() => {
+                            <button className="game-button" id="checkinventory-button" data-testid="checkinventory-button" onClick={() => {
                                 displayInventory();
                                 setShowItems(true);
                             }}>Check inventory</button>
@@ -94,7 +94,7 @@ const PlayGame = () => {
                     </div>
                 </div>
                 
-                {currentGameState.location.name !== "Town" &&
+                {currentGameState.location && currentGameState.location.name !== "Town" &&
                     <div className="enemy-card" id="enemy-card">
                         <img className="fighterImage" id="enemy-image" src={enemyImage} alt="Enemy" />
                         <h3>{currentGameState.location.enemy.name}</h3>
@@ -107,12 +107,11 @@ const PlayGame = () => {
                 }
                 
                 
-            </>
+            </div>
             
         ) : (
             <p id="error-message">Error Loading game</p>
         )}
-      
     </div>
   )
 }

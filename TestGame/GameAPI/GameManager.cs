@@ -3,8 +3,6 @@ using GameAPI.Data.Events;
 using GameAPI.Data.Items.Equipment;
 using GameAPI.Data.Items.Equipment.Armors;
 using GameAPI.Data.Items.Equipment.Weapons;
-using System;
-using System.Xml.Linq;
 
 namespace GameAPI
 {
@@ -104,7 +102,7 @@ namespace GameAPI
 
 		#endregion
 
-		#region Battle admin
+        #region Battle admin
 
 		/// <summary>
 		/// Creates a Battle location with a random enemy from the EnemyList in GameState, and puts the game there
@@ -155,10 +153,10 @@ namespace GameAPI
 			_state.Hero.Money += enemy.MoneyValue;
 			_state.Hero.LevelUpCheck();
 
-			ReturnToTown();
+            ReturnToTown();
 
-			return _state;
-		}
+            return _state;
+        }
 
 		/// <summary>
 		/// Checks if enemy is still alive and either attacks the hero or ends the battle
@@ -173,10 +171,10 @@ namespace GameAPI
 
 			Battle battleLocation = (Battle)_state.Location;
 
-			battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
+            battleLocation.DamageTakenLastTurn = enemy.Attack(_state.Hero);
 
-			return _state;
-		}
+            return _state;
+        }
 
 		/// <summary>
 		/// Checks enemy HP and either lets enemy take a turn, or ends the battle
@@ -201,7 +199,7 @@ namespace GameAPI
 			return _state;
 		}
 
-		#endregion
+        #endregion
 
 		#region Battle actions
 		/// <summary>
@@ -224,8 +222,8 @@ namespace GameAPI
 
 			EnemyOrEnd(enemy);
 
-			return _state;
-		}
+            return _state;
+        }
 
 		/// <summary>
 		/// Doubles the heroes armor value, lets the enemy take a swing, then returns to normal value
@@ -247,9 +245,9 @@ namespace GameAPI
 			int defendingArmor = originalArmor * 2;
 			_state.Hero.ArmorValue = defendingArmor;
 
-			EnemyOrEnd(enemy);
+            EnemyOrEnd(enemy);
 
-			_state.Hero.ArmorValue = originalArmor;
+            _state.Hero.ArmorValue = originalArmor;
 
 			battleLocation.DamageDoneLastTurn = 0;
 
@@ -276,9 +274,9 @@ namespace GameAPI
 			int dodgingChance = originalDodge * 2;
 			_state.Hero.DodgeChance = dodgingChance;
 
-			EnemyOrEnd(enemy);
+            EnemyOrEnd(enemy);
 
-			_state.Hero.DodgeChance = originalDodge;
+            _state.Hero.DodgeChance = originalDodge;
 
 			return _state;
 		}

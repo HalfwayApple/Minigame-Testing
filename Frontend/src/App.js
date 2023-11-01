@@ -1,4 +1,5 @@
 import './App.css'
+import React from 'react'
 import GameContextProvider from './contexts/GameContext'
 import RouteElements from './RouteElements'
 import AudioPlayer from './components/music/AudioPlayer'
