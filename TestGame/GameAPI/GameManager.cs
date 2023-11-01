@@ -14,18 +14,16 @@ namespace GameAPI
 			_state = new GameState();
 		}
 
-		public GameState GetGameState()
+		public virtual GameState GetGameState()
 		{
 			return _state;
 		}
 
-		public GameState ReturnToTown()
+		public virtual GameState ReturnToTown()
 		{
 			_state.Location = new Town("Town");
 			return _state;
 		}
-
-
 
 		#region Equip
 
@@ -33,7 +31,7 @@ namespace GameAPI
 		/// Checks if the hero can currently equip items
 		/// </summary>
 		/// <returns>True if location is Town, false otherwise</returns>
-		internal bool CanEquip()
+		internal virtual bool CanEquip()
 		{
 			if (_state.Location == null) throw new ArgumentNullException("No location in state");
 			Location location = _state.Location;
@@ -49,7 +47,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="index"></param>
 		/// <returns>GameState</returns>
-		public GameState Equip(int index)
+		public virtual GameState Equip(int index)
 		{
 			if (index < 0) throw new ArgumentOutOfRangeException("index cannot be less than 0");
 			if (index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException("index cannot be higher than number of items in bag");
@@ -79,7 +77,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="weapon"></param>
 		/// <returns>GameState</returns>
-		internal GameState EquipWeapon(Weapon weapon)
+		internal virtual GameState EquipWeapon(Weapon weapon)
 		{
 			if (weapon == null) throw new ArgumentNullException("Weapon cannot be null");
 
@@ -92,7 +90,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="armor"></param>
 		/// <returns>GameState</returns>
-		internal GameState EquipArmor(Armor armor)
+		internal virtual GameState EquipArmor(Armor armor)
 		{
 			if (armor == null) throw new ArgumentNullException("Armor cannot be null");
 
@@ -108,7 +106,7 @@ namespace GameAPI
 		/// Creates a Battle location with a random enemy from the EnemyList in GameState, and puts the game there
 		/// </summary>
 		/// <returns>GameState</returns>
-		public GameState StartFight()
+		public virtual GameState StartFight()
 		{
 			Enemy enemy = ChooseRandomEnemy();
 
@@ -123,7 +121,7 @@ namespace GameAPI
 		/// Choses a random enemy from the GameStates EnemyList
 		/// </summary>
 		/// <returns>Random Enemy</returns>
-        internal Enemy ChooseRandomEnemy()
+        internal virtual Enemy ChooseRandomEnemy()
 		{
 			if (_state.EnemyList == null) throw new NullReferenceException("EnemyList is Null");
 			if (_state.EnemyList.Count() == 0) throw new ArgumentOutOfRangeException("EnemyList is empty");
@@ -140,7 +138,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="enemy"></param>
 		/// <returns>GameState</returns>
-		internal GameState EndBattle(Enemy enemy)
+		internal virtual GameState EndBattle(Enemy enemy)
 		{
 			if (enemy == null) throw new ArgumentNullException("Enemy is null");
 
@@ -163,7 +161,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="enemy"></param>
 		/// <returns>GameState</returns>
-		internal GameState EnemyTurn(Enemy enemy)
+		internal virtual GameState EnemyTurn(Enemy enemy)
 		{
 			if (enemy == null) throw new ArgumentNullException("Enemy cant be null");
 			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
@@ -181,7 +179,7 @@ namespace GameAPI
 		/// </summary>
 		/// <param name="enemy"></param>
 		/// <returns>GameState after EnemyTurn or EndBattle</returns>
-		internal GameState EnemyOrEnd(Enemy enemy)
+		internal virtual GameState EnemyOrEnd(Enemy enemy)
 		{
 			if (enemy == null) throw new ArgumentNullException("Enemy cant be null");
 			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
@@ -206,7 +204,7 @@ namespace GameAPI
 		/// Attacks enemy, then calls EnemyTurn() to either further the battle or end it
 		/// </summary>
 		/// <returns>GameState</returns>
-		public GameState Attack()
+		public virtual GameState Attack()
 		{
 			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
 			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
@@ -229,7 +227,7 @@ namespace GameAPI
 		/// Doubles the heroes armor value, lets the enemy take a swing, then returns to normal value
 		/// </summary>
 		/// <returns>GameState</returns>
-		public GameState Defend()
+		public virtual GameState Defend()
 		{
 			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
 			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
@@ -258,7 +256,7 @@ namespace GameAPI
 		/// Doubles the heroes dodge chance, lets the enemy take a swing, then revets back to normal dodge chance
 		/// </summary>
 		/// <returns>GameState</returns>
-		public GameState Dodge()
+		public virtual GameState Dodge()
 		{
 			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
 			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
@@ -285,7 +283,7 @@ namespace GameAPI
 
 		#region Shopping
 
-		public GameState EnterShop()
+		public virtual GameState EnterShop()
 		{
 			if (_state.Location == null) throw new ArgumentNullException("Must be in Town");
 			if (_state.Location.GetType() != typeof(Town)) throw new ArgumentException("Must be in Town");
@@ -304,7 +302,7 @@ namespace GameAPI
 			return _state;
 		}
 
-		public GameState Buy(int index)
+		public virtual GameState Buy(int index)
 		{
 			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
 
@@ -323,7 +321,7 @@ namespace GameAPI
 			return _state;
 		}
 
-		public GameState Sell(int index)
+		public virtual GameState Sell(int index)
 		{
 			if (_state.Location.GetType() != typeof(Shop)) { return _state; }
 			if (index < 0 || index > _state.Hero.EquipmentInBag.Count()) throw new ArgumentOutOfRangeException(nameof(index), "index cannot be less than 0 or greater than the amount of items in the bag");
