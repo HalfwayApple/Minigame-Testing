@@ -56,7 +56,7 @@ namespace UI_Tests
                 {
                     Console.WriteLine("Test passed: Attack power has increased to 3");
                 }
-                Console.WriteLine("------------TEST CONTINUES------------");
+                Console.WriteLine("------------TEST CONTINUES WITH BATTLE------------");
 
 
                 await page.WaitForTimeoutAsync(1000);
@@ -94,6 +94,8 @@ namespace UI_Tests
                     var myMoney = await page.InnerTextAsync("#money-tag");
                     Console.WriteLine(myMoney);
                 }
+
+                Console.WriteLine("------------TEST CONTINUES WITH STORE------------");
 
                 await page.ClickAsync("#enterStore-button");
                 await page.WaitForTimeoutAsync(1000);
