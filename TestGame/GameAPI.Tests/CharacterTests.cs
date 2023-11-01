@@ -26,6 +26,10 @@
             _log = output;
         }
         #endregion
+
+        #region Attack
+
+
         [Fact]
         public void Attack_ShouldReduceEnemyCurrentHPByCorrectAmount()
         {
@@ -82,6 +86,66 @@
         }
 
         [Fact]
+        public void Attack_ShouldDealZeroDamage_WhenArmorEqualsDamage()
+        {
+            //arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = 50;
+            enemy.ArmorValue = 50;
+            enemy.CurrentHP = 100;
+            //act
+            attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(100, enemy.CurrentHP);
+        }
+
+        [Fact]
+        public void Attack_WithNegativeAttackPower_ShouldNotIncreaseEnemyHP()
+        {
+            //Arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = -10;
+            enemy.CurrentHP = 100;
+            //Act
+            attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(100, enemy.CurrentHP);
+        }
+
+        [Fact]
+        public void Attack_ReturnsCorrectDamageDealt()
+        {
+            //Arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = 40;
+            enemy.ArmorValue = 10;
+            enemy.CurrentHP = 100;
+            //Act
+            int damageDealt = attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(30, damageDealt);
+        }
+
+        #endregion
+
+        #region CalcNormalDamage
+
+        [Fact]
         public void CalcNormalDamage_ShouldReturnAttackPower()
         {
             // Arrange
@@ -95,6 +159,9 @@
             Assert.Equal(20, damage);
         }
 
+        #endregion
+
+        #region CalcCriticalDamage
         [Theory]
         [InlineData(25)]
         [InlineData(75)]
@@ -154,7 +221,9 @@
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => attacker.CalcCriticalDamage(invalidCritChance));
         }
+        #endregion
 
+        #region CalcDodge
         [Theory]
         [InlineData(25)]
         [InlineData(75)]
@@ -263,62 +332,7 @@
             //Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => defender.CalcDodge(invalidDodgeChance));
         }
-
-        [Fact]
-        public void Attack_ShouldDealZeroDamage_WhenArmorEqualsDamage()
-        {
-            //arrange
-            var attacker = new TestCharacter();
-            var enemy = new TestCharacter();
-            attacker.AttackPower = 50;
-            enemy.ArmorValue = 50;
-            enemy.CurrentHP = 100;
-            //act
-            attacker.Attack(enemy);
-
-            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
-            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
-
-            //Assert
-            Assert.Equal(100, enemy.CurrentHP);
-        }
-
-        [Fact]
-        public void Attack_WithNegativeAttackPower_ShouldNotIncreaseEnemyHP()
-        {
-            //Arrange
-            var attacker = new TestCharacter();
-            var enemy = new TestCharacter();
-            attacker.AttackPower = -10;
-            enemy.CurrentHP = 100;
-            //Act
-            attacker.Attack(enemy);
-
-            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
-            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
-
-            //Assert
-            Assert.Equal(100, enemy.CurrentHP);
-        }
-
-        [Fact]
-        public void Attack_ReturnsCorrectDamageDealt()
-        {
-            //Arrange
-            var attacker = new TestCharacter();
-            var enemy = new TestCharacter();
-            attacker.AttackPower = 40;
-            enemy.ArmorValue = 10;
-            enemy.CurrentHP = 100;
-            //Act
-            int damageDealt = attacker.Attack(enemy);
-
-            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
-            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
-
-            //Assert
-            Assert.Equal(30, damageDealt);
-        }
+        #endregion
 
     }
 }
