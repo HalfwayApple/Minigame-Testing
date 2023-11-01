@@ -159,11 +159,13 @@
         [InlineData(25)]
         [InlineData(75)]
         [InlineData(50)]
-        public void CalcDodge_ShouldBeDeterministic_GivenFixedDodgeChance(int dodgeChance)
+        public void CalcDodge_ShouldProduceConsistentDodgeResults(int dodgeChance)
         {
             // Arrange
             var attacker = new TestCharacter();
             attacker.DodgeChance = dodgeChance;
+
+            _log.WriteLine($"dodgeChance: {dodgeChance}");
 
             // Act & Assert
             for (int i = 0; i < 100; i++)
@@ -174,7 +176,7 @@
         }
 
         [Fact]
-        public void CalcDodge_ReturnsZero_IfDodgeOccurs()
+        public void CalcDodge_ReturnsZero_IfDodgeWorks()
         {
             // Arrange
             var attacker = new TestCharacter();
@@ -182,6 +184,8 @@
 
             // Act
             int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
+
+            _log.WriteLine($"dmg multiplier: {damageMultiplier}");
 
             // Assert
             Assert.True(damageMultiplier == 0);
@@ -198,6 +202,8 @@
             // Act
             int damageMultiplier = attacker.CalcDodge(attacker.DodgeChance);
 
+            _log.WriteLine($"dmg multiplier: {damageMultiplier}");
+
             // Assert
             Assert.True(damageMultiplier == 1);
         }
@@ -210,8 +216,109 @@
             // Arrange
             var attacker = new TestCharacter();
 
+            _log.WriteLine($"invalid dodge chance: {invalidDodgeChance}");
+
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => attacker.CalcDodge(invalidDodgeChance));
         }
+        [Fact]
+        public void CalcDodgeDefender_ReturnsZero_IfDodgeWorks()
+        {
+            //Arrange
+            var defender = new TestCharacter();
+            defender.DodgeChance = 100;
+            //Act
+            int dodgeMultiplier = defender.CalcDodge(defender.DodgeChance);
+
+            _log.WriteLine($"dodge multiplier: {dodgeMultiplier}");
+
+            //Assert
+            Assert.True(dodgeMultiplier == 0);
+        }
+        [Fact]
+        public void CalcDodgeDefender_ReturnsOne_IfDodgeFails()
+        {
+            //Arrange
+            var defender = new TestCharacter();
+            defender.DodgeChance = 0;
+            //Act
+            int dodgeMultiplier = defender.CalcDodge(defender.DodgeChance);
+
+            _log.WriteLine($"dodge multiplier: {dodgeMultiplier}");
+
+            //Assert
+            Assert.True(dodgeMultiplier == 1);
+        }
+
+        [Theory]
+        [InlineData(-5)]
+        [InlineData(-10)]
+        public void CalcDodgeDefender_ShouldThrowException_WhenDodgeChanceOutOfBounds(int invalidDodgeChance)
+        {
+            //Arrange
+            var defender = new TestCharacter();
+
+            _log.WriteLine($"invalid dodge chance: {invalidDodgeChance}");
+
+            //Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => defender.CalcDodge(invalidDodgeChance));
+        }
+
+        [Fact]
+        public void Attack_ShouldDealZeroDamage_WhenArmorEqualsDamage()
+        {
+            //arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = 50;
+            enemy.ArmorValue = 50;
+            enemy.CurrentHP = 100;
+            //act
+            attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(100, enemy.CurrentHP);
+        }
+
+        [Fact]
+        public void Attack_WithNegativeAttackPower_ShouldNotIncreaseEnemyHP()
+        {
+            //Arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = -10;
+            enemy.CurrentHP = 100;
+            //Act
+            attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(100, enemy.CurrentHP);
+        }
+
+        [Fact]
+        public void Attack_ReturnsCorrectDamageDealt()
+        {
+            //Arrange
+            var attacker = new TestCharacter();
+            var enemy = new TestCharacter();
+            attacker.AttackPower = 40;
+            enemy.ArmorValue = 10;
+            enemy.CurrentHP = 100;
+            //Act
+            int damageDealt = attacker.Attack(enemy);
+
+            _log.WriteLine($"enemy first hp {enemy.MaxHP}");
+            _log.WriteLine($"enemy current hp: {enemy.CurrentHP}");
+
+            //Assert
+            Assert.Equal(30, damageDealt);
+        }
+
     }
 }
