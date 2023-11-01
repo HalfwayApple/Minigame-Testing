@@ -18,6 +18,8 @@ namespace GameAPI.Tests
         }
         #endregion
 
+        #region Integration Tests av GameController
+
         #region GetGameState Integration Tests
         [Fact]
         public async Task GetGameState_ReturnsOk_WithGameState()
@@ -433,6 +435,8 @@ namespace GameAPI.Tests
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
             _log.WriteLine($"Status kod: {response.StatusCode}");
         }
+        #endregion 
+
         #endregion
 
         #region Unit Tests av controllerns metoder
