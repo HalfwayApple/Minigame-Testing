@@ -276,6 +276,8 @@ namespace GameAPI
 
             _state.Hero.DodgeChance = originalDodge;
 
+			battleLocation.DamageDoneLastTurn = 0;
+
 			return _state;
 		}
 

@@ -1299,7 +1299,7 @@ namespace GameAPI.Tests
 			Assert.Equal(enemy.CurrentHP, enemyHP);
 		}
 		[Fact]
-		public void Dodge_ShouldupdateDamageDoneLastTurn()
+		public void Dodge_ShouldUpdateDamageDoneLastTurn()
 		{
 			// Arrange
 			int enemyHP = 100;
