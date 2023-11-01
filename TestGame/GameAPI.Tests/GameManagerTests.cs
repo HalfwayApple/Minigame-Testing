@@ -17,7 +17,15 @@ namespace GameAPI.Tests
             gameManager = new GameManager();
         }
 		#endregion
-
+		public class LocationDataAttribute : DataAttribute
+		{
+			public override IEnumerable<object[]> GetData(MethodInfo testMethod)
+			{
+				yield return new object[] { new Location("NonDerivedLocation") };
+				yield return new object[] { new Town("Town") };
+				yield return new object[] { new Shop("Shop") };
+			}
+		}
 		#region CanEquip
 		[Fact]
         public void CanEquip_InTown_ShouldReturnTrue()
@@ -746,16 +754,6 @@ namespace GameAPI.Tests
 			// Assert
 			Assert.Throws<ArgumentNullException>(() => gameManager.EnemyTurn(enemy));
 		}
-
-		public class LocationDataAttribute : DataAttribute
-		{
-			public override IEnumerable<object[]> GetData(MethodInfo testMethod)
-			{
-				yield return new object[] { new Location("NonDerivedLocation") };
-				yield return new object[] { new Town("Town") };
-				yield return new object[] { new Shop("Shop") };
-			}
-		}
 		[Theory]
 		[LocationData]
 		public void EnemyTurn_IfLocationIsNotBattle_ShouldThrowArgumentException(Location location)
@@ -766,6 +764,93 @@ namespace GameAPI.Tests
 
 			// Assert
 			Assert.Throws<ArgumentException>(() => gameManager.EnemyTurn(enemy));
+		}
+		#endregion
+		#region EnemyOrEnd
+		[Fact]
+		public void EnemyOrEnd_WhenEnemyIsAlive_ShouldStillBeInBattle()
+		{
+			// Arrange
+			int enemyHp = 10;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHp,
+				CurrentHP = enemyHp
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			GameState result = gameManager.EnemyOrEnd(enemy);
+
+			// Assert
+			Assert.Equal("Battle", result.Location.Name);
+		}
+		[Fact]
+		public void EnemyOrEnd_WhenEnemyIsDead_ShouldNoLongerBeInBattle()
+		{
+			// Arrange
+			int enemyHp = 0;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHp,
+				CurrentHP = enemyHp
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			GameState result = gameManager.EnemyOrEnd(enemy);
+
+			// Assert
+			Assert.NotEqual("Battle", result.Location.Name);
+		}
+		[Fact]
+		public void EnemyOrEnd_WhenEnemyIsDead_ShouldPutLocationToTown()
+		{
+			// Arrange
+			int enemyHp = 0;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHp,
+				CurrentHP = enemyHp
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			GameState result = gameManager.EnemyOrEnd(enemy);
+
+			// Assert
+			Assert.Equal("Town", result.Location.Name);
+		}
+		[Fact]
+		public void EnemyOrEnd_IfEnemyIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = null;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EnemyOrEnd(enemy));
+		}
+		[Fact]
+		public void EnemyOrEnd_IfLocationIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = null;
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EnemyOrEnd(enemy));
+		}
+		[Theory]
+		[LocationData]
+		public void EnemyOrEnd_IfLocationIsNotBattle_ShouldThrowArgumentException(Location location)
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = location;
+
+			// Assert
+			Assert.Throws<ArgumentException>(() => gameManager.EnemyOrEnd(enemy));
 		}
 		#endregion
 		#region Attack

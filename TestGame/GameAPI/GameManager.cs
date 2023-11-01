@@ -185,6 +185,10 @@ namespace GameAPI
 		/// <returns>GameState after EnemyTurn or EndBattle</returns>
 		internal GameState EnemyOrEnd(Enemy enemy)
 		{
+			if (enemy == null) throw new ArgumentNullException("Enemy cant be null");
+			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
+			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
+
 			if (enemy.CurrentHP <= 0)
 			{
 				EndBattle(enemy);
