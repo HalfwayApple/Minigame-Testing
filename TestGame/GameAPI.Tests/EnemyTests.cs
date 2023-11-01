@@ -10,6 +10,8 @@
             _log = output;
         }
         #endregion
+
+        #region CalcNormalDamage
         [Fact]
         public void CalcNormalDamage_ReturnsZero_WhenEnemyIsDead()
         {
@@ -41,7 +43,9 @@
             // Assert
             Assert.Equal(25, damage);
         }
+        #endregion
 
+        #region DropEquipment
         //Negativt scenario
         [Fact]
         public void DropEquipment_ReturnsNull_WhenLootTableIsEmpty()
@@ -145,7 +149,9 @@
             Assert.Contains(mockEquipment1.Name, results);
             Assert.Contains(mockEquipment2.Name, results);
         }
+        #endregion
 
+        #region Clone
         [Fact]
         public void Clone_ReturnsClone_ButNotIdentical()
         {
@@ -167,6 +173,7 @@
             // Assert
             Assert.NotSame(originalEnemy, clonedEnemy);
         }
+        #endregion
 
     }
 }

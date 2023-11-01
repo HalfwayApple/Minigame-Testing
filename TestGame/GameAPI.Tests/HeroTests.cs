@@ -14,6 +14,7 @@ namespace GameAPI.Tests
         }
         #endregion
 
+        #region CalcMaxHp
         [Theory]
         [InlineData(1, 10)]  // 7 baseHp + 3*1 = 10 : level 1 blir maxHp 10
         [InlineData(2, 13)]  // 7 baseHp + 3*2 = 13
@@ -33,6 +34,17 @@ namespace GameAPI.Tests
         }
 
         [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void CalcMaxHp_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxHp(level));
+        }
+
+        #endregion
+
+        #region CalcMaxMana
+        [Theory]
         [InlineData(1, 5)] // 3 baseMana + 2*1 = 5 //level 1 blir baseMana 5
         [InlineData(2, 7)] // 3 baseMana + 2*2 = 7
         [InlineData(10, 23)] // 3 baseMana + 2*10 = 23
@@ -49,6 +61,17 @@ namespace GameAPI.Tests
             Assert.Equal(expectedMana, maxMana);
         }
 
+        [Theory]
+        [InlineData(-1)]
+        [InlineData(0)]
+        public void CalcMaxMana_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxMana(level));
+        }
+
+        #endregion
+
+        #region CalcArmorValue
         [Theory]
         [InlineData(10)]
         [InlineData(20)]
@@ -71,7 +94,9 @@ namespace GameAPI.Tests
             // Assert
             Assert.Equal(testArmor.ArmorValue, armorValue);
         }
+        #endregion
 
+        #region CalcLevel
         [Theory]
         [InlineData(10, 1)]
         [InlineData(20, 2)]
@@ -91,6 +116,16 @@ namespace GameAPI.Tests
             Assert.Equal(expectedLevel, level);
         }
 
+        [Fact]
+        public void CalcLevel_WhenXpIsLessThanTen_ReturnsOne()
+        {
+            _hero.Xp = 5;
+            var result = _hero.CalcLevel();
+            Assert.Equal(1, result);
+        }
+        #endregion
+
+        #region SetStats
         [Theory]
         // xp, expectedLevel, expectedMaxHp, expectedMaxMana, expectedAttackPower
         [InlineData(0, 1, 10, 5, 1)]
@@ -259,8 +294,9 @@ namespace GameAPI.Tests
             // Act & Assert
             Assert.Throws<ArgumentOutOfRangeException>(() => _hero.SetStats()); // Replace with your specific exception type
         }
+        #endregion
 
-
+        #region CalcNormalDamage
         [Fact]
         public void CalcNormalDamage_WithWeaponEquipped_ShouldReturnCombinedDamage()
         {
@@ -294,7 +330,9 @@ namespace GameAPI.Tests
             // Assert
             Assert.Equal(expectedDamage, damage);
         }
+        #endregion
 
+        #region LevelUpCheck
         //Positivt test scenario
         [Fact]
         public void LevelUpCheck_WhenXpIsEnough_ShouldLevelUp()
@@ -327,7 +365,9 @@ namespace GameAPI.Tests
             // Assert
             Assert.Equal(oldLevel, _hero.Level);
         }
+        #endregion
 
+        #region EquipWeapon
         [Fact]
         public void EquipWeapon_ShouldEquipWeapon_WhenNoWeaponEquipped()
         {
@@ -447,7 +487,9 @@ namespace GameAPI.Tests
         {
             Assert.Throws<ArgumentNullException>(() => _hero.EquipWeapon(null));
         }
+        #endregion
 
+        #region EquipArmor
         [Fact]
         public void EquipArmor_ShouldEquipArmor_WhenNoArmorEquipped()
         {
@@ -564,29 +606,7 @@ namespace GameAPI.Tests
         {
             Assert.Throws<ArgumentNullException>(() => _hero.EquipArmor(null));
         }
+        #endregion
 
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        public void CalcMaxHp_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxHp(level));
-        }
-
-        [Theory]
-        [InlineData(-1)]
-        [InlineData(0)]
-        public void CalcMaxMana_WhenLevelIsNegativeOrZero_ThrowsArgumentOutOfRangeException(int level)
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => _hero.CalcMaxMana(level));
-        }
-
-        [Fact]
-        public void CalcLevel_WhenXpIsLessThanTen_ReturnsOne()
-        {
-            _hero.Xp = 5;
-            var result = _hero.CalcLevel();
-            Assert.Equal(1, result);
-        }
     }
 }
