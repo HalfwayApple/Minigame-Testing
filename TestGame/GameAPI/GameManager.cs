@@ -233,8 +233,15 @@ namespace GameAPI
 		/// <returns>GameState</returns>
 		public GameState Defend()
 		{
+			if (_state.Location == null) throw new ArgumentNullException("Location cant be null");
+			if (_state.Location.GetType() != typeof(Battle)) throw new ArgumentException("Location has to be Battle");
+			if (_state.Hero.CurrentHP <= 0) throw new ArgumentException("Hero is dead (0 or less hp)");
+
 			Battle battleLocation = (Battle)_state.Location;
 			Enemy enemy = battleLocation.Enemy;
+
+			if (enemy == null) throw new ArgumentNullException("Enemy cant be null");
+			if (enemy.CurrentHP <= 0) throw new ArgumentException("Enemy is dead (0 or less hp)");
 
 			int originalArmor = _state.Hero.ArmorValue;
 			int defendingArmor = originalArmor * 2;
@@ -243,6 +250,8 @@ namespace GameAPI
 			EnemyOrEnd(enemy);
 
 			_state.Hero.ArmorValue = originalArmor;
+
+			battleLocation.DamageDoneLastTurn = 0;
 
 			return _state;
 		}

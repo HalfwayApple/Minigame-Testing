@@ -1056,7 +1056,199 @@ namespace GameAPI.Tests
 		}
 		#endregion
 		#region Defend
+		[Fact]
+		public void Defend_ShouldDecreaseDamageTakenMoreThanNormallyExpected()
+		{
+			// Arrange
+			int enemyAttackPower = 10;
+			int heroHP = 100;
+			int heroArmorValue = 1;
+			Enemy enemy = new Enemy()
+			{
+				CurrentHP = 1,
+				AttackPower = enemyAttackPower
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Hero hero = gameManager.GetGameState().Hero;
+			hero.MaxHP = heroHP;
+			hero.CurrentHP = heroHP;
+			hero.ArmorValue = heroArmorValue;
 
+			int normallyExpectedDamage = enemyAttackPower - heroArmorValue;
+			int normallyExpectedHPLeftAfterAttack = heroHP - normallyExpectedDamage;
+
+			// Act
+			gameManager.Attack();
+
+			// Assert
+			Assert.True(hero.CurrentHP > normallyExpectedHPLeftAfterAttack);
+		}
+		[Fact]
+		public void Defend_ShouldDoNoDamage()
+		{
+			// Arrange
+			int enemyHP = 100;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHP,
+				CurrentHP = enemyHP,
+				DodgeChance = 0,
+				ArmorValue = 0
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Battle battleLocation = (Battle)gameManager.GetGameState().Location;
+			battleLocation.DamageDoneLastTurn = 0;
+
+			// Act
+			gameManager.Defend();
+
+			// Assert
+			Assert.Equal(0, battleLocation.DamageDoneLastTurn);
+			Assert.Equal(enemy.CurrentHP, enemyHP);
+		}
+		[Fact]
+		public void Defend_ShouldupdateDamageDoneLastTurn()
+		{
+			// Arrange
+			int enemyHP = 100;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHP,
+				CurrentHP = enemyHP,
+				DodgeChance = 0,
+				ArmorValue = 0
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Battle battleLocation = (Battle)gameManager.GetGameState().Location;
+			battleLocation.DamageDoneLastTurn = 10;
+
+			// Act
+			gameManager.Defend();
+
+			// Assert
+			Assert.Equal(0, battleLocation.DamageDoneLastTurn);
+		}
+		[Fact]
+		public void Defend_ShouldBeInBattle()
+		{
+			// Arrange
+			int enemyHP = 100;
+			int heroAttackPower = 1;
+			Enemy enemy = new Enemy()
+			{
+				MaxHP = enemyHP,
+				CurrentHP = enemyHP,
+				DodgeChance = 0,
+				ArmorValue = 0
+			};
+			gameManager.GetGameState().Hero.AttackPower = heroAttackPower;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			gameManager.Defend();
+
+			// Assert
+			Assert.Equal("Battle", gameManager.GetGameState().Location.Name);
+		}
+		[Fact]
+		public void Defend_ShouldDamageHero()
+		{
+			// Arrange
+			int heroHP = 100;
+			Enemy enemy = new Enemy()
+			{
+				CurrentHP = 1,
+				AttackPower = 1
+			};
+			gameManager.GetGameState().Hero.MaxHP = heroHP;
+			gameManager.GetGameState().Hero.CurrentHP = heroHP;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Act
+			gameManager.Defend();
+
+			// Assert
+			Assert.NotEqual(heroHP, gameManager.GetGameState().Hero.CurrentHP);
+		}
+		[Theory]
+		[InlineData(0)]
+		[InlineData(1)]
+		public void Defend_ShouldUpdateDamageTaken(int heroArmorValue)
+		{
+			// Arrange
+			int heroHP = 100;
+			Enemy enemy = new Enemy()
+			{
+				CurrentHP = 1,
+				AttackPower = 10
+			};
+			gameManager.GetGameState().Hero.MaxHP = heroHP;
+			gameManager.GetGameState().Hero.CurrentHP = heroHP;
+			gameManager.GetGameState().Hero.ArmorValue = heroArmorValue;
+			gameManager.GetGameState().Hero.DodgeChance = 0;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			Battle battleLocation = (Battle)gameManager.GetGameState().Location;
+			battleLocation.DamageTakenLastTurn = -1;
+
+			// Act
+			gameManager.Defend();
+
+			// Assert
+			Assert.NotEqual(0, battleLocation.DamageTakenLastTurn);
+		}
+		[Fact]
+		public void Defend_IfLocationIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = null;
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.Defend());
+		}
+		[Theory]
+		[LocationData]
+		public void Defend_IfLocationIsNotBattle_ShouldThrowArgumentException(Location location)
+		{
+			// Arrange
+			gameManager.GetGameState().Location = location;
+
+			// Assert
+			Assert.Throws<ArgumentException>(() => gameManager.Defend());
+		}
+		[Fact]
+		public void Defend_IfHeroIsDead_ShouldThrowArgumentException()
+		{
+			// Arrange
+			Enemy enemy = new Enemy();
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+			gameManager.GetGameState().Hero.CurrentHP = 0;
+
+			// Assert
+			Assert.Throws<ArgumentException>(() => gameManager.Defend());
+		}
+		[Fact]
+		public void Defend_IfEnemyIsNull_ShouldThrowArgumentNullException()
+		{
+			// Arrange
+			Enemy enemy = null;
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.Defend());
+		}
+		[Fact]
+		public void Defend_IfEnemyIsDead_ShouldThrowArgumentException()
+		{
+			// Arrange
+			Enemy enemy = new Enemy()
+			{
+				CurrentHP = 0
+			};
+			gameManager.GetGameState().Location = new Battle("Battle", enemy);
+
+			// Assert
+			Assert.Throws<ArgumentException>(() => gameManager.Defend());
+		}
 		#endregion
 		#region Dodge
 
