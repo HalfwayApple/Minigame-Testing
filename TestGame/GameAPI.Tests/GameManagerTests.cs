@@ -1445,6 +1445,9 @@ namespace GameAPI.Tests
 			Assert.Throws<ArgumentException>(() => gameManager.Dodge());
 		}
 		#endregion
+		#region EnterShop
+
+		#endregion
 		#region Buy
 		[Fact]
 		public void Buy_ShouldReturnSameState_IfNotInShop()

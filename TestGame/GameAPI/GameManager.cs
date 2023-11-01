@@ -289,7 +289,8 @@ namespace GameAPI
 
 		public GameState EnterShop()
 		{
-			if (_state.Location.GetType() != typeof(Town)) { return _state; }
+			if (_state.Location == null) throw new ArgumentNullException("Must be in Town");
+			if (_state.Location.GetType() != typeof(Town)) throw new ArgumentException("Must be in Town");
 
 			Shop shop = new("Shop");
 			Armor breastplate = new()
