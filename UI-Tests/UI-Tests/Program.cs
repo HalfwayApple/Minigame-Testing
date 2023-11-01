@@ -8,7 +8,7 @@ namespace UI_Tests
         {
             try
             {
-                Console.WriteLine("Test has begun");
+                Console.WriteLine("------------TEST HAS BEGUN------------");
 
                 // startar playwright
                 using var playwright = await Playwright.CreateAsync();
@@ -67,6 +67,9 @@ namespace UI_Tests
                     await page.WaitForTimeoutAsync(1000);
                     Console.WriteLine("Battle started");
 
+                    //Hämtar ut vad för sorts enemy det är
+                    var enemyType = await page.InnerTextAsync("#enemy-type-name");
+
                     // klickar på attack
                     await page.ClickAsync("#attack-button");
                     await page.WaitForTimeoutAsync(1000);
@@ -89,7 +92,7 @@ namespace UI_Tests
                         }
                     }
 
-                    Console.WriteLine("Enemy has died");
+                    Console.WriteLine($"{enemyType} has been slain");
                     await page.WaitForTimeoutAsync(1000);
                     var myMoney = await page.InnerTextAsync("#money-tag");
                     Console.WriteLine(myMoney);
