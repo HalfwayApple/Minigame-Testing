@@ -93,7 +93,7 @@ const PlayGame = () => {
                 {currentGameState.location && currentGameState.location.name !== "Town" &&
                     <div className="enemy-card" id="enemy-card">
                         <img className="fighterImage" id="enemy-image" src={enemyImage} alt="Enemy" />
-                        <h3>{currentGameState.location.enemy.name}</h3>
+                        <h3 id="enemy-type-name">{currentGameState.location.enemy.name}</h3>
                         <p>Level: {currentGameState.location.enemy.level}</p>
                         <p>HP: {currentGameState.location.enemy.currentHP}/{currentGameState.location.enemy.maxHP}</p>
                         <p>Mana: {currentGameState.location.enemy.currentMana}/{currentGameState.location.enemy.maxMana}</p>
