@@ -1447,9 +1447,57 @@ namespace GameAPI.Tests
 		#endregion
 		#region EnterShop
 
-		#endregion
-		#region Buy
 		[Fact]
+		public void EnterShop_ShouldChangeLocationToShop_IfInTown()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Town("Town");
+
+			// Act
+			var state = gameManager.EnterShop();
+
+			// Assert
+			Assert.Equal("Shop", state.Location.Name);
+		}
+
+        [Fact]
+        public void EnterShop_ShouldHaveArmorForSale_IfCorrectlyEntered()
+        {
+            // Arrange
+            gameManager.GetGameState().Location = new Town("Town");
+
+            // Act
+            var state = gameManager.EnterShop();
+            Shop? shop = state.Location as Shop;
+
+            // Assert
+            Assert.NotNull(shop);
+            Assert.Contains(shop.EquipmentForSale, item => item.Name == "Breastplate");
+        }
+
+		[Fact]
+		public void EnterShop_ShouldThrowException_IfLocationIsNull()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = null;
+
+			// Act & Assert
+			Assert.Throws<ArgumentNullException>(() => gameManager.EnterShop());
+		}
+
+		[Fact]
+		public void EnterShop_ShouldThrowExceptionIfLocationIsNotTown()
+		{
+			// Arrange
+			gameManager.GetGameState().Location = new Battle("Battle", new Enemy());
+
+			// Act & Assert
+			Assert.Throws<ArgumentException>(() => gameManager.EnterShop());
+		}
+
+        #endregion
+        #region Buy
+        [Fact]
 		public void Buy_ShouldReturnSameState_IfNotInShop()
 		{
 			// Arrange
