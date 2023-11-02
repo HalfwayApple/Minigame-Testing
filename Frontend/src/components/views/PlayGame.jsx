@@ -21,10 +21,6 @@ const PlayGame = () => {
     }
 
     const handleClick = () => { navigate('/Shop'); }
-
-    const displayInventory = () => {
-        getInventory();
-    }
     
   return (
     <div>
@@ -54,7 +50,7 @@ const PlayGame = () => {
             
                 <div id="game-info">
                     <h1 className="game-area-text" id="location-text">You are currently in: {currentGameState.location.name}</h1>
-                    <ul id="text-display" className="action-flow">
+                    <ul id="text-display" data-testid="text-display-test" className="action-flow">
                         {showItems === true && 
                             currentItems.map(listItem => {
                                 return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
@@ -75,17 +71,17 @@ const PlayGame = () => {
                             }}>Challenge an enemy</button>
                         }
                         {currentGameState.location.name === "Battle" &&
-                            <button className="game-button" id="attack-button" onClick={() => attackEnemy()}>Attack</button>
+                            <button className="game-button" id="attack-button" data-testid="attack-button-test" onClick={() => attackEnemy()}>Attack</button>
                         }
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" id="checkinventory-button" data-testid="checkinventory-button" onClick={() => {
-                                displayInventory();
+                            <button className="game-button" id="checkinventory-button" data-testid="checkinventory-button-test" onClick={() => {
+                                getInventory();
                                 setShowItems(true);
                             }}>Check inventory</button>
                         }
 
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" id="enterStore-button" onClick={() =>{
+                            <button className="game-button" id="enterStore-button" data-testid="enterStore-button-test" onClick={() =>{
                                 enterStore();
                                 handleClick();
                             }}>Enter Store</button>

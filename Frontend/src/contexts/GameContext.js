@@ -81,6 +81,10 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
+  <div data-testid="current-game-state">
+    {currentGameState}
+  </div>
+
   return (
     <GameContext.Provider
       value={{
