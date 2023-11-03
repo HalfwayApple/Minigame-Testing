@@ -5,9 +5,7 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI-Tests", "UI-Tests\UI-Tests.csproj", "{DEB62442-0B27-4433-BCD3-2ED78396F25D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xUnitPlaywrightTests", "xUnitPlaywrightTests\xUnitPlaywrightTests.csproj", "{E0165152-20D6-4CDB-B267-943F19316CF5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitPlaywrightTest", "NUnitPlaywrightTest\NUnitPlaywrightTest.csproj", "{DE99D096-16B3-4DB8-AF3F-D6CA0FCFA061}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "xUnitPlaywrightTests", "xUnitPlaywrightTests\xUnitPlaywrightTests.csproj", "{E0165152-20D6-4CDB-B267-943F19316CF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +21,6 @@ Global
 		{E0165152-20D6-4CDB-B267-943F19316CF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0165152-20D6-4CDB-B267-943F19316CF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0165152-20D6-4CDB-B267-943F19316CF5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DE99D096-16B3-4DB8-AF3F-D6CA0FCFA061}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DE99D096-16B3-4DB8-AF3F-D6CA0FCFA061}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DE99D096-16B3-4DB8-AF3F-D6CA0FCFA061}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DE99D096-16B3-4DB8-AF3F-D6CA0FCFA061}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
