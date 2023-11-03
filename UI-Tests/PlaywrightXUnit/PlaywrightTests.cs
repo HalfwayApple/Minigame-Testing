@@ -71,7 +71,7 @@ namespace PlaywrightXUnit
 
             // Simulate battles
             await _page.WaitForTimeoutAsync(1000);
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 5; i++)
             {
                 await _page.ClickAsync("#startbattle-button");
                 await _page.WaitForTimeoutAsync(1000);
@@ -110,9 +110,21 @@ namespace PlaywrightXUnit
             await _page.WaitForTimeoutAsync(1000);
             Console.WriteLine("Left store and went to town");
 
+            // kollar inv och equip breastplate
+            await _page.WaitForTimeoutAsync(1000);
+            await _page.ClickAsync("#checkinventory-button");
+            await _page.WaitForTimeoutAsync(1000);
+            await _page.WaitForSelectorAsync("#equip-button");
+            Console.WriteLine("Clicked check inventory button");
+
+            await _page.ClickAsync("#equip-button");
+            await _page.WaitForTimeoutAsync(1000);
+            Console.WriteLine("Clicked equip button");
+
             var myMoneyAfterPurchase = await _page.InnerTextAsync("#money-tag");
             Console.WriteLine("Opens wallet and checks money");
             Console.WriteLine(myMoneyAfterPurchase);
+            await _page.WaitForTimeoutAsync(5000);
         }
     }
 
