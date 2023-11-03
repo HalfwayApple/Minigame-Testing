@@ -43,6 +43,7 @@ namespace PlaywrightXUnit
             await _page.GotoAsync("http://localhost:3000/");
 
             // startar spelet
+            await _page.WaitForTimeoutAsync(1000);
             await _page.ClickAsync("#startgame-button");
             await _page.WaitForNavigationAsync();
             Console.WriteLine("Clicked start game button");
@@ -52,7 +53,9 @@ namespace PlaywrightXUnit
             Console.WriteLine("Attack power before equip: " + startAttackPower + "'.");
 
             // kollar inv och equip svärd
+            await _page.WaitForTimeoutAsync(1000);
             await _page.ClickAsync("#checkinventory-button");
+            await _page.WaitForTimeoutAsync(1000);
             await _page.WaitForSelectorAsync("#equip-button");
             Console.WriteLine("Clicked check inventory button");
 
