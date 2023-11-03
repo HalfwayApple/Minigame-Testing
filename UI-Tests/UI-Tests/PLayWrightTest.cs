@@ -2,7 +2,7 @@
 
 namespace UI_Tests
 {
-    internal class Program
+    public class PLayWrightTest
     {
         static async Task Main(string[] args)
         {
