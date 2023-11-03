@@ -20,12 +20,17 @@ const PlayGame = () => {
 
     let heroImage = "";
 
-    if(currentGameState.location.name !== null){
-        if (currentGameState.hero.equippedWeapon === null){
-            heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956091904405535/transbacknosword.png?ex=65574985&is=6544d485&hm=b42e0e6378b250ffb24e2d50420d914321d8e6af37d3e6aba0dd7afe7bf9866b&"
-        }else{
-            heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956106152448010/transbackwithsword.png?ex=65574988&is=6544d488&hm=4e9c93c8307974210d2aca8490be96deb4a7ef49f783037c9d526d643105887e&"
-        }
+    if (currentGameState.hero.equippedWeapon === null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956091904405535/transbacknosword.png?ex=65574985&is=6544d485&hm=b42e0e6378b250ffb24e2d50420d914321d8e6af37d3e6aba0dd7afe7bf9866b&"
+    }
+    else if(currentGameState.hero.equippedArmor !== null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1170024137863999599/transbackwithswordandshield.png?ex=655788e4&is=654513e4&hm=87a44396802aa4b833110e57747b9f31a612360e842237a63dad920d91b44b3f&"
+    }
+    else if(currentGameState.hero.equippedWeapon !== null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956106152448010/transbackwithsword.png?ex=65574988&is=6544d488&hm=4e9c93c8307974210d2aca8490be96deb4a7ef49f783037c9d526d643105887e&&"
     }
 
     return (
