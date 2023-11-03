@@ -1,5 +1,3 @@
-using Microsoft.Playwright;
-
 namespace XunitPlaywrightTest
 {
     public class PlaywrightTests : IAsyncLifetime
@@ -42,16 +40,16 @@ namespace XunitPlaywrightTest
 
             await _page.GotoAsync("http://localhost:3000/");
 
-            // Start the game
+            // startar spelet
             await _page.ClickAsync("#startgame-button");
             await _page.WaitForNavigationAsync();
             Console.WriteLine("Clicked start game button");
 
-            // Check attack power before equipping the sword
+            // kollar attack power
             var startAttackPower = await _page.InnerTextAsync("#attackpower-tag");
             Console.WriteLine("Attack power before equip: " + startAttackPower + "'.");
 
-            // Check inventory and equip the sword
+            // kollar inv och equip svärd
             await _page.ClickAsync("#checkinventory-button");
             await _page.WaitForSelectorAsync("#equip-button");
             Console.WriteLine("Clicked check inventory button");
@@ -111,7 +109,5 @@ namespace XunitPlaywrightTest
             Console.WriteLine("Opens wallet and checks money");
             Console.WriteLine(myMoneyAfterPurchase);
         }
-
-        // Additional tests would follow the same pattern
     }
 }
