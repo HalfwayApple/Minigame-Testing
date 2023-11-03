@@ -18,7 +18,7 @@ namespace UI_Tests
 
                 await using var browser = await playwright.Chromium.LaunchAsync(new()
                 {
-                    Headless = true,
+                    Headless = false,
                     ExecutablePath = edgeExecutablePath
                 });
 
