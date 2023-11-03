@@ -1453,6 +1453,7 @@ namespace GameAPI.Tests
 			// Arrange
 			gameManager.GetGameState().Location = new Town("Town");
 
+
 			// Act
 			var state = gameManager.EnterShop();
 

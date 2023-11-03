@@ -1,13 +1,11 @@
 import "./PlayGame.css";
 import React, { useContext, useState } from "react";
 import { GameContext } from "../../contexts/GameContext";
-import { useNavigate } from "react-router-dom";
 
 const PlayGame = () => {
 
-    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterStore} = useContext(GameContext);
+    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterStore, handleNavigateSite} = useContext(GameContext);
 
-    const navigate = useNavigate();
     const [showItems, setShowItems] = useState(false);
 
     let enemyImage = "";
@@ -20,7 +18,6 @@ const PlayGame = () => {
         }
     }
 
-    const handleClick = () => { navigate('/Shop'); }
     
   return (
     <div>
@@ -83,7 +80,6 @@ const PlayGame = () => {
                         {currentGameState.location.name !== "Battle" &&
                             <button className="game-button" id="enterStore-button" data-testid="enterStore-button-test" onClick={() =>{
                                 enterStore();
-                                handleClick();
                             }}>Enter Store</button>
                         }
                         

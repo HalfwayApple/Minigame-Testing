@@ -10,14 +10,22 @@ import {
   SellItemAsync,
   BuyItemAsync,
 } from '../services/GameService'
+import { useNavigate } from "react-router-dom";
+
 export const GameContext = createContext()
 export const GameContextProvider = ({ children }) => {
   const [currentGameState, setCurrentGameState] = useState()
+  const [currentShopItems, setCurrentShopItems] = useState([])
   const [currentItems, setCurrentItems] = useState([])
+  const navigate = useNavigate();
 
   useEffect(() => {
     setGameState()
   }, [])
+
+  useEffect(() => {
+    getEquipmentForSale()
+  }, [currentGameState])
 
   useEffect(() => {
     getInventory()
@@ -34,6 +42,7 @@ export const GameContextProvider = ({ children }) => {
   }
 
   const returnToTown = async () => {
+    handleNavigateSite("/PlayGame");
     let currentState = await GetReturnToTownAsync()
     setCurrentGameState(currentState)
   }
@@ -59,13 +68,14 @@ export const GameContextProvider = ({ children }) => {
   }
 
   const enterStore = async () => {
+    handleNavigateSite("/Shop");
     let currentState = await GetEnterStoreAsync()
     setCurrentGameState(currentState)
   }
 
   const getEquipmentForSale = async () => {
     if (currentGameState && currentGameState.location.name === 'Shop') {
-      await setCurrentItems(currentGameState.location.equipmentForSale)
+      setCurrentShopItems(currentGameState.location.equipmentForSale)
     } else {
       console.log('Game state or store not available')
     }
@@ -81,9 +91,9 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
-  <div data-testid="current-game-state">
-    {currentGameState}
-  </div>
+  const handleNavigateSite = (site) => { 
+    navigate(`${site}`); 
+  }
 
   return (
     <GameContext.Provider
@@ -100,6 +110,8 @@ export const GameContextProvider = ({ children }) => {
         sellItem,
         buyItem,
         currentItems,
+        handleNavigateSite,
+        currentShopItems,
       }}
     >
       {children}

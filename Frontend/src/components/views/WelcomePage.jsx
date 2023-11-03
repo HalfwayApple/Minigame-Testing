@@ -1,13 +1,13 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import './WelcomePage.css';  // Make sure to import the CSS file
+import React, {useContext} from 'react'
+import './WelcomePage.css';
+import { GameContext } from '../../contexts/GameContext';
 
 const WelcomePage = () => {
-    const navigate = useNavigate()
+    const {handleNavigateSite} = useContext(GameContext);
 
     const handleClick = () => {
         setTimeout(() => {
-            navigate('/PlayGame');
+            handleNavigateSite('/PlayGame');
         }, 500);
     }
 

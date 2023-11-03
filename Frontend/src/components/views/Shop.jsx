@@ -1,19 +1,12 @@
 import React, { useContext } from 'react';
 import { GameContext } from '../../contexts/GameContext';
-import { useNavigate } from "react-router-dom";
 import './Shop.css';
 
 
 const Shop = () => {
-    const { currentGameState, currentItems, getInventory, getEquipmentForSale, returnToTown, buyItem, sellItem, } = useContext(GameContext);
-    
-    const displayInventory = () => {
-        getInventory();
-    }
-    getEquipmentForSale();
-    
-    const navigate = useNavigate();
-    const handleClick = () => { navigate('/PlayGame'); returnToTown(); currentGameState.location.name = "Town"; }
+    const { currentGameState, returnToTown, buyItem, sellItem, handleNavigateSite, currentShopItems} = useContext(GameContext);
+
+    console.log(currentGameState)
 
     return (
         <div className="game-container">
@@ -43,11 +36,11 @@ const Shop = () => {
                 <h1 className="game-area-text" id="current-location">You are currently in: {currentGameState.location.name}</h1>
                 <h2 id="shop-inventory-title">Shop Inventory</h2>
                 <ul id="shop-text-display" className="action-flow">
-                {currentItems.map(listItem => {
-                    return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                        <button id='buy-button'
+                {currentShopItems.map(listItem => {
+                    return <li key={currentShopItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
+                        <button id='buy-button' data-testid="buy-button-test"
                         onClick={() => {
-                            buyItem(currentItems.indexOf(listItem));
+                            buyItem(currentShopItems.indexOf(listItem));
                         }}>Buy</button></li>
                     })
                 }
@@ -58,12 +51,17 @@ const Shop = () => {
                     {currentGameState.hero.equipmentInBag.map((item, index) => (
                         <li key={index}>
                             {item.name} + {item.attackPower}{item.armorValue}
-                            <button onClick={() => {sellItem(index)}}>Sell</button>
+                            <button data-testid="sell-button-test" onClick={() => {
+                                sellItem(index);
+                                }}>Sell</button>
                         </li>
                     ))}
                 </ul>
             </div>
-            <button className="button" id="leave-button" onClick={() => handleClick()}>Leave</button>
+            <button className="button" id="leave-button" data-testid="leave-button-test" onClick={() => {
+                returnToTown();
+                currentGameState.location.name = "Town";
+                }}>Leave</button>
         </div>
             
         ) : (
