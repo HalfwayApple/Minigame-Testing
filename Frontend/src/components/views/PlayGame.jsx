@@ -18,13 +18,27 @@ const PlayGame = () => {
         }
     }
 
-    
-  return (
+    let heroImage = "";
+
+    if (currentGameState.hero.equippedWeapon === null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956091904405535/transbacknosword.png?ex=65574985&is=6544d485&hm=b42e0e6378b250ffb24e2d50420d914321d8e6af37d3e6aba0dd7afe7bf9866b&"
+    }
+    else if(currentGameState.hero.equippedArmor !== null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1170024137863999599/transbackwithswordandshield.png?ex=655788e4&is=654513e4&hm=87a44396802aa4b833110e57747b9f31a612360e842237a63dad920d91b44b3f&"
+    }
+    else if(currentGameState.hero.equippedWeapon !== null)
+    {
+        heroImage = "https://cdn.discordapp.com/attachments/1157246873334198305/1169956106152448010/transbackwithsword.png?ex=65574988&is=6544d488&hm=4e9c93c8307974210d2aca8490be96deb4a7ef49f783037c9d526d643105887e&&"
+    }
+
+    return (
     <div>
         {currentGameState ? (
             <div className="game-container" id="game-container">
                 <div className="hero-card" id="hero-card">
-                    <img className="fighterImage" id="hero-image" src="https://cdn.discordapp.com/attachments/1068620070227562659/1164550263479226449/imageedit_4_5377634979.gif?ex=65439ef3&is=653129f3&hm=0a989bec8fefb11f7c983f22dff0c21443ac03f6a8a5a4ca7d105d99c034b2d6&" alt="Hero" />
+                    <img className="fighterImage" id="hero-image" src={heroImage} alt="Hero" />
                     <h3>{currentGameState.hero.name} The Hero</h3>
                     <p>Level: {currentGameState.hero.level}</p>
                     <p id="money-tag">Money: {currentGameState.hero.money}</p>
