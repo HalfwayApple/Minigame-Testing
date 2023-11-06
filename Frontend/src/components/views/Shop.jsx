@@ -65,7 +65,7 @@ const Shop = () => {
                     {currentGameState.hero.equipmentInBag.map((item, index) => (
                         <li key={index}>
                             {item.name} + {item.attackPower}{item.armorValue}
-                            <button data-testid="sell-button-test" onClick={() => {
+                            <button id='sell-button' data-testid="sell-button-test" onClick={() => {
                                 sellItem(index);
                                 }}>Sell</button>
                         </li>

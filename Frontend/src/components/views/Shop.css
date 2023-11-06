@@ -56,6 +56,13 @@ button {
     text-shadow: 1px 1px #3e3e3e;
 }
 
+#buy-button {
+    margin-left: 5px;
+}
+
+#sell-button {
+    margin-left: 5px;
+}
 
 button:hover {
     background-color: #6a2c0a;

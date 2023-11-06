@@ -416,7 +416,7 @@ const mockEquippedItemsGamestate = {
 }
 //#endregion
 
-describe('GameContextProvider', () => {
+describe('GameContext methods tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
