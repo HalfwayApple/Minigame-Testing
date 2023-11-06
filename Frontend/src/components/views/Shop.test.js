@@ -100,7 +100,8 @@ const mockGameState = {
   }
 //#endregion
 
-test('Renders the component without errors', () => {
+describe("Render component tests", () => {
+  test('Renders the component without errors', () => {
     // Arrange
     render(
         <BrowserRouter>
@@ -112,28 +113,31 @@ test('Renders the component without errors', () => {
 
     // Assert
     expect(screen.getByText(/You are currently in:/)).toBeInTheDocument();
-});
+  });
 
-test('Renders the hero card with correct values', () => {
-    // Arrange
-    render(
-        <BrowserRouter>
-            <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale }}>
-                <Shop />
-            </GameContext.Provider>
-        </BrowserRouter>
-    );
+  test('Renders the hero card with correct values', () => {
+      // Arrange
+      render(
+          <BrowserRouter>
+              <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale }}>
+                  <Shop />
+              </GameContext.Provider>
+          </BrowserRouter>
+      );
 
-    // Assert
-    expect(screen.getByText(`${mockGameState.hero.name} The Hero`)).toBeInTheDocument();
-    expect(screen.getByText(`Level: ${mockGameState.hero.level}`)).toBeInTheDocument();
-    expect(screen.getByText(`Money: ${mockGameState.hero.money}`)).toBeInTheDocument();
-    expect(screen.getByText(`Attack Power: ${mockGameState.hero.attackPower}`)).toBeInTheDocument();
-    expect(screen.getByText('Weapon: Unarmed')).toBeInTheDocument();
-    expect(screen.getByText('Armor: Unarmored')).toBeInTheDocument();
-});
+      // Assert
+      expect(screen.getByText(`${mockGameState.hero.name} The Hero`)).toBeInTheDocument();
+      expect(screen.getByText(`Level: ${mockGameState.hero.level}`)).toBeInTheDocument();
+      expect(screen.getByText(`Money: ${mockGameState.hero.money}`)).toBeInTheDocument();
+      expect(screen.getByText(`Attack Power: ${mockGameState.hero.attackPower}`)).toBeInTheDocument();
+      expect(screen.getByText('Weapon: Unarmed')).toBeInTheDocument();
+      expect(screen.getByText('Armor: Unarmored')).toBeInTheDocument();
+  });
 
-test('Should handle "Buy button" button click ', () => {
+})
+
+describe("Call functions tests", () => {
+  test('Should handle "Buy button" button click ', () => {
     // Arrange
     const mockBuyItem = jest.fn();
     render(
@@ -152,47 +156,48 @@ test('Should handle "Buy button" button click ', () => {
 
     // Assert
     expect(mockBuyItem).toHaveBeenCalled();
-})
+  })
 
-test('Should handle "Sell button" button click ', () => {
-    // Arrange
-    const mockSellItem = jest.fn(); 
-    render(
-        <BrowserRouter>
-            <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale, sellItem: mockSellItem }}>
-                <Shop />
-            </GameContext.Provider>
-        </BrowserRouter>
-    );
+  test('Should handle "Sell button" button click ', () => {
+      // Arrange
+      const mockSellItem = jest.fn(); 
+      render(
+          <BrowserRouter>
+              <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale, sellItem: mockSellItem }}>
+                  <Shop />
+              </GameContext.Provider>
+          </BrowserRouter>
+      );
 
-    // Act
-    const mockSellButton = screen.getByTestId("sell-button-test")
-    act(() => {
-        userEvent.click(mockSellButton);
-    })
+      // Act
+      const mockSellButton = screen.getByTestId("sell-button-test")
+      act(() => {
+          userEvent.click(mockSellButton);
+      })
 
-    // Assert
-    expect(mockSellItem).toHaveBeenCalled();
-})
+      // Assert
+      expect(mockSellItem).toHaveBeenCalled();
+  })
 
-test('Should handle "Leave" button click', () => {
-    // Arrange
-    const mockReturnToTown = jest.fn();
+  test('Should handle "Leave" button click', () => {
+      // Arrange
+      const mockReturnToTown = jest.fn();
 
-    render(
-        <BrowserRouter>
-            <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale, returnToTown: mockReturnToTown }}>
-                <Shop />
-            </GameContext.Provider>
-        </BrowserRouter>
-    );
+      render(
+          <BrowserRouter>
+              <GameContext.Provider value={{ currentGameState: mockGameState, currentShopItems: mockGameState.location.equipmentForSale, returnToTown: mockReturnToTown }}>
+                  <Shop />
+              </GameContext.Provider>
+          </BrowserRouter>
+      );
 
-    // Act
-    const mockLeaveButton = screen.getByTestId("leave-button-test") 
-    act(() => {
-        userEvent.click(mockLeaveButton);
-    })
+      // Act
+      const mockLeaveButton = screen.getByTestId("leave-button-test") 
+      act(() => {
+          userEvent.click(mockLeaveButton);
+      })
 
-    // Assert
-    expect(mockReturnToTown).toHaveBeenCalled();
+      // Assert
+      expect(mockReturnToTown).toHaveBeenCalled();
+  })
 })
