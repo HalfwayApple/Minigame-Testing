@@ -1473,7 +1473,7 @@ namespace GameAPI.Tests
 
             // Assert
             Assert.NotNull(shop);
-            Assert.Contains(shop.EquipmentForSale, item => item.Name == "Breastplate");
+            Assert.Contains(shop.EquipmentForSale, item => item.GetType() == typeof(Armor));
         }
 
 		[Fact]

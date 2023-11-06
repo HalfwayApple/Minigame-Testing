@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,7 +9,7 @@
 body, html {
     height: 100%;
     background-color: #f4e9d8;
-    font-family: 'Georgia', Times, 'Times New Roman', serif;
+    font-family: 'MedievalSharp', 'Georgia', Times, 'Times New Roman', serif;
 }
 
 .game-container {
@@ -26,12 +28,13 @@ body, html {
 p, h3 {
     color: #3e3e3e;
     margin-bottom: 1rem;
+    text-shadow: 1px 1px #8b4513;
 }
 
 .hero-card,
 .enemy-card {
     flex: 0 0 auto;
-    max-width: 35%;
+    max-width: 23%;
     border: 5px solid #8b4513;
     padding: 6vh;
     border-radius: 35px;
@@ -39,11 +42,21 @@ p, h3 {
     background-color: #e6d5b8;
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
     margin-right: 1vw;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-card:hover,
+.enemy-card:hover {
+    transform: scale(1.05);
+    box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 .fighterImage {
     max-width: 100%;
     border-radius: 10px;
+    height: 300px;
+    width: auto;
+    object-fit: cover; 
 }
 
 .button-container {
@@ -61,9 +74,48 @@ p, h3 {
     border: 1px solid #3e3e3e;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease; 
+    text-shadow: 1px 1px #3e3e3e;
 }
 
 .game-button:hover {
     background-color: #6a2c0a;
+    transform: translateY(-2px);
+    box-shadow: 0 5px #403020;
+}
+
+@media screen and (max-width: 768px) {
+    .hero-card, .enemy-card {
+        max-width: 100%;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.game-container {
+    animation: fadeIn 1s ease-out;
+}
+
+@media screen and (max-height: 700px), screen and (max-width: 500px) {
+    .hero-card, .enemy-card, .button-container {
+        flex-direction: column;
+        align-items: center;
+        max-width: 80%;
+        margin: 0 auto;
+    }
+
+    .fighterImage {
+        height: 200px;
+    }
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #e6d5b8 50%, #f8ece0 50%);
+}
+
+.enemy-card {
+    background: linear-gradient(135deg, #e6d5b8 50%, #f3e2c7 50%);
 }
