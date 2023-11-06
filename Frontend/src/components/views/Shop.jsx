@@ -51,8 +51,9 @@ const Shop = () => {
                 <h2 id="shop-inventory-title">Shop Inventory</h2>
                 <ul id="shop-text-display" className="action-flow">
                 {currentShopItems.map(listItem => {
+                    var listBuyItemName ="buy-"+ listItem.name;
                     return <li key={currentShopItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                        <button id='buy-button' data-testid="buy-button-test"
+                        <button id={listBuyItemName} data-testid="buy-button-test"
                         onClick={() => {
                             buyItem(currentShopItems.indexOf(listItem));
                         }}>Buy</button></li>

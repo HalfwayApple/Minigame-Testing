@@ -64,8 +64,9 @@ const PlayGame = () => {
                     <ul id="text-display" data-testid="text-display-test" className="action-flow">
                         {showItems === true && 
                             currentItems.map(listItem => {
+                                var listEquipItemName ="equip-"+ listItem.name;
                                 return <li key={currentItems.indexOf(listItem)}>{listItem.name} + {listItem.attackPower}{listItem.armorValue} 
-                                <button id="equip-button"
+                                <button id={listEquipItemName}
                                 onClick={() => {
                                     equipItem(currentItems.indexOf(listItem));
                                     setShowItems(false);

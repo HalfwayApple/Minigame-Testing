@@ -56,10 +56,10 @@ namespace PlaywrightXUnit
             await _page.WaitForTimeoutAsync(1000);
             await _page.ClickAsync("#checkinventory-button");
             await _page.WaitForTimeoutAsync(1000);
-            await _page.WaitForSelectorAsync("#equip-button");
+            await _page.WaitForSelectorAsync("#equip-Sword");
             Console.WriteLine("Clicked check inventory button");
 
-            await _page.ClickAsync("#equip-button");
+            await _page.ClickAsync("#equip-Sword");
             await _page.WaitForTimeoutAsync(1000);
             Console.WriteLine("Clicked equip button");
 
@@ -102,7 +102,7 @@ namespace PlaywrightXUnit
             await _page.WaitForTimeoutAsync(1000);
             Console.WriteLine("Clicked enter store button");
 
-            await _page.ClickAsync("#buy-button");
+            await _page.ClickAsync("#buy-Shield");
             await _page.WaitForTimeoutAsync(1000);
             Console.WriteLine("Item successfully bought from store");
 
@@ -114,10 +114,10 @@ namespace PlaywrightXUnit
             await _page.WaitForTimeoutAsync(1000);
             await _page.ClickAsync("#checkinventory-button");
             await _page.WaitForTimeoutAsync(1000);
-            await _page.WaitForSelectorAsync("#equip-button");
+            await _page.WaitForSelectorAsync("#equip-Shield");
             Console.WriteLine("Clicked check inventory button");
 
-            await _page.ClickAsync("#equip-button");
+            await _page.ClickAsync("#equip-Shield");
             await _page.WaitForTimeoutAsync(1000);
             Console.WriteLine("Clicked equip button");
 
