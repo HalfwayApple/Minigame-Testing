@@ -45,7 +45,7 @@ namespace PlaywrightXUnit
             // startar spelet
             await _page.WaitForTimeoutAsync(1000);
             await _page.ClickAsync("#startgame-button");
-            await _page.WaitForNavigationAsync();
+            await _page.WaitForSelectorAsync("#checkinventory-button");
             Console.WriteLine("Clicked start game button");
 
             // kollar attack power
