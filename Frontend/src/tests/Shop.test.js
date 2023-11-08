@@ -1,9 +1,9 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
-import {GameContext} from "../../contexts/GameContext";
+import {GameContext} from "../contexts/GameContext";
 import { BrowserRouter } from 'react-router-dom'
-import Shop from "./Shop";
+import Shop from "../components/views/Shop";
 
 //#region Mocked gamestate
 const mockGameState = {

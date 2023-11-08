@@ -1,9 +1,8 @@
 import React from "react";
 import { render, screen, act } from "@testing-library/react";
 import userEvent from '@testing-library/user-event';
-import PlayGame from "./PlayGame";
-import {GameContext} from "../../contexts/GameContext";
-import { BrowserRouter } from 'react-router-dom'
+import PlayGame from '../components/views/PlayGame'
+import {GameContext} from "../contexts/GameContext";
 
 //#region Mocked gamestate
 const mockGameState = {
@@ -215,25 +214,24 @@ describe("Component rendering tests", () => {
     test('Renders the component without errors', () => {
         // Arrange
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameState }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameState }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
+
+        // Act
+        const gameContainer = screen.getByTestId('game-container-test');
     
         // Assert
-        expect(screen.getByText(/You are currently in:/)).toBeInTheDocument();
+        expect(gameContainer).toBeInTheDocument();
     });
     
     test('Renders the hero card with correct values', () => {
         // Arrange
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameState }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameState }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Assert
@@ -250,11 +248,9 @@ describe("Component rendering tests", () => {
     test('Renders the enemy card with correct values', () => {
         // Arrange
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameStateBattle }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameStateBattle }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Assert
@@ -271,15 +267,13 @@ describe("Call functions tests", () => {
         // Arrange
         const mockEnterBattle = jest.fn();
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameState, enterBattle: mockEnterBattle }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameState, enterBattle: mockEnterBattle }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Act
-        const challengeButton = screen.getByText('Challenge an enemy');
+        const challengeButton = screen.getByTestId('startbattle-button-test');
         userEvent.click(challengeButton);
         const ulElement = screen.getByTestId('text-display-test');
         const isEmpty = ulElement.textContent.trim() === ''; 
@@ -293,11 +287,9 @@ describe("Call functions tests", () => {
         // Arrange
         const mockAttackEnemy = jest.fn();
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameStateBattle, attackEnemy: mockAttackEnemy }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameStateBattle, attackEnemy: mockAttackEnemy }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Act
@@ -312,11 +304,9 @@ describe("Call functions tests", () => {
         // Arrange
         const mockDisplayInventory = jest.fn();
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameState, getInventory: mockDisplayInventory, currentItems: mockGameState.hero.equipmentInBag }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameState, getInventory: mockDisplayInventory, currentItems: mockGameState.hero.equipmentInBag }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Act
@@ -338,18 +328,14 @@ describe("Call functions tests", () => {
         const mockNavigate = jest.fn();
     
         render(
-            <BrowserRouter>
-                <GameContext.Provider value={{ currentGameState: mockGameState, enterStore: mockEnterStore, handleNavigateSite: mockNavigate("/Shop") }}>
-                    <PlayGame />
-                </GameContext.Provider>
-            </BrowserRouter>
+            <GameContext.Provider value={{ currentGameState: mockGameState, enterStore: mockEnterStore, handleNavigateSite: mockNavigate("/Shop") }}>
+                <PlayGame />
+            </GameContext.Provider>
         );
     
         // Act
         const storeButton = screen.getByTestId('enterStore-button-test');
-        act(() => {
-            userEvent.click(storeButton);
-          });
+        userEvent.click(storeButton);
     
         // Assert
         expect(mockEnterStore).toHaveBeenCalled();
@@ -360,3 +346,7 @@ describe("Call functions tests", () => {
 
 
 
+// react testing library provides you function to catch dom element like
+// render, fireEvent, waitFor, screen
+
+// where jest(testing-framework) will collect all .test.js files execute all the test cases and put the output in console with detail like how many pass and fail

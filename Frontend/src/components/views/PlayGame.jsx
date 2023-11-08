@@ -4,7 +4,7 @@ import { GameContext } from "../../contexts/GameContext";
 
 const PlayGame = () => {
 
-    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterStore, handleNavigateSite} = useContext(GameContext);
+    const {currentGameState, enterBattle, attackEnemy, getInventory, currentItems, equipItem, enterStore} = useContext(GameContext);
 
     const [showItems, setShowItems] = useState(false);
 
@@ -36,7 +36,7 @@ const PlayGame = () => {
     return (
     <div>
         {currentGameState ? (
-            <div className="game-container" id="game-container">
+            <div className="game-container" id="game-container" data-testid="game-container-test">
                 <div className="hero-card" id="hero-card">
                     <img className="fighterImage" id="hero-image" src={heroImage} alt="Hero" />
                     <h3>{currentGameState.hero.name} The Hero</h3>
@@ -77,7 +77,7 @@ const PlayGame = () => {
                     </ul>
                     <div className="button-container" id="game-buttons">
                         {currentGameState.location.name !== "Battle" &&
-                            <button className="game-button" id="startbattle-button" onClick={() =>{
+                            <button className="game-button" id="startbattle-button" data-testid="startbattle-button-test" onClick={() =>{
                                 enterBattle();
                                 setShowItems(false);
                             }}>Challenge an enemy</button>

@@ -1,14 +1,9 @@
 import React from 'react';
 import { render, act, waitFor, screen } from '@testing-library/react';
-import { GameContext } from './GameContext';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import GameContextProvider from './GameContext';
+import { GameContext } from '../contexts/GameContext';
+import { BrowserRouter } from 'react-router-dom';
+import GameContextProvider from '../contexts/GameContext';
 import { GetGameStateAsync, GetBattleStartAsync, GetReturnToTownAsync, GetAttackAsync, EquipItemAsync, GetEnterStoreAsync, SellItemAsync, BuyItemAsync } from '../services/GameService';
-
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => jest.fn(),
-}));
 
 jest.mock('../services/GameService', () => ({
   GetBattleStartAsync: jest.fn(),
@@ -420,8 +415,37 @@ describe('GameContext methods tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
+  
     test('setGameState, Should set the game state', async () => {
+
+      // Arrange
         GetGameStateAsync.mockResolvedValue(mockGameState);
+        let contextValue;
+        render(
+          <BrowserRouter>
+              <GameContextProvider>
+                  <GameContext.Consumer>
+                  {value => {
+                      contextValue = value;
+                      return <div data-testid="consumer" />;
+                  }}
+                  </GameContext.Consumer>
+              </GameContextProvider>
+          </BrowserRouter>
+        );
+        
+
+        // Assert
+        await waitFor(() => {
+            expect(screen.getByTestId('consumer')).toBeInTheDocument();
+            expect(contextValue.currentGameState).toEqual(mockGameState);
+        });
+    })
+
+    test('enterBattle, Should set battle game state', async () => {
+
+      // Arrange
+        GetBattleStartAsync.mockResolvedValue(mockBattleGameState);
         let contextValue;
         render(
             <BrowserRouter>
@@ -436,34 +460,12 @@ describe('GameContext methods tests', () => {
             </BrowserRouter>
         );
 
-        await waitFor(() => {
-            expect(screen.getByTestId('consumer')).toBeInTheDocument();
-            expect(contextValue.currentGameState).toEqual(mockGameState);
-        });
-    })
-
-    test('enterBattle, Should set battle game state', async () => {
-        GetBattleStartAsync.mockResolvedValue(mockBattleGameState);
-        let contextValue;
-        await act(async () => {
-            render(
-                <BrowserRouter>
-                    <GameContextProvider>
-                        <GameContext.Consumer>
-                        {value => {
-                            contextValue = value;
-                            return <div data-testid="consumer" />;
-                        }}
-                        </GameContext.Consumer>
-                    </GameContextProvider>
-                </BrowserRouter>
-            );
-        })
-
-        await act(() => {
+        // Act
+        act(() => {
             contextValue.enterBattle();
-          });
+        });
 
+          // Assert
         await waitFor(() => {
             expect(screen.getByTestId('consumer')).toBeInTheDocument();
             expect(contextValue.currentGameState).toEqual(mockBattleGameState);
@@ -471,26 +473,28 @@ describe('GameContext methods tests', () => {
     })
 
     test('returnToTown, Should return town game state', async () => {
+      // Arrange
         GetReturnToTownAsync.mockResolvedValue(mockGameState);
         let contextValue;
-        await act(() => {
-            render(
-              <BrowserRouter>
-                <GameContextProvider>
-                  <GameContext.Consumer>
-                    {value => {
-                      contextValue = value;
-                      return <div data-testid="consumer" />;
-                    }}
-                  </GameContext.Consumer>
-                </GameContextProvider>
-              </BrowserRouter>
-            );
-          });
-        await act(() => {
+        render(
+          <BrowserRouter>
+            <GameContextProvider>
+              <GameContext.Consumer>
+                {value => {
+                  contextValue = value;
+                  return <div data-testid="consumer" />;
+                }}
+              </GameContext.Consumer>
+            </GameContextProvider>
+          </BrowserRouter>
+        );
+
+        // Act
+        act(() => {
             contextValue.returnToTown();
           });
 
+          // Assert
         await waitFor(() => {
             expect(screen.getByTestId('consumer')).toBeInTheDocument();
             expect(contextValue.currentGameState).toEqual(mockGameState);
@@ -498,27 +502,28 @@ describe('GameContext methods tests', () => {
     })
 
     test('attackEnemy, Should return game state', async () => {
+      // Arrange
         GetAttackAsync.mockResolvedValue(mockBattleGameState);
         let contextValue;
-        await act(() => {
-            render(
-              <BrowserRouter>
-                <GameContextProvider>
-                  <GameContext.Consumer>
-                    {value => {
-                      contextValue = value;
-                      return <div data-testid="consumer" />;
-                    }}
-                  </GameContext.Consumer>
-                </GameContextProvider>
-              </BrowserRouter>
-            );
-          });
+        render(
+          <BrowserRouter>
+            <GameContextProvider>
+              <GameContext.Consumer>
+                {value => {
+                  contextValue = value;
+                  return <div data-testid="consumer" />;
+                }}
+              </GameContext.Consumer>
+            </GameContextProvider>
+          </BrowserRouter>
+        );
 
-        await act(() => {
+        // Act
+        act(() => {
             contextValue.attackEnemy();
           });
 
+          // Assert
         await waitFor(() => {
             expect(screen.getByTestId('consumer')).toBeInTheDocument();
             expect(contextValue.currentGameState).toEqual(mockBattleGameState);
@@ -526,27 +531,28 @@ describe('GameContext methods tests', () => {
     })
 
     test('equipItem, Should return equipped items game state', async () => {
+      // Arrange
       EquipItemAsync.mockResolvedValue(mockEquippedItemsGamestate);
       let contextValue;
-      await act(() => {
-          render(
-            <BrowserRouter>
-              <GameContextProvider>
-                <GameContext.Consumer>
-                  {value => {
-                    contextValue = value;
-                    return <div data-testid="consumer" />;
-                  }}
-                </GameContext.Consumer>
-              </GameContextProvider>
-            </BrowserRouter>
-          );
-        });
+      render(
+        <BrowserRouter>
+          <GameContextProvider>
+            <GameContext.Consumer>
+              {value => {
+                contextValue = value;
+                return <div data-testid="consumer" />;
+              }}
+            </GameContext.Consumer>
+          </GameContextProvider>
+        </BrowserRouter>
+      );
 
-      await act(() => {
+      // Act
+      act(() => {
           contextValue.equipItem();
-        });
+      });
 
+        // Assert
       await waitFor(() => {
           expect(screen.getByTestId('consumer')).toBeInTheDocument();
           expect(contextValue.currentGameState).toEqual(mockEquippedItemsGamestate);
@@ -556,27 +562,28 @@ describe('GameContext methods tests', () => {
   })
 
   test('enterStore, Should return store game state', async () => {
+    // Arrange
     GetEnterStoreAsync.mockResolvedValue(mockStoreGameState);
     let contextValue;
-    await act(() => {
-        render(
-          <BrowserRouter>
-            <GameContextProvider>
-              <GameContext.Consumer>
-                {value => {
-                  contextValue = value;
-                  return <div data-testid="consumer" />;
-                }}
-              </GameContext.Consumer>
-            </GameContextProvider>
-          </BrowserRouter>
-        );
-      });
+    render(
+      <BrowserRouter>
+        <GameContextProvider>
+          <GameContext.Consumer>
+            {value => {
+              contextValue = value;
+              return <div data-testid="consumer" />;
+            }}
+          </GameContext.Consumer>
+        </GameContextProvider>
+      </BrowserRouter>
+    );
 
-    await act(() => {
+    // Act
+    act(() => {
         contextValue.enterStore();
       });
 
+      // Assert
     await waitFor(() => {
         expect(screen.getByTestId('consumer')).toBeInTheDocument();
         expect(contextValue.currentGameState).toEqual(mockStoreGameState);
@@ -585,27 +592,29 @@ describe('GameContext methods tests', () => {
   })
 
   test('sellItem, Should return game state', async () => {
+    // Arrange
     SellItemAsync.mockResolvedValue(mockStoreGameState);
     let contextValue;
-    await act(() => {
-        render(
-          <BrowserRouter>
-            <GameContextProvider>
-              <GameContext.Consumer>
-                {value => {
-                  contextValue = value;
-                  return <div data-testid="consumer" />;
-                }}
-              </GameContext.Consumer>
-            </GameContextProvider>
-          </BrowserRouter>
-        );
-      });
 
-    await act(() => {
+    // Act
+    render(
+      <BrowserRouter>
+        <GameContextProvider>
+          <GameContext.Consumer>
+            {value => {
+              contextValue = value;
+              return <div data-testid="consumer" />;
+            }}
+          </GameContext.Consumer>
+        </GameContextProvider>
+      </BrowserRouter>
+    );
+
+    act(() => {
         contextValue.sellItem();
-      });
+    });
 
+    // Assert
     await waitFor(() => {
         expect(screen.getByTestId('consumer')).toBeInTheDocument();
         expect(contextValue.currentGameState).toEqual(mockStoreGameState);
@@ -613,9 +622,9 @@ describe('GameContext methods tests', () => {
   })
 
   test('buyItem, Should return game state', async () => {
+    // Arrange
     BuyItemAsync.mockResolvedValue(mockStoreGameState);
     let contextValue;
-    await act(() => {
         render(
           <BrowserRouter>
             <GameContextProvider>
@@ -628,12 +637,13 @@ describe('GameContext methods tests', () => {
             </GameContextProvider>
           </BrowserRouter>
         );
-      });
 
-    await act(() => {
+    // Act
+    act(() => {
         contextValue.buyItem();
       });
 
+      // Assert
     await waitFor(() => {
         expect(screen.getByTestId('consumer')).toBeInTheDocument();
         expect(contextValue.currentGameState).toEqual(mockStoreGameState);

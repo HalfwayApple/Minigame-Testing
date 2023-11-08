@@ -4,7 +4,7 @@ import './Shop.css';
 
 
 const Shop = () => {
-    const { currentGameState, returnToTown, buyItem, sellItem, handleNavigateSite, currentShopItems} = useContext(GameContext);
+    const { currentGameState, returnToTown, buyItem, sellItem, currentShopItems} = useContext(GameContext);
 
 
     let heroImage = "";

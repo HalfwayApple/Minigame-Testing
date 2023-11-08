@@ -91,10 +91,10 @@ export const GameContextProvider = ({ children }) => {
     setCurrentGameState(currentState)
   }
 
-  const handleNavigateSite = (site) => { 
+  const handleNavigateSite = (site) => {
     navigate(`${site}`); 
   }
-
+  
   return (
     <GameContext.Provider
       value={{

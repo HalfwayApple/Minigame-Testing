@@ -5,15 +5,9 @@ import { GameContext } from '../../contexts/GameContext';
 const WelcomePage = () => {
     const {handleNavigateSite} = useContext(GameContext);
 
-    const handleClick = () => {
-        setTimeout(() => {
-            handleNavigateSite('/PlayGame');
-        }, 500);
-    }
-
     return (
         <div className="welcome-container">
-            <button className="button" id='startgame-button' onClick={() => handleClick()}>Start Game</button>
+            <button className="button" id='startgame-button' data-testid="startgame-button-test" onClick={() => handleNavigateSite('/PlayGame')}>Start Game</button>
         </div>
     )
 }
